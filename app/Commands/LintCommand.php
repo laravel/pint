@@ -32,7 +32,7 @@ class LintCommand extends Command
      *
      * @var string
      */
-    protected $description = 'TODO';
+    protected $description = 'Lints the project\'s code';
 
     /**
      * The configuration of the command.
@@ -46,9 +46,9 @@ class LintCommand extends Command
         $this
             ->setDefinition(
                 [
-                    new InputArgument('path', InputArgument::OPTIONAL, 'The path.', (string) getcwd()),
-                    new InputOption('risky', '', InputOption::VALUE_NONE, 'TODO'),
-                    new InputOption('dry-run', '', InputOption::VALUE_NONE, 'TODO'),
+                    new InputArgument('path', InputArgument::OPTIONAL, 'The project\'s path.', (string) getcwd()),
+                    new InputOption('risky', '', InputOption::VALUE_NONE, 'If risky fixers are allowed to be used.'),
+                    new InputOption('dry-run', '', InputOption::VALUE_NONE, 'If the linter should run in "dry-run". '),
                 ]
             );
     }
