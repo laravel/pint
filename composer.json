@@ -23,8 +23,9 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.8.0",
         "laravel-zero/framework": "^9.1.1",
-        "nunomaduro/termwind": "^1.10.1",
         "mockery/mockery": "^1.5.0",
+        "nunomaduro/larastan": "^2.1.11",
+        "nunomaduro/termwind": "^1.10.1",
         "pestphp/pest": "^1.21.3"
     },
     "autoload": {
