@@ -1,5 +1,5 @@
+/phpunit.xml
 /vendor
-/.idea
-/.vscode
-/.vagrant
+composer.lock
 .phpunit.result.cache
+
