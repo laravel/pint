@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ConfigurationResolverFactory
 {
     /**
-     * Statically holds the resolver context.
+     * Statically holds the resolver factory context.
      *
      * @var array<string, string>
      */
@@ -39,7 +39,7 @@ class ConfigurationResolverFactory
                     dirname(__DIR__, 2),
                     'resources',
                     'presets',
-                    'recommended.php',
+                    'PSR12.php',
                 ]),
                 'dry-run'     => $input->getOption('dry-run'),
                 'path-mode'   => ConfigurationResolver::PATH_MODE_OVERRIDE,
