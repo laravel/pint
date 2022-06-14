@@ -15,7 +15,7 @@ class ConfigurationResolverFactory
     /**
      * Statically holds the resolver context.
      *
-     * @param array<string, string>
+     * @var array<string, string>
      */
     public static $context = [];
 
@@ -45,7 +45,7 @@ class ConfigurationResolverFactory
                 'path-mode'   => ConfigurationResolver::PATH_MODE_OVERRIDE,
                 'cache-file'  => implode(DIRECTORY_SEPARATOR, [
                     sys_get_temp_dir(),
-                    md5($path)
+                    md5($path),
                 ]),
                 'stop-on-violation' => false,
                 'verbosity'         => $output->getVerbosity(),

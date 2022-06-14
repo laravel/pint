@@ -121,7 +121,7 @@ class LintCommand extends Command
      * @param  \PhpCsFixer\Console\ConfigurationResolver  $resolver
      * @param  \PhpCsFixer\Error\ErrorsManager  $errors
      * @param  array<int, string>  $changed
-     * @param  int
+     * @return int
      */
     private function exit($resolver, $errors, array $changed): int
     {

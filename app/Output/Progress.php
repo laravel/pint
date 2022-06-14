@@ -12,9 +12,9 @@ class Progress
     /**
      * The list of status symbols.
      *
-     * @param array<string, array<string, string>>
+     * @var array<int, array<string, string>>
      */
-    private static $status = [
+    protected static $status = [
         FixerFileProcessedEvent::STATUS_UNKNOWN    => ['symbol' => '?', 'format' => '<options=bold;fg=yellow>%s</>'],
         FixerFileProcessedEvent::STATUS_INVALID    => ['symbol' => '!', 'format' => '<options=bold;fg=red>%s</>'],
         FixerFileProcessedEvent::STATUS_SKIPPED    => ['symbol' => '.', 'format' => '<options=bold;fg=green>%s</>'],
@@ -72,7 +72,7 @@ class Progress
     /**
      * Handle the given processed event.
      *
-     * @param  \PhpCsFixer\FixerFileProcessedEvent
+     * @param  \PhpCsFixer\FixerFileProcessedEvent  $event
      * @return void
      */
     public function handle($event)
