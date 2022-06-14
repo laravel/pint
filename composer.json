@@ -17,12 +17,15 @@
     ],
     "require": {
         "php": "^8.0",
-        "laravel-zero/framework": "^9.0",
-        "nunomaduro/termwind": "^1.3"
+        "ext-json": "*",
+        "ext-tokenizer": "*"
     },
     "require-dev": {
-        "mockery/mockery": "^1.4.4",
-        "pestphp/pest": "^1.21.1"
+        "friendsofphp/php-cs-fixer": "^3.8.0",
+        "laravel-zero/framework": "^9.1.1",
+        "nunomaduro/termwind": "^1.10.1",
+        "mockery/mockery": "^1.5.0",
+        "pestphp/pest": "^1.21.3"
     },
     "autoload": {
         "psr-4": {
@@ -49,5 +52,5 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "bin": ["pint"]
+    "bin": ["builds/pint"]
 }
