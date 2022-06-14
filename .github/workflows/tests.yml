@@ -35,7 +35,7 @@ jobs:
           composer install
 
       - name: Execute lint
-        run: bin/pint
+        run: pint
 
       - name: Execute static analysis
         run: vendor/bin/phpstan
