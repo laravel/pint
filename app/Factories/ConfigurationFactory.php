@@ -25,6 +25,7 @@ class ConfigurationFactory
     /**
      * Creates a configuration with the given preset of rules.
      *
+     * @param  array<int, string>  $rules
      * @return \PhpCsFixer\ConfigInterface
      */
     public static function preset($rules)

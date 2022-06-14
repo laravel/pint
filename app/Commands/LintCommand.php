@@ -35,6 +35,9 @@ class LintCommand extends Command
      */
     protected $description = 'Lints the project\'s code';
 
+    /**
+     * Creates a new command instance.
+     */
     public function __construct(
         protected ErrorsManager $errorsManager,
         protected Stopwatch $stopwatch,
@@ -127,7 +130,7 @@ class LintCommand extends Command
      * @param  array<int, string>  $changed
      * @return int
      */
-    private function exit($resolver, $errors, array $changed): int
+    private function exit($resolver, $errors, $changed)
     {
         return (new FixCommandExitStatusCalculator())->calculate(
             $resolver->isDryRun(),
