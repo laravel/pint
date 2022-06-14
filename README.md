@@ -11,7 +11,7 @@ alias pint=$(pwd)/laravel-pint/builds/pint
 ---
 
 <p align="center">
-    <img src="/art/readme.png" alt="Logo Laravel Pint CLI preview" style="width:70%;">
+    <img src="/art/pint-example.png" alt="Logo Laravel Pint CLI preview" style="width:70%;">
 </p>
 
 <p align="center">
