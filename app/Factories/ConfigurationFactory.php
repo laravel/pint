@@ -35,6 +35,10 @@ class ConfigurationFactory
                 $folder,
             ]))->filter(fn ($folder) => is_dir($folder))->values()->toArray();
 
+        if (empty($ins)) {
+            abort(1, 'Please run Pint on the root directory of your project.');
+        }
+
         $finder = Finder::create()
             ->in($ins)
             ->name('*.php')

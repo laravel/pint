@@ -1,3 +1,15 @@
+## Team Preface
+
+Hi Team. Welcome to Pint, an opinionated code formatter for PHP. Here are the instructions to try it out locally:
+```bash
+cd <your-work-directory>
+git clone git@github.com:laravel/pint.git
+alias pint=$(pwd)/laravel-pint/builds/pint
+# Try `pint`, and eventually `pint --fix` on any project.
+```
+
+---
+
 <p align="center">
     <img src="/art/readme.png" alt="Logo Laravel Pint CLI preview" style="width:70%;">
 </p>
@@ -11,7 +23,7 @@
 
 ## Introduction
 
-**Laravel Pint** is a ...
+**Laravel Pint** is an opinionated code formatter for PHP...
 
 ## Official Documentation
 

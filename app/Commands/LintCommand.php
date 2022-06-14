@@ -4,6 +4,7 @@ namespace App\Commands;
 
 use App\Factories\ConfigurationResolverFactory;
 use App\Output\Progress;
+use App\Output\Summary;
 use ArrayIterator;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
@@ -34,6 +35,14 @@ class LintCommand extends Command
      */
     protected $description = 'Lints the project\'s code';
 
+    public function __construct(
+        protected ErrorsManager $errorsManager,
+        protected Stopwatch $stopwatch,
+        protected EventDispatcher $eventDispatcher,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * The configuration of the command.
      *
@@ -48,7 +57,7 @@ class LintCommand extends Command
                 [
                     new InputArgument('path', InputArgument::OPTIONAL, 'The project\'s path.', (string) getcwd()),
                     new InputOption('risky', '', InputOption::VALUE_NONE, 'If risky fixers are allowed to be used.'),
-                    new InputOption('dry-run', '', InputOption::VALUE_NONE, 'If the linter should run in "dry-run". '),
+                    new InputOption('fix', '', InputOption::VALUE_NONE, 'If the linter should apply the fixes. '),
                 ]
             );
     }
@@ -65,14 +74,11 @@ class LintCommand extends Command
         $reporter = $resolver->getReporter();
         $finder = $resolver->getFinder();
 
-        $errors = new ErrorsManager();
-        $stopwatch = new Stopwatch();
-        $eventDispatcher = new EventDispatcher();
-
         $finder = new ArrayIterator(iterator_to_array($finder));
         $progress = new Progress(
+            $this->input,
             $this->output,
-            $eventDispatcher,
+            $this->eventDispatcher,
             count($finder)
         );
 
@@ -82,8 +88,8 @@ class LintCommand extends Command
             $finder,
             $resolver->getFixers(),
             $resolver->getDiffer(),
-            $eventDispatcher,
-            $errors,
+            $this->eventDispatcher,
+            $this->errorsManager,
             $resolver->getLinter(),
             $resolver->isDryRun(),
             $resolver->getCacheManager(),
@@ -91,11 +97,11 @@ class LintCommand extends Command
             $resolver->shouldStopOnViolation()
         );
 
-        $stopwatch->start('fixFiles');
+        $this->stopwatch->start('fixFiles');
         $changed = $runner->fix();
-        $stopwatch->stop('fixFiles');
+        $this->stopwatch->stop('fixFiles');
 
-        $fixEvent = $stopwatch->getEvent('fixFiles');
+        $fixEvent = $this->stopwatch->getEvent('fixFiles');
 
         $reportSummary = new ReportSummary(
             $changed,
@@ -106,13 +112,11 @@ class LintCommand extends Command
             $this->output->isDecorated()
         );
 
-        $this->output->isDecorated()
-            ? $this->output->write($reporter->generate($reportSummary))
-            : $this->output->write($reporter->generate($reportSummary), false, OutputInterface::OUTPUT_RAW);
-
         $progress->unsubscribe();
 
-        return $this->exit($resolver, $errors, $changed);
+        (new Summary($this->output))->handle($reportSummary, $this->input->getArgument('path'), count($finder));
+
+        return $this->exit($resolver, $this->errorsManager, $changed);
     }
 
     /**

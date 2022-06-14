@@ -34,6 +34,9 @@ jobs:
         run: |
           composer install
 
+      - name: Execute lint
+        run: bin/pint
+
       - name: Execute static analysis
         run: vendor/bin/phpstan
         if: matrix.php == '8.1'

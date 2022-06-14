@@ -41,10 +41,11 @@ class ConfigurationResolverFactory
                     'presets',
                     'PSR12.php',
                 ]),
-                'dry-run'     => $input->getOption('dry-run'),
+                'diff' => true,
+                'dry-run'     => ! $input->getOption('fix'),
                 'path-mode'   => ConfigurationResolver::PATH_MODE_OVERRIDE,
                 'cache-file'  => implode(DIRECTORY_SEPARATOR, [
-                    sys_get_temp_dir(),
+                    realpath(sys_get_temp_dir()),
                     md5($path),
                 ]),
                 'stop-on-violation' => false,
