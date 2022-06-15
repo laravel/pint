@@ -7,7 +7,7 @@ Hi Team. Welcome to Pint, an opinionated code formatter for PHP. It's a minimali
 ```bash
 cd <your-work-directory>
 git clone git@github.com:laravel/pint.git
-alias pint=$(pwd)/laravel-pint/builds/pint
+alias pint=$(pwd)/pint/builds/pint
 ```
 
 Finally, you may format the PHP code in any of your projects:
