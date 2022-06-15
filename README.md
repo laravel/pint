@@ -11,6 +11,9 @@ alias pint=$(pwd)/pint/builds/pint
 ```
 
 Finally, you may format the PHP code in any of your projects:
+
+> Note: If we move forward, we can consider a `artisan format` artisan command.
+
 ```
 cd <your-favorite-project>
 pint
