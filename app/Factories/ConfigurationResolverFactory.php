@@ -20,6 +20,14 @@ class ConfigurationResolverFactory
     public static $context = [];
 
     /**
+     * The list of available presets.
+     */
+    public static $presets = [
+        'laravel',
+        'psr12',
+    ];
+
+    /**
      * Creates a new configuration resolver instance.
      *
      * @param  \Symfony\Component\Console\Input\InputInterface  $input
@@ -29,6 +37,11 @@ class ConfigurationResolverFactory
     public static function fromIO($input, $output)
     {
         $path = (string) $input->getArgument('path');
+        $preset = (string) $input->getOption('preset');
+
+        if (! in_array($preset, static::$presets)) {
+            abort(1, 'Preset not found.');
+        }
 
         static::$context = ['path' => $path];
 
@@ -39,7 +52,7 @@ class ConfigurationResolverFactory
                     dirname(__DIR__, 2),
                     'resources',
                     'presets',
-                    'PSR12.php',
+                    sprintf('%s.php', $preset),
                 ]),
                 'diff' => true,
                 'dry-run'     => ! $input->getOption('fix'),

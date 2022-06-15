@@ -1,5 +1,4 @@
 <div class="my-1 mx-2">
-
     <div></div>
 
     @if ($isVerbose)
@@ -19,7 +18,7 @@
             @if($isDryRun && count($changes) > 0)
                 <div class="px-2 bg-yellow text-gray uppercase font-bold">wait</div>
                 <em class="ml-1">
-                    {{ $total - count($changes) }} files are respecting the <a class="font-bold" href="https://www.php-fig.org/psr/psr-12/">PSR 12</a> coding style.
+                    {{ $total - count($changes) }} files are respecting the <span class="font-bold">{{ $preset }}</span> coding style.
                     Yet, <span class="text-yellow font-bold">{{ count($changes) }} {{ count($changes) > 1 ? 'files' : 'file' }}</span> have issues.
                 </em>
 
@@ -30,7 +29,7 @@
             @else
                 <div class="px-2 bg-green text-gray uppercase font-bold">OK</div>
                 <em class="ml-1">
-                    {{ $total }} files are respecting the <a class="font-bold" href="https://www.php-fig.org/psr/psr-12/">PSR 12</a> coding style.
+                    {{ $total }} files are respecting the <span class="font-bold">{{ $preset }}</span> coding style.
                 </em>
             @endif
         </span>

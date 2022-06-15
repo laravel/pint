@@ -22,7 +22,7 @@ class Change
      */
     public function file()
     {
-        return str_replace($this->path . DIRECTORY_SEPARATOR, '', $this->file);
+        return str_replace($this->path.DIRECTORY_SEPARATOR, '', $this->file);
     }
 
     /**

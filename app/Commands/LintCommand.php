@@ -59,6 +59,7 @@ class LintCommand extends Command
             ->setDefinition(
                 [
                     new InputArgument('path', InputArgument::OPTIONAL, 'The project\'s path.', (string) getcwd()),
+                    new InputOption('preset', '', InputOption::VALUE_REQUIRED, 'The preset that should be used', 'psr12'),
                     new InputOption('risky', '', InputOption::VALUE_NONE, 'If risky fixers are allowed to be used.'),
                     new InputOption('fix', '', InputOption::VALUE_NONE, 'If the linter should apply the fixes. '),
                 ]
@@ -117,7 +118,10 @@ class LintCommand extends Command
 
         $progress->unsubscribe();
 
-        (new Summary($this->output))->handle($reportSummary, $this->input->getArgument('path'), count($finder));
+        (new Summary(
+            $this->input,
+            $this->output,
+        ))->handle($reportSummary, $this->input->getArgument('path'), count($finder));
 
         return $this->exit($resolver, $this->errorsManager, $changed);
     }
