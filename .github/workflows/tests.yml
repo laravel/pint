@@ -34,8 +34,11 @@ jobs:
         run: |
           composer install
 
-      - name: Execute lint
+      - name: Execute lint with PSR 12 preset
         run: ./pint
+
+      - name: Execute lint with Laravel preset
+        run: ./pint --preset=laravel
 
       - name: Execute static analysis
         run: vendor/bin/phpstan
