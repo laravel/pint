@@ -1,10 +1,8 @@
 ## Team Preface
 
-Hi Team. Welcome to Pint, an opinionated code formatter for PHP. This repository contains a proof-of-concept on what could become **pint**. Code, tests, and output, will become different if we actually decide to move forward. 
+> This repository contains a proof-of-concept on what could become **pint**. Code, tests, and output, will become different if we actually decide to move forward. 
 
-Also, in my opinion, we should ship with a Laravel preset instead of PSR 12.
-
-Meanwhile, here are the instructions to try it out locally:
+Hi Team. Welcome to Pint, an opinionated code formatter for PHP. It's a minimalist and zero-dependency alternative to PHP CS Fixer, that just works once you require it in your `composer.json` file. Here are the instructions to try it out locally:
 
 ```bash
 cd <your-work-directory>
