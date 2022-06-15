@@ -15,8 +15,10 @@ Finally, you may format the PHP code in any of your projects:
 cd <your-favorite-project>
 pint
 pint --fix
+pint --fix -v
 pint --preset=laravel
 pint --preset=laravel --fix
+pint --preset=laravel --fix -v
 ```
 
 ---
