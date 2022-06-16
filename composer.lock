@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fd6e0905355c62417910da10591dcb10",
+    "content-hash": "1ae4b739a862966d760751489cd65c1f",
     "packages": [],
     "packages-dev": [
         {
@@ -2112,16 +2112,16 @@
         },
         {
             "name": "laravel-zero/foundation",
-            "version": "v9.13.0",
+            "version": "v9.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel-zero/foundation.git",
-                "reference": "dfe43bce2e1c935f9c0a0e2d74d00bcb7049ceda"
+                "reference": "2de3d311b3165ecdc4d961cde53ff74ff66f8224"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel-zero/foundation/zipball/dfe43bce2e1c935f9c0a0e2d74d00bcb7049ceda",
-                "reference": "dfe43bce2e1c935f9c0a0e2d74d00bcb7049ceda",
+                "url": "https://api.github.com/repos/laravel-zero/foundation/zipball/2de3d311b3165ecdc4d961cde53ff74ff66f8224",
+                "reference": "2de3d311b3165ecdc4d961cde53ff74ff66f8224",
                 "shasum": ""
             },
             "require": {
@@ -2151,9 +2151,9 @@
                 "laravel"
             ],
             "support": {
-                "source": "https://github.com/laravel-zero/foundation/tree/v9.13.0"
+                "source": "https://github.com/laravel-zero/foundation/tree/v9.17.0"
             },
-            "time": "2022-05-18T15:59:33+00:00"
+            "time": "2022-06-16T10:32:54+00:00"
         },
         {
             "name": "laravel-zero/framework",

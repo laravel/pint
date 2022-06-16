@@ -21,8 +21,8 @@
         "ext-tokenizer": "*"
     },
     "require-dev": {
-        "illuminate/view": "^9.17.0",
         "friendsofphp/php-cs-fixer": "^3.8.0",
+        "illuminate/view": "^9.17.0",
         "laravel-zero/framework": "^9.1.1",
         "mockery/mockery": "^1.5.0",
         "nunomaduro/larastan": "^2.1.11",
