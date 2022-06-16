@@ -128,27 +128,24 @@ class DefaultCommand extends Command
         (new Footer(
             $this->input,
             $this->output,
-        ))->handle($reportSummary, (string) $this->input->getArgument('path'), count($finder));
+        ))->handle($this->errorsManager, $reportSummary, (string) $this->input->getArgument('path'), count($finder));
 
-        return $this->exit($resolver, $this->errorsManager, $changed);
+        return $this->exit($changed);
     }
 
     /**
      * Returns the command exit code based on the linting errors.
      *
-     * @param  \PhpCsFixer\Console\ConfigurationResolver  $resolver
-     * @param  \PhpCsFixer\Error\ErrorsManager  $errors
      * @param  array<int, string>  $changed
      * @return int
      */
-    private function exit($resolver, $errors, $changed)
+    private function exit($changed)
     {
-        return (new FixCommandExitStatusCalculator())->calculate(
-            $resolver->isDryRun(),
-            count($changed) > 0,
-            count($errors->getInvalidErrors()) > 0,
-            count($errors->getExceptionErrors()) > 0,
-            count($errors->getLintErrors()) > 0
-        );
+        $failure = count($changed) > 0
+            || count($this->errorsManager->getInvalidErrors()) > 0
+            || count($this->errorsManager->getExceptionErrors()) > 0
+            || count($this->errorsManager->getLintErrors()) > 0;
+
+        return $failure ? static::FAILURE : static::SUCCESS;
     }
 }
