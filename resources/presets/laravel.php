@@ -37,7 +37,7 @@ return ConfigurationFactory::preset([
     'elseif' => true,
     'encoding' => true,
     'full_opening_tag' => true,
-    'fully_qualified_strict_types' => true, // added by Shift
+    'fully_qualified_strict_types' => true,
     'function_declaration' => true,
     'function_typehint_space' => true,
     'general_phpdoc_tag_rename' => true,
@@ -49,8 +49,8 @@ return ConfigurationFactory::preset([
     'line_ending' => true,
     'lowercase_cast' => true,
     'lowercase_keywords' => true,
-    'lowercase_static_reference' => true, // added from Symfony
-    'magic_method_casing' => true, // added from Symfony
+    'lowercase_static_reference' => true,
+    'magic_method_casing' => true,
     'magic_constant_casing' => true,
     'method_argument_space' => [
         'on_multiline' => 'ignore',
@@ -109,14 +109,14 @@ return ConfigurationFactory::preset([
     'phpdoc_scalar' => true,
     'phpdoc_single_line_var_spacing' => true,
     'phpdoc_summary' => false,
-    'phpdoc_to_comment' => false, // override to preserve user preference
+    'phpdoc_to_comment' => false,
     'phpdoc_tag_type' => true,
     'phpdoc_trim' => true,
     'phpdoc_types' => true,
     'phpdoc_var_without_name' => true,
     'self_accessor' => true,
     'short_scalar_cast' => true,
-    'simplified_null_return' => false, // disabled as "risky"
+    'simplified_null_return' => false,
     'single_blank_line_at_eof' => true,
     'single_blank_line_before_namespace' => true,
     'single_class_element_per_statement' => [
