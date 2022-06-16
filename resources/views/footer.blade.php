@@ -11,61 +11,50 @@
 
     <div>
         <span>
-            @if($issues->isNotEmpty() > 0)
-                <div class="flex space-x-1">
-                    <span class="px-2 bg-red text-white uppercase font-bold">
-                        FAIL
-                    </span>
-                    <span class="flex-1 content-repeat-[.] text-gray"></span>
+            <div class="flex space-x-1">
+
+                @php
+                    $fixableErrors = $issues->reject->isError();
+                    $nonFixableErrors = $issues->filter->isError();
+                @endphp
+
+                @if($issues->count() == 0)
+                <span class="px-2 bg-green text-gray uppercase font-bold">
+                    PASS
+                </span>
+                @elseif($nonFixableErrors->count() == 0 && ! $testing)
+                <span class="px-2 bg-green text-gray uppercase font-bold">
+                    FIXED
+                </span>
+                @else
+                <span class="px-2 bg-red text-white uppercase font-bold">
+                    FAIL
+                </span>
+                @endif
+
+                <span class="flex-1 content-repeat-[.] text-gray"></span>
+                <span>
                     <span>
-                        <span>
-                            {{ $total }} {{ str('file')->plural($total) }}
-                        </span>
-
-                        @php
-                        $nonFixableErrors = $issues->filter->isError();
-                        @endphp
-
-                        @if ($nonFixableErrors->isNotEmpty())
-                        <span>
-                            , {{ $nonFixableErrors->count() }} {{ str('error')->plural($nonFixableErrors) }}
-                        </span>
-                        @endif
-
-                        @php
-                            $fixableErrors = $issues->reject->isError();
-                        @endphp
-
-                        @if ($fixableErrors->isNotEmpty())
-                        <span>
-                            @if ($pretending)
-                            , {{ $fixableErrors->count() }} style {{ str('issue')->plural($fixableErrors) }}
-                            @else
-                            , {{ $fixableErrors->count() }} style {{ str('issues')->plural($fixableErrors) }} fixed
-                            @endif
-                        </span>
-                        @endif
-
+                        {{ $total }} {{ str('file')->plural($total) }}
                     </span>
-                </div>
-            @else
-                <div class="flex space-x-1">
-                    <span class="px-2 bg-green text-gray uppercase font-bold">
-                        PASS
-                    </span>
-                    <span class="flex-1 content-repeat-[.] text-gray"></span>
+
+                    @if ($nonFixableErrors->isNotEmpty())
                     <span>
-                        <span>
-                            {{ $total }} {{ str('file')->plural($total) }}
-                        </span>
-                        <span>
-                        @if ($issues->isNotEmpty())
-                            , {{ $issues->isNotEmpty() }} {{ str('file')->plural($total) }} fixed
-                        @endif
-                        </span>
+                        , {{ $nonFixableErrors->count() }} {{ str('error')->plural($nonFixableErrors) }}
                     </span>
-                </div>
-            @endif
+                    @endif
+
+                    @if ($fixableErrors->isNotEmpty())
+                    <span>
+                        @if ($testing)
+                        , {{ $fixableErrors->count() }} style {{ str('issue')->plural($fixableErrors) }}
+                        @else
+                        , {{ $fixableErrors->count() }} style {{ str('issue')->plural($fixableErrors) }} fixed
+                        @endif
+                    </span>
+                    @endif
+                </span>
+            </div>
         </span>
     </div>
 
@@ -80,7 +69,7 @@
                 </span>
             </span>
             <span class="flex-1 truncate text-gray text-right">
-                {{ $issue->description($pretending) }}
+                {{ $issue->description($testing) }}
             </span>
         </div>
     @endforeach

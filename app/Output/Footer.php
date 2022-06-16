@@ -57,7 +57,7 @@ class Footer
             view('footer', [
                 'total' => $total,
                 'issues' => $this->getIssues($path, $errorsManager, $reportSummary),
-                'pretending' => $reportSummary->isDryRun(),
+                'testing' => $reportSummary->isDryRun(),
                 'isVerbose' => $this->output->isVerbose(),
                 'preset' => $this->presets[(string) $this->input->getOption('preset')],
             ]),

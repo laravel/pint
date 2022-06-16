@@ -40,7 +40,7 @@ trait InteractsWithSymbols
         $statusSymbol = $this->statuses[$status];
 
         if (! isset($statusSymbol['symbol'])) {
-            $statusSymbol = $this->input->getOption('pretend')
+            $statusSymbol = $this->input->getOption('test')
                 ? $statusSymbol[0]
                 : $statusSymbol[1];
         }

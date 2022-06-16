@@ -34,7 +34,7 @@ class DefaultCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Fixes the coding style of the given project';
+    protected $description = 'Fixes the project\'s coding style';
 
     /**
      * Creates a new command instance.
@@ -67,7 +67,7 @@ class DefaultCommand extends Command
                     new InputArgument('path', InputArgument::OPTIONAL, 'The project\'s path.', (string) getcwd()),
                     new InputOption('preset', '', InputOption::VALUE_REQUIRED, 'The preset that should be used', 'psr12'),
                     new InputOption('risky', '', InputOption::VALUE_NONE, 'If risky fixers are allowed to be used.'),
-                    new InputOption('pretend', '', InputOption::VALUE_NONE, 'Display the fixable issues instead of actually fix them.'),
+                    new InputOption('test', '', InputOption::VALUE_NONE, 'If the project\'s coding style should be tested instead.'),
                 ]
             );
     }
@@ -141,7 +141,7 @@ class DefaultCommand extends Command
      */
     private function exit($changed)
     {
-        $failure = count($changed) > 0
+        $failure = ($this->option('test') && count($changed) > 0)
             || count($this->errorsManager->getInvalidErrors()) > 0
             || count($this->errorsManager->getExceptionErrors()) > 0
             || count($this->errorsManager->getLintErrors()) > 0;

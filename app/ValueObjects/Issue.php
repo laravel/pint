@@ -44,10 +44,10 @@ class Issue
     /**
      * Returns the issue's description.
      *
-     * @param  bool $pretending
+     * @param  bool  $testing
      * @return string
      */
-    public function description($pretending)
+    public function description($testing)
     {
         if (! empty($this->payload['source'])) {
             return $this->payload['source']->getMessage();

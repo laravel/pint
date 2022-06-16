@@ -54,7 +54,7 @@ function run($command, $arguments)
     $output = new BufferedOutput();
 
     $statusCode = resolve(Kernel::class)->call($command, array_merge([
-        '--pretend' => true,
+        '--test' => true,
     ], $arguments), $output);
 
     return [$statusCode, $output];
