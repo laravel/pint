@@ -19,21 +19,21 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Stopwatch\Stopwatch;
 use function Termwind\{render};
 
-class LintCommand extends Command
+class DefaultCommand extends Command
 {
     /**
      * The name of the command.
      *
      * @var string
      */
-    protected $name = 'lint';
+    protected $name = 'default';
 
     /**
      * The description of the command.
      *
      * @var string
      */
-    protected $description = 'Lints the project\'s code';
+    protected $description = 'Fixes the coding style of the given project';
 
     /**
      * Creates a new command instance.
@@ -84,6 +84,7 @@ class LintCommand extends Command
         $finder = $resolver->getFinder();
 
         $finder = new ArrayIterator(iterator_to_array($finder));
+
         $progress = new Progress(
             $this->input,
             $this->output,

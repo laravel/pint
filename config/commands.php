@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => \App\Commands\LintCommand::class,
+    'default' => \App\Commands\DefaultCommand::class,
 
     /*
     |--------------------------------------------------------------------------
