@@ -5,6 +5,5 @@ parameters:
     - app
     - bootstrap
     - config
-  level: 5
-  checkMissingIterableValueType: false
+  level: 6
   checkGenericClassInNonGenericObjectType: false

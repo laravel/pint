@@ -23,10 +23,14 @@ class Summary
 
     /**
      * Creates a new summary instance.
+     *
+     * @param  \Symfony\Component\Console\Input\InputInterface  $input
+     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
+     * @return void
      */
     public function __construct(
-        protected InputInterface $input,
-        protected OutputInterface $output,
+        protected $input,
+        protected $output,
     ) {
         // ..
     }

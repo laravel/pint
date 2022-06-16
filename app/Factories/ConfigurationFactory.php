@@ -34,7 +34,9 @@ class ConfigurationFactory
             ->map(fn ($folder) => implode(DIRECTORY_SEPARATOR, [
                 ConfigurationResolverFactory::$context['path'],
                 $folder,
-            ]))->filter(fn ($folder) => is_dir($folder))->values()->toArray();
+            ]))->filter(fn ($folder) => is_dir($folder))
+            ->values()
+            ->toArray();
 
         if (empty($ins)) {
             abort(1, 'Please run Pint on the root directory of your project.');

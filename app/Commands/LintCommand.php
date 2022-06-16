@@ -37,11 +37,16 @@ class LintCommand extends Command
 
     /**
      * Creates a new command instance.
+     *
+     * @param  \PhpCsFixer\Error\ErrorsManager  $errorsManager
+     * @param  \Symfony\Component\Stopwatch\Stopwatch  $stopwatch
+     * @param  \Symfony\Component\EventDispatcher\EventDispatcher  $eventDispatcher
+     * @return void
      */
     public function __construct(
-        protected ErrorsManager $errorsManager,
-        protected Stopwatch $stopwatch,
-        protected EventDispatcher $eventDispatcher,
+        protected $errorsManager,
+        protected $stopwatch,
+        protected $eventDispatcher,
     ) {
         parent::__construct();
     }
@@ -109,7 +114,7 @@ class LintCommand extends Command
 
         $reportSummary = new ReportSummary(
             $changed,
-            $fixEvent->getDuration(),
+            (int) $fixEvent->getDuration(),
             $fixEvent->getMemory(),
             OutputInterface::VERBOSITY_VERBOSE <= $this->output->getVerbosity(),
             $resolver->isDryRun(),
@@ -121,7 +126,7 @@ class LintCommand extends Command
         (new Summary(
             $this->input,
             $this->output,
-        ))->handle($reportSummary, $this->input->getArgument('path'), count($finder));
+        ))->handle($reportSummary, (string) $this->input->getArgument('path'), count($finder));
 
         return $this->exit($resolver, $this->errorsManager, $changed);
     }

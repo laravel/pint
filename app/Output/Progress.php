@@ -13,7 +13,7 @@ class Progress
     /**
      * The list of status symbols.
      *
-     * @var array<int, array<string, array<int, string>|string>>
+     * @var array<int, array<'symbol'|'format', array<int, string>|string>>
      */
     protected static $status = [
         FixerFileProcessedEvent::STATUS_UNKNOWN    => ['symbol' => '?', 'format' => '<options=bold;fg=yellow>%s</>'],
@@ -43,12 +43,18 @@ class Progress
 
     /**
      * Creates a new linting progress instance.
+     *
+     * @param  \Symfony\Component\Console\Input\InputInterface  $input
+     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
+     * @param  \Symfony\Component\EventDispatcher\EventDispatcherInterface  $dispatcher
+     * @param  int  $total
+     * @return void
      */
     public function __construct(
-        protected InputInterface $input,
-        protected OutputInterface $output,
-        protected EventDispatcherInterface $dispatcher,
-        protected int $total
+        protected $input,
+        protected $output,
+        protected $dispatcher,
+        protected $total
     ) {
         $this->symbolsPerLine = (new Terminal())->getWidth() - 4;
     }
@@ -94,19 +100,21 @@ class Progress
 
         $status = self::$status[$event->getStatus()];
 
+        $symbol = (string) $status['symbol'];
+
         if (! $this->output->isDecorated()) {
-            $this->output->write($status['symbol']);
+            $this->output->write($symbol);
         } else {
             if (is_array($status['format'])) {
                 [$dryRunFormat, $fixFormat] = $status['format'];
 
                 if ($this->input->getOption('fix')) {
-                    $this->output->write(sprintf($fixFormat, $status['symbol']));
+                    $this->output->write(sprintf($fixFormat, $symbol));
                 } else {
-                    $this->output->write(sprintf($dryRunFormat, $status['symbol']));
+                    $this->output->write(sprintf($dryRunFormat, $symbol));
                 }
             } else {
-                $this->output->write(sprintf($status['format'], $status['symbol']));
+                $this->output->write(sprintf($status['format'], $symbol));
             }
         }
 

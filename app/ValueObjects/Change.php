@@ -5,12 +5,16 @@ namespace App\ValueObjects;
 class Change
 {
     /**
-     * Creates a new change instance.
+     * Creates a new Change instance.
+     *
+     * @param  string  $path
+     * @param  string  $file
+     * @param  array<string, array<int, string>>  $information
      */
     public function __construct(
-        protected string $path,
-        protected string $file,
-        protected array $information
+        protected $path,
+        protected $file,
+        protected $information
     ) {
         // ..
     }

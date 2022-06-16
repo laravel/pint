@@ -21,6 +21,8 @@ class ConfigurationResolverFactory
 
     /**
      * The list of available presets.
+     *
+     * @var array<int, string>
      */
     public static $presets = [
         'laravel',
