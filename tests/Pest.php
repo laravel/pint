@@ -11,6 +11,9 @@
 |
 */
 
+use Illuminate\Foundation\Console\Kernel;
+use Symfony\Component\Console\Output\BufferedOutput;
+
 uses(Tests\TestCase::class)->in('Feature');
 
 /*
@@ -39,7 +42,20 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+/**
+ * Runs the given console command.
+ *
+ * @param  string  $command
+ * @param  array<string, string>  $arguments
+ * @return array{int, BufferedOutput}
+ */
+function run($command, $arguments)
 {
-    // ..
+    $output = new BufferedOutput();
+
+    $statusCode = resolve(Kernel::class)->call($command, array_merge([
+        '--pretend' => true,
+    ], $arguments), $output);
+
+    return [$statusCode, $output];
 }
