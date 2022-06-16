@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1ae4b739a862966d760751489cd65c1f",
+    "content-hash": "4c0a46269dd58bb4ecfbd39799a44fc3",
     "packages": [],
     "packages-dev": [
         {
@@ -3062,16 +3062,16 @@
         },
         {
             "name": "nunomaduro/termwind",
-            "version": "v1.10.1",
+            "version": "dev-truncate",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nunomaduro/termwind.git",
-                "reference": "b63e00e448af1d418cbb07a683187685a97ca0e6"
+                "reference": "f7a858b7bf395de9b839fd360e4d857ad31e0215"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nunomaduro/termwind/zipball/b63e00e448af1d418cbb07a683187685a97ca0e6",
-                "reference": "b63e00e448af1d418cbb07a683187685a97ca0e6",
+                "url": "https://api.github.com/repos/nunomaduro/termwind/zipball/f7a858b7bf395de9b839fd360e4d857ad31e0215",
+                "reference": "f7a858b7bf395de9b839fd360e4d857ad31e0215",
                 "shasum": ""
             },
             "require": {
@@ -3128,7 +3128,7 @@
             ],
             "support": {
                 "issues": "https://github.com/nunomaduro/termwind/issues",
-                "source": "https://github.com/nunomaduro/termwind/tree/v1.10.1"
+                "source": "https://github.com/nunomaduro/termwind/tree/truncate"
             },
             "funding": [
                 {
@@ -3144,7 +3144,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-05-12T01:36:04+00:00"
+            "time": "2022-06-16T18:00:13+00:00"
         },
         {
             "name": "pestphp/pest",
@@ -8054,7 +8054,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "nunomaduro/termwind": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
