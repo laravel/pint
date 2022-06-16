@@ -1,4 +1,4 @@
-<div class="my-2 mx-2">
+<div class="my-1 mx-2">
     <div class="flex space-x-1">
         <span class="flex-1 content-repeat-[─] text-gray">
 
