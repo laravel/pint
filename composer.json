@@ -26,7 +26,7 @@
         "laravel-zero/framework": "^9.1.1",
         "mockery/mockery": "^1.5.0",
         "nunomaduro/larastan": "^2.1.11",
-        "nunomaduro/termwind": "^1.10.1",
+        "nunomaduro/termwind": "dev-truncate",
         "pestphp/pest": "^1.21.3"
     },
     "autoload": {
