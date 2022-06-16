@@ -3,8 +3,9 @@
 namespace App\Commands;
 
 use App\Factories\ConfigurationResolverFactory;
+use App\Output\Footer;
+use App\Output\Header;
 use App\Output\Progress;
-use App\Output\Summary;
 use ArrayIterator;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
@@ -124,7 +125,7 @@ class DefaultCommand extends Command
 
         $progress->unsubscribe();
 
-        (new Summary(
+        (new Footer(
             $this->input,
             $this->output,
         ))->handle($reportSummary, (string) $this->input->getArgument('path'), count($finder));

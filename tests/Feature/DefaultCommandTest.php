@@ -9,15 +9,16 @@ it('detects issues', function () {
 
     expect($statusCode)->toBe(8)
         ->and($output->fetch())
-        ->toContain('0 files are respecting the PSR 12 coding style. However, 1 file have issues.');
+        ->toContain('FAIL')
+        ->toContain('1 files, 1 file(s) failed');
 });
 
 it('may not detect issues', function () {
     [$statusCode, $output] = run('default', [
-        'path' => base_path('tests/Fixtures/with-issues'),
+        'path' => base_path('tests/Fixtures/without-issues'),
     ]);
 
-    expect($statusCode)->toBe(8)
+    expect($statusCode)->toBe(0)
         ->and($output->fetch())
-        ->toContain('0 files are respecting the PSR 12 coding style. However, 1 file have issues.');
+        ->toContain('PASS');
 });

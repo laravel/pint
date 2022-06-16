@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function Termwind\render;
 use function Termwind\renderUsing;
 
-class Summary
+class Footer
 {
     /**
      * The list of presets, on a human readable format.
@@ -48,7 +48,7 @@ class Summary
         renderUsing($this->output);
 
         render(
-            view('summary', [
+            view('footer', [
                 'total' => $total,
                 'changes' => collect($reportSummary->getChanged())
                     ->map(fn ($information, $file) => new Change($path, $file, $information))

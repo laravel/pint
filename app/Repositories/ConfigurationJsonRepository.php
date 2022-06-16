@@ -22,7 +22,7 @@ class ConfigurationJsonRepository
     {
         $file = implode(DIRECTORY_SEPARATOR, [
             $this->path,
-            'pint.json'
+            'pint.json',
         ]);
 
         if (file_exists($file)) {
