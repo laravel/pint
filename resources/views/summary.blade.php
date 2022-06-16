@@ -21,11 +21,6 @@
                     {{ $total - count($changes) }} files are respecting the <span class="font-bold">{{ $preset }}</span> coding style.
                     Yet, <span class="text-yellow font-bold">{{ count($changes) }} {{ count($changes) > 1 ? 'files' : 'file' }}</span> have issues.
                 </em>
-
-                <div class="px-2 bg-blue text-white uppercase mt-1 font-bold">hint</div>
-                <em class="ml-1">
-                    You may run the <span class="italic font-bold">--fix</span> to fix the issues.
-                </em>
             @else
                 <div class="px-2 bg-green text-gray uppercase font-bold">OK</div>
                 <em class="ml-1">

@@ -108,10 +108,10 @@ class Progress
             if (is_array($status['format'])) {
                 [$dryRunFormat, $fixFormat] = $status['format'];
 
-                if ($this->input->getOption('fix')) {
-                    $this->output->write(sprintf($fixFormat, $symbol));
-                } else {
+                if ($this->input->getOption('pretend')) {
                     $this->output->write(sprintf($dryRunFormat, $symbol));
+                } else {
+                    $this->output->write(sprintf($fixFormat, $symbol));
                 }
             } else {
                 $this->output->write(sprintf($status['format'], $symbol));

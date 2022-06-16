@@ -66,7 +66,7 @@ class LintCommand extends Command
                     new InputArgument('path', InputArgument::OPTIONAL, 'The project\'s path.', (string) getcwd()),
                     new InputOption('preset', '', InputOption::VALUE_REQUIRED, 'The preset that should be used', 'psr12'),
                     new InputOption('risky', '', InputOption::VALUE_NONE, 'If risky fixers are allowed to be used.'),
-                    new InputOption('fix', '', InputOption::VALUE_NONE, 'If the linter should apply the fixes. '),
+                    new InputOption('pretend', '', InputOption::VALUE_NONE, 'Display the fixable issues instead of actually fix them.'),
                 ]
             );
     }
