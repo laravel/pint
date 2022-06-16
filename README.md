@@ -1,31 +1,3 @@
-## Team Preface
-
-> This repository contains a proof-of-concept on what could become **pint**. Code, tests, and output, will become different if we actually decide to move forward. 
-
-Hi Team. Welcome to Pint, an opinionated code formatter for PHP. It's a minimalist and zero-dependency alternative to PHP CS Fixer, that just works once you require it in your `composer.json` file. Here are the instructions to try it out locally:
-
-```bash
-cd <your-work-directory>
-git clone git@github.com:laravel/pint.git
-alias pint=$(pwd)/pint/builds/pint
-```
-
-Finally, you may format the PHP code in any of your projects:
-
-> Note: If we move forward, we can consider a `artisan format` artisan command.
-
-```
-cd <your-favorite-project>
-pint
-pint --pretend
-pint --pretend -v
-pint --preset=laravel
-pint --preset=laravel --pretend
-pint --preset=laravel --pretend -v
-```
-
----
-
 <p align="center">
     <img src="/art/pint-example.png" alt="Logo Laravel Pint CLI preview" style="width:70%;">
 </p>
