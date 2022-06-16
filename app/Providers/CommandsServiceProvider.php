@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Commands\LintCommand;
+use App\Commands\DefaultCommand;
 use Illuminate\Support\ServiceProvider;
 use PhpCsFixer\Error\ErrorsManager;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -17,8 +17,8 @@ class CommandsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->bind(\App\Commands\LintCommand::class, function () {
-            return new LintCommand(
+        $this->app->bind(\App\Commands\DefaultCommand::class, function () {
+            return new DefaultCommand(
                 new ErrorsManager(),
                 new Stopwatch(),
                 new EventDispatcher(),
