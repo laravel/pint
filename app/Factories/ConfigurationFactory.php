@@ -2,24 +2,28 @@
 
 namespace App\Factories;
 
+use App\Repositories\ConfigurationJsonRepository;
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 
 class ConfigurationFactory
 {
     /**
-     * The list of folders that should be considered for linting.
+     * The list of files to ignore.
      *
      * @var array<int, string>
      */
-    protected static $folders = [
-        'app',
-        'config',
-        'database',
-        'resources',
-        'routes',
-        'src',
-        'tests',
+    protected static $notName = [
+        '*.blade.php',
+    ];
+
+    /**
+     * The list of folders to ignore.
+     *
+     * @var array<int, string>
+     */
+    protected static $exclude = [
+        'storage',
     ];
 
     /**
@@ -30,24 +34,22 @@ class ConfigurationFactory
      */
     public static function preset($rules)
     {
-        $ins = collect(static::$folders)
-            ->map(fn ($folder) => implode(DIRECTORY_SEPARATOR, [
-                ConfigurationResolverFactory::$context['path'],
-                $folder,
-            ]))->filter(fn ($folder) => is_dir($folder))
-            ->values()
-            ->toArray();
-
-        if (empty($ins)) {
-            abort(1, 'Please run Pint on the root directory of your project.');
-        }
+        $path = ConfigurationResolverFactory::$context['path'];
 
         $finder = Finder::create()
-            ->in($ins)
-            ->name('*.php')
-            ->notName('*.blade.php')
+            ->in($path)
+            ->notName(static::$notName)
+            ->exclude(static::$exclude)
             ->ignoreDotFiles(true)
             ->ignoreVCS(true);
+
+        foreach ((new ConfigurationJsonRepository($path))->get() as $method => $arguments) {
+            if (! method_exists($finder, $method)) {
+                abort(1, sprintf('Option [%s] is not valid.', $method));
+            }
+
+            $finder->{$method}($arguments);
+        }
 
         return (new Config())
             ->setFinder($finder)
