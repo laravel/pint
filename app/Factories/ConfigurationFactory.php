@@ -24,6 +24,7 @@ class ConfigurationFactory
      */
     protected static $exclude = [
         'storage',
+        'bootstrap/cache',
     ];
 
     /**
