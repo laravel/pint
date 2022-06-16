@@ -2,6 +2,7 @@
 
 namespace App\Output;
 
+use App\Output\Concerns\InteractsWithSymbols;
 use PhpCsFixer\FixerFileProcessedEvent;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -10,22 +11,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Progress
 {
-    /**
-     * The list of status symbols.
-     *
-     * @var array<int, array<'symbol'|'format', array<int, string>|string>>
-     */
-    protected static $status = [
-        FixerFileProcessedEvent::STATUS_UNKNOWN    => ['symbol' => '?', 'format' => '<options=bold;fg=yellow>%s</>'],
-        FixerFileProcessedEvent::STATUS_INVALID    => ['symbol' => '!', 'format' => '<options=bold;fg=red>%s</>'],
-        FixerFileProcessedEvent::STATUS_SKIPPED    => ['symbol' => '.', 'format' => '<fg=green>%s</>'],
-        FixerFileProcessedEvent::STATUS_NO_CHANGES => ['symbol' => '.', 'format' => '<fg=green>%s</>'],
-        FixerFileProcessedEvent::STATUS_FIXED      => ['symbol' => 'F', 'format' => [
-            '<options=bold;fg=red>%s</>', '<options=bold;fg=green>%s</>',
-        ]],
-        FixerFileProcessedEvent::STATUS_EXCEPTION  => ['symbol' => '!', 'format' => '<options=bold;fg=red>%s</>'],
-        FixerFileProcessedEvent::STATUS_LINT       => ['symbol' => '!', 'format' => '<options=bold;fg=red>%s</>'],
-    ];
+    use InteractsWithSymbols;
 
     /**
      * Holds the current number of processed total.
@@ -98,25 +84,7 @@ class Progress
             $this->output->write('  ');
         }
 
-        $status = self::$status[$event->getStatus()];
-
-        $symbol = (string) $status['symbol'];
-
-        if (! $this->output->isDecorated()) {
-            $this->output->write($symbol);
-        } else {
-            if (is_array($status['format'])) {
-                [$dryRunFormat, $fixFormat] = $status['format'];
-
-                if ($this->input->getOption('pretend')) {
-                    $this->output->write(sprintf($dryRunFormat, $symbol));
-                } else {
-                    $this->output->write(sprintf($fixFormat, $symbol));
-                }
-            } else {
-                $this->output->write(sprintf($status['format'], $symbol));
-            }
-        }
+        $this->output->write($this->getSymbol($event->getStatus()));
 
         $this->processed++;
     }

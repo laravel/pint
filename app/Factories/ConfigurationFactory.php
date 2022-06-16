@@ -36,6 +36,7 @@ class ConfigurationFactory
     public static function preset($rules)
     {
         $path = ConfigurationResolverFactory::$context['path'];
+        $localConfiguration = new ConfigurationJsonRepository($path);
 
         $finder = Finder::create()
             ->in($path)
@@ -44,7 +45,7 @@ class ConfigurationFactory
             ->ignoreDotFiles(true)
             ->ignoreVCS(true);
 
-        foreach ((new ConfigurationJsonRepository($path))->get() as $method => $arguments) {
+        foreach ($localConfiguration->finder() as $method => $arguments) {
             if (! method_exists($finder, $method)) {
                 abort(1, sprintf('Option [%s] is not valid.', $method));
             }
@@ -54,7 +55,7 @@ class ConfigurationFactory
 
         return (new Config())
             ->setFinder($finder)
-            ->setRules($rules)
+            ->setRules(array_merge($rules, $localConfiguration->rules()))
             ->setRiskyAllowed(true)
             ->setUsingCache(true);
     }
