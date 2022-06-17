@@ -4,12 +4,8 @@ namespace App\Factories;
 
 use ArrayIterator;
 use PhpCsFixer\Config;
-use PhpCsFixer\ConfigInterface;
 use PhpCsFixer\Console\ConfigurationResolver;
-use PhpCsFixer\Finder;
 use PhpCsFixer\ToolInfo;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 class ConfigurationResolverFactory
 {

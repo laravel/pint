@@ -4,11 +4,7 @@ namespace App\Output;
 
 use App\Output\Concerns\InteractsWithSymbols;
 use App\ValueObjects\Issue;
-use PhpCsFixer\Console\Report\FixReport\ReportSummary;
-use PhpCsFixer\Error\Error;
 use PhpCsFixer\FixerFileProcessedEvent;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use function Termwind\render;
 use function Termwind\renderUsing;
 

@@ -2,9 +2,7 @@
 
 namespace App\Actions;
 
-use PhpCsFixer\Console\Report\FixReport\ReportSummary;
 use PhpCsFixer\Runner\Runner;
-use Symfony\Component\Console\Output\OutputInterface;
 
 class FixCode
 {

@@ -5,7 +5,6 @@ namespace App\Commands;
 use App\Actions\ElaborateSummary;
 use App\Actions\FixCode;
 use App\Factories\ConfigurationResolverFactory;
-use App\Output\Header;
 use LaravelZero\Framework\Commands\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;

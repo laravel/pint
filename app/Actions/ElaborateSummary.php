@@ -2,7 +2,6 @@
 
 namespace App\Actions;
 
-use App\Output\SummaryOutput;
 use Illuminate\Console\Command;
 use PhpCsFixer\Console\Report\FixReport\ReportSummary;
 use Symfony\Component\Console\Output\OutputInterface;

@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Contracts\Console\Kernel;
-
 it('detects issues', function () {
     [$statusCode, $output] = run('default', [
         'path' => base_path('tests/Fixtures/with-issues'),
