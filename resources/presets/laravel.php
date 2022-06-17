@@ -100,7 +100,7 @@ return ConfigurationFactory::preset([
     'not_operator_with_successor_space' => true,
     'object_operator_without_whitespace' => true,
     'ordered_imports' => ['sort_algorithm' => 'alpha'],
-    'psr_autoloading' => true,
+    'psr_autoloading' => false,
     'phpdoc_indent' => true,
     'phpdoc_inline_tag_normalizer' => true,
     'phpdoc_no_access' => true,
