@@ -2,6 +2,7 @@
 
 namespace App\Factories;
 
+use App\Repositories\ConfigurationJsonRepository;
 use ArrayIterator;
 use PhpCsFixer\Config;
 use PhpCsFixer\Console\ConfigurationResolver;
@@ -36,7 +37,8 @@ class ConfigurationResolverFactory
     public static function fromIO($input, $output)
     {
         $path = (string) $input->getArgument('path');
-        $preset = (string) $input->getOption('preset');
+
+        $preset = resolve(ConfigurationJsonRepository::class)->preset();
 
         if (! in_array($preset, static::$presets)) {
             abort(1, 'Preset not found.');

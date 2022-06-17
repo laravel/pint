@@ -5,8 +5,8 @@ use App\Repositories\ConfigurationJsonRepository;
 it('works without json file', function () {
     $repository = new ConfigurationJsonRepository(__DIR__);
 
-    expect($repository->finder())->toBeEmpty();
-    expect($repository->rules())->toBeEmpty();
+    expect($repository->finder())->toBeEmpty()
+        ->and($repository->rules())->toBeEmpty();
 });
 
 it('may have rules options', function () {
@@ -25,4 +25,10 @@ it('may have finder options', function () {
             'my-dir',
         ],
     ]);
+});
+
+it('may have a preset option', function () {
+    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/preset');
+
+    expect($repository->preset())->toBe('laravel');
 });

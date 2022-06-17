@@ -33,6 +33,7 @@ class SummaryOutput
     public function __construct(
         protected $errors,
         protected $input,
+        protected $config,
         protected $output,
     ) {
         // ..
@@ -55,7 +56,7 @@ class SummaryOutput
                 'issues' => $this->getIssues((string) $this->input->getArgument('path'), $summary),
                 'testing' => $summary->isDryRun(),
                 'isVerbose' => $this->output->isVerbose(),
-                'preset' => $this->presets[(string) $this->input->getOption('preset')],
+                'preset' => $this->presets[$this->config->preset()],
             ]),
         );
     }

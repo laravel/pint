@@ -6,6 +6,7 @@ use App\Actions\ElaborateSummary;
 use App\Actions\FixCode;
 use App\Output\ProgressOutput;
 use App\Output\SummaryOutput;
+use App\Repositories\ConfigurationJsonRepository;
 use Illuminate\Support\ServiceProvider;
 use PhpCsFixer\Error\ErrorsManager;
 use Symfony\Component\Console\Input\InputInterface;
@@ -53,6 +54,7 @@ class ActionsServiceProvider extends ServiceProvider
                 new SummaryOutput(
                     resolve(ErrorsManager::class),
                     resolve(InputInterface::class),
+                    resolve(ConfigurationJsonRepository::class),
                     resolve(OutputInterface::class),
                 )
             );

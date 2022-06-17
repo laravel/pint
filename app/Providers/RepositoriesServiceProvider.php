@@ -26,8 +26,11 @@ class RepositoriesServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(ConfigurationJsonRepository::class, function () {
+            $input = resolve(InputInterface::class);
+
             return new ConfigurationJsonRepository(
-                resolve(InputInterface::class)->getArgument('path') ?: (string) getcwd(),
+                $input->getArgument('path') ?: (string) getcwd(),
+                $input->getOption('preset'),
             );
         });
     }
