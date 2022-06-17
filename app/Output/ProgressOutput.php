@@ -4,12 +4,9 @@ namespace App\Output;
 
 use App\Output\Concerns\InteractsWithSymbols;
 use PhpCsFixer\FixerFileProcessedEvent;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Terminal;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class Progress
+class ProgressOutput
 {
     use InteractsWithSymbols;
 
@@ -33,14 +30,12 @@ class Progress
      * @param  \Symfony\Component\Console\Input\InputInterface  $input
      * @param  \Symfony\Component\Console\Output\OutputInterface  $output
      * @param  \Symfony\Component\EventDispatcher\EventDispatcherInterface  $dispatcher
-     * @param  int  $total
      * @return void
      */
     public function __construct(
+        protected $dispatcher,
         protected $input,
         protected $output,
-        protected $dispatcher,
-        protected $total
     ) {
         $this->symbolsPerLine = (new Terminal())->getWidth() - 4;
     }

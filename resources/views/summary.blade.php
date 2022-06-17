@@ -35,7 +35,7 @@
                 <span class="flex-1 content-repeat-[.] text-gray"></span>
                 <span>
                     <span>
-                        {{ $total }} {{ str('file')->plural($total) }}
+                        {{ $totalFiles }} {{ str('file')->plural($totalFiles) }}
                     </span>
 
                     @if ($nonFixableErrors->isNotEmpty())

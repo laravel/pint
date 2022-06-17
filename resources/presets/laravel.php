@@ -92,6 +92,7 @@ return ConfigurationFactory::preset([
     'no_unneeded_control_parentheses' => [
         'statements' => ['break', 'clone', 'continue', 'echo_print', 'return', 'switch_case', 'yield'],
     ],
+    'no_unused_imports' => true,
     'no_unreachable_default_argument_value' => true,
     'no_useless_return' => true,
     'no_whitespace_before_comma_in_array' => true,

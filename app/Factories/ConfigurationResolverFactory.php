@@ -2,6 +2,7 @@
 
 namespace App\Factories;
 
+use ArrayIterator;
 use PhpCsFixer\Config;
 use PhpCsFixer\ConfigInterface;
 use PhpCsFixer\Console\ConfigurationResolver;
@@ -34,7 +35,7 @@ class ConfigurationResolverFactory
      *
      * @param  \Symfony\Component\Console\Input\InputInterface  $input
      * @param  \Symfony\Component\Console\Output\OutputInterface  $output
-     * @return \PhpCsFixer\Console\ConfigurationResolver
+     * @return array{\PhpCsFixer\Console\ConfigurationResolver, int}
      */
     public static function fromIO($input, $output)
     {
@@ -47,7 +48,7 @@ class ConfigurationResolverFactory
 
         static::$context = ['path' => $path];
 
-        return new ConfigurationResolver(
+        $resolver = new ConfigurationResolver(
             new Config('default'),
             [
                 'config' => implode(DIRECTORY_SEPARATOR, [
@@ -70,5 +71,11 @@ class ConfigurationResolverFactory
             $path,
             new ToolInfo(),
         );
+
+        $totalFiles = count(new ArrayIterator(iterator_to_array(
+            $resolver->getFinder(),
+        )));
+
+        return [$resolver, $totalFiles];
     }
 }

@@ -2,23 +2,13 @@
 
 namespace App\Commands;
 
+use App\Actions\ElaborateSummary;
+use App\Actions\FixCode;
 use App\Factories\ConfigurationResolverFactory;
-use App\Output\Footer;
 use App\Output\Header;
-use App\Output\Progress;
-use ArrayIterator;
-use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
-use PhpCsFixer\Console\Command\FixCommandExitStatusCalculator;
-use PhpCsFixer\Console\Report\FixReport\ReportSummary;
-use PhpCsFixer\Error\ErrorsManager;
-use PhpCsFixer\Runner\Runner;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\Stopwatch\Stopwatch;
-use function Termwind\{render};
 
 class DefaultCommand extends Command
 {
@@ -35,22 +25,6 @@ class DefaultCommand extends Command
      * @var string
      */
     protected $description = 'Fixes the project\'s coding style';
-
-    /**
-     * Creates a new command instance.
-     *
-     * @param  \PhpCsFixer\Error\ErrorsManager  $errorsManager
-     * @param  \Symfony\Component\Stopwatch\Stopwatch  $stopwatch
-     * @param  \Symfony\Component\EventDispatcher\EventDispatcher  $eventDispatcher
-     * @return void
-     */
-    public function __construct(
-        protected $errorsManager,
-        protected $stopwatch,
-        protected $eventDispatcher,
-    ) {
-        parent::__construct();
-    }
 
     /**
      * The configuration of the command.
@@ -75,77 +49,19 @@ class DefaultCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
-     */
-    public function handle()
-    {
-        $resolver = ConfigurationResolverFactory::fromIO($this->input, $this->output);
-
-        $reporter = $resolver->getReporter();
-        $finder = $resolver->getFinder();
-
-        $finder = new ArrayIterator(iterator_to_array($finder));
-
-        $progress = new Progress(
-            $this->input,
-            $this->output,
-            $this->eventDispatcher,
-            count($finder)
-        );
-
-        $progress->subscribe();
-
-        $runner = new Runner(
-            $finder,
-            $resolver->getFixers(),
-            $resolver->getDiffer(),
-            $this->eventDispatcher,
-            $this->errorsManager,
-            $resolver->getLinter(),
-            $resolver->isDryRun(),
-            $resolver->getCacheManager(),
-            $resolver->getDirectory(),
-            $resolver->shouldStopOnViolation()
-        );
-
-        $this->stopwatch->start('fixFiles');
-        $changed = $runner->fix();
-        $this->stopwatch->stop('fixFiles');
-
-        $fixEvent = $this->stopwatch->getEvent('fixFiles');
-
-        $reportSummary = new ReportSummary(
-            $changed,
-            (int) $fixEvent->getDuration(),
-            $fixEvent->getMemory(),
-            OutputInterface::VERBOSITY_VERBOSE <= $this->output->getVerbosity(),
-            $resolver->isDryRun(),
-            $this->output->isDecorated()
-        );
-
-        $progress->unsubscribe();
-
-        (new Footer(
-            $this->input,
-            $this->output,
-        ))->handle($this->errorsManager, $reportSummary, (string) $this->input->getArgument('path'), count($finder));
-
-        return $this->exit($changed);
-    }
-
-    /**
-     * Returns the command exit code based on the linting errors.
-     *
-     * @param  array<int, string>  $changed
+     * @param  \App\Actions\FixCode  $fixCode
+     * @param  \App\Actions\ElaborateSummary  $elaborateSummary
      * @return int
      */
-    private function exit($changed)
+    public function handle(FixCode $fixCode, ElaborateSummary $elaborateSummary)
     {
-        $failure = ($this->option('test') && count($changed) > 0)
-            || count($this->errorsManager->getInvalidErrors()) > 0
-            || count($this->errorsManager->getExceptionErrors()) > 0
-            || count($this->errorsManager->getLintErrors()) > 0;
+        [$resolver, $totalFiles] = ConfigurationResolverFactory::fromIO($this->input, $this->output);
 
-        return $failure ? static::FAILURE : static::SUCCESS;
+        $changes = with($resolver, $fixCode);
+
+        return with([
+            'totalFiles' => $totalFiles,
+            'changes' => $changes,
+        ], $elaborateSummary);
     }
 }

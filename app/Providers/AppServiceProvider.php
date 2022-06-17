@@ -2,13 +2,11 @@
 
 namespace App\Providers;
 
-use App\Commands\DefaultCommand;
 use Illuminate\Support\ServiceProvider;
 use PhpCsFixer\Error\ErrorsManager;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\Stopwatch\Stopwatch;
 
-class CommandsServiceProvider extends ServiceProvider
+class AppServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
@@ -27,6 +25,12 @@ class CommandsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton(ErrorsManager::class, function () {
+            return new ErrorsManager();
+        });
+
+        $this->app->singleton(EventDispatcher::class, function () {
+            return new EventDispatcher();
+        });
     }
 }

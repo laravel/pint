@@ -15,7 +15,7 @@ class ConfigurationJsonRepository
 
     /**
      * @param  string  $path
-     * return  void
+     * @return void
      */
     public function __construct(protected $path)
     {

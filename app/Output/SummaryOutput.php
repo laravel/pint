@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function Termwind\render;
 use function Termwind\renderUsing;
 
-class Footer
+class SummaryOutput
 {
     use InteractsWithSymbols;
 
@@ -29,11 +29,13 @@ class Footer
     /**
      * Creates a new Footer instance.
      *
+     * @param  \PhpCsFixer\Error\ErrorsManager  $errors
      * @param  \Symfony\Component\Console\Input\InputInterface  $input
      * @param  \Symfony\Component\Console\Output\OutputInterface  $output
      * @return void
      */
     public function __construct(
+        protected $errors,
         protected $input,
         protected $output,
     ) {
@@ -43,21 +45,19 @@ class Footer
     /**
      * Handle the given report summary.
      *
-     * @param  \PhpCsFixer\Error\ErrorsManager  $errorsManager
-     * @param  \PhpCsFixer\Console\Report\FixReport\ReportSummary  $reportSummary
-     * @param  string  $path
-     * @param  int  $total
+     * @param  \PhpCsFixer\Console\Report\FixReport\ReportSummary  $summary
+     * @param  int  $totalFiles
      * @return void
      */
-    public function handle($errorsManager, $reportSummary, $path, $total)
+    public function handle($summary, $totalFiles)
     {
         renderUsing($this->output);
 
         render(
-            view('footer', [
-                'total' => $total,
-                'issues' => $this->getIssues($path, $errorsManager, $reportSummary),
-                'testing' => $reportSummary->isDryRun(),
+            view('summary', [
+                'totalFiles' => $totalFiles,
+                'issues' => $this->getIssues((string) $this->input->getArgument('path'), $summary),
+                'testing' => $summary->isDryRun(),
                 'isVerbose' => $this->output->isVerbose(),
                 'preset' => $this->presets[(string) $this->input->getOption('preset')],
             ]),
@@ -67,13 +67,13 @@ class Footer
     /**
      * Get "issues" from the errors and summary.
      *
-     * @param  \PhpCsFixer\Error\ErrorsManager  $errorsManager
-     * @param  \PhpCsFixer\Console\Report\FixReport\ReportSummary  $reportSummary
+     * @param  string  $path
+     * @param  \PhpCsFixer\Console\Report\FixReport\ReportSummary  $summary
      * @return \Illuminate\Support\Collection<int, Issue>
      */
-    public function getIssues($path, $errorsManager, $reportSummary)
+    public function getIssues($path, $summary)
     {
-        $issues = collect($reportSummary->getChanged())
+        $issues = collect($summary->getChanged())
             ->map(fn ($information, $file) => new Issue(
                 $path,
                 $file,
@@ -83,9 +83,9 @@ class Footer
 
         return $issues->merge(
             collect(
-                $errorsManager->getInvalidErrors()
-                + $errorsManager->getExceptionErrors()
-                + $errorsManager->getLintErrors()
+                $this->errors->getInvalidErrors()
+                + $this->errors->getExceptionErrors()
+                + $this->errors->getLintErrors()
             )->map(fn ($error) => new Issue(
                 $path,
                 $error->getFilePath(),

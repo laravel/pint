@@ -54,7 +54,10 @@ return [
     */
 
     'providers' => [
+        App\Providers\ActionsServiceProvider::class,
+        App\Providers\AppServiceProvider::class,
         App\Providers\CommandsServiceProvider::class,
+        App\Providers\RepositoriesServiceProvider::class,
     ],
 
 ];
