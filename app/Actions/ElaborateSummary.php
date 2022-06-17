@@ -29,13 +29,14 @@ class ElaborateSummary
     /**
      * Elaborates the summary of the given changes.
      *
-     * @param  array{'totalFiles': int, 'changes': array<int, string>}  $context
+     * @param  int  $totalFiles
+     * @param  array<int, string>  $changes
      * @return int
      */
-    public function __invoke($context)
+    public function execute($totalFiles, $changes)
     {
         $summary = new ReportSummary(
-            $context['changes'],
+            $changes,
             0,
             0,
             OutputInterface::VERBOSITY_VERBOSE <= $this->output->getVerbosity(),
@@ -43,7 +44,7 @@ class ElaborateSummary
             $this->output->isDecorated()
         );
 
-        $changes = tap($summary, fn () => $this->summaryOutput->handle($summary, $context['totalFiles']))->getChanged();
+        tap($summary, fn () => $this->summaryOutput->handle($summary, $totalFiles))->getChanged();
 
         $failure = ($summary->isDryRun() && count($changes) > 0)
             || count($this->errors->getInvalidErrors()) > 0

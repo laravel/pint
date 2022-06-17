@@ -4,7 +4,6 @@ namespace App\Commands;
 
 use App\Actions\ElaborateSummary;
 use App\Actions\FixCode;
-use App\Factories\ConfigurationResolverFactory;
 use LaravelZero\Framework\Commands\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -54,13 +53,8 @@ class DefaultCommand extends Command
      */
     public function handle(FixCode $fixCode, ElaborateSummary $elaborateSummary)
     {
-        [$resolver, $totalFiles] = ConfigurationResolverFactory::fromIO($this->input, $this->output);
+        [$totalFiles, $changes] = $fixCode->execute();
 
-        $changes = with($resolver, $fixCode);
-
-        return with([
-            'totalFiles' => $totalFiles,
-            'changes' => $changes,
-        ], $elaborateSummary);
+        return $elaborateSummary->execute($totalFiles, $changes);
     }
 }

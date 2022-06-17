@@ -35,6 +35,7 @@ class ActionsServiceProvider extends ServiceProvider
             return new FixCode(
                 resolve(ErrorsManager::class),
                 resolve(EventDispatcher::class),
+                resolve(InputInterface::class),
                 resolve(OutputInterface::class),
                 new ProgressOutput(
                     resolve(EventDispatcher::class),
