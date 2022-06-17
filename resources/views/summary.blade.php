@@ -68,7 +68,7 @@
                     {{ $issue->file() }}
                 </span>
             </span>
-            <span class="flex-1 truncate text-gray text-right">
+            <span class="{{ $isVerbose ? '' : 'flex-1 truncate' }} text-gray text-right">
                 {{ $issue->description($testing) }}
             </span>
         </div>
