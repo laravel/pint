@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="/art/pint-example.png" alt="Logo Laravel Pint preview" style="width:70%;">
+    <img src="/art/pint-example.png" alt="Laravel Pint preview" style="width:70%;">
 </p>
 
 <p align="center">
@@ -12,7 +12,7 @@
 <a name="introduction"></a>
 ## Introduction
 
-**Laravel Pint** is a minimalist, simple, zero dependencies coding-style fixer for PHP, built on top of [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer), that you may use to ensure a clean and consistent code style-wise.
+**Laravel Pint** is a minimalist, simple, zero dependencies coding-style fixer for PHP, built on top of **[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)**, that you may use to ensure a **clean and consistent code** style-wise.
 
 <a name="installation"></a>
 ## Installation
@@ -21,14 +21,25 @@ You may use Composer to install Pint into your new PHP project:
 
     composer require laravel/pint --dev
 
-After Pint has been installed, you may run `pint` to fix coding-style issues in your code:
+Once Pint has been installed, the `pint` binary will be available in your application's `vendor/bin` directory:
 
-    pint
+    ./vendor/bin/pint
+
+<a name="list-of-changes"></a>
+## List Of Changes
+
+When running Pint, it will output a list of files that have been changed. While most of the time it's enough, it is possible to see the changes in a more detailed manner using the `-v` option:
+
+    ./vendor/bin/pint -v
+
+In addition, if you wish Pint to simply test your code for style errors, so you can see the changes that would be made, you may use the `--test` option:
+
+    ./vendor/bin/pint --test
 
 <a name="configuring"></a>
 ## Configuring Pint
 
-By default, Pint does not require any configuration, and it will fix coding-style issues in your code following the rules defined in the [PSR 12 Style Guide](https://www.php-fig.org/psr/psr-12).
+**By default, Pint does not require any configuration**, and it will fix coding-style issues in your code following the rules defined in the [PSR 12 Style Guide](https://www.php-fig.org/psr/psr-12).
 
 However, Pint's configuration can be defined in the `pint.json` file, which should be located at the root of your project:
 
