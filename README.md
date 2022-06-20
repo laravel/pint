@@ -78,7 +78,7 @@ If you wish, you may opt to disable or enable rules in your `pint.json` file:
         }
     }
 
-As mentioned above, Pint is built on top of the [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) tool, as such, you may use any of its rules to fix coding-style issues in your code: [github.com/FriendsOfPHP/PHP-CS-Fixer/blob/master/doc/rules](https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/master/doc/rules/index.rst)
+As mentioned above, Pint is built on top of the [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) tool, as such, you may use any of its rules to fix coding-style issues in your code: [PHP CS Fixer Configurator](https://mlocati.github.io/php-cs-fixer-configurator/)
 
 <a name="contributing"></a>
 ## Contributing
