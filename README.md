@@ -44,7 +44,7 @@ In addition, if you wish Pint to simply test your code for style errors, so you 
 However, if you wish to customize the presets, rules, or inspected folders, you may do so by creating a `pint.json` file in your project's root directory:
 
     {
-        "preset": "psr-12"
+        "preset": "psr12"
     }
 
 <a name="presets"></a>
@@ -63,6 +63,8 @@ If you wish, you may also set the preset in your `pint.json` file:
     {
         "preset": "laravel"
     }
+
+The list of available presets is: `psr12`, `laravel`, and `symfony`.
 
 <a name="rules"></a>
 ### Rules
