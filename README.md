@@ -41,7 +41,7 @@ In addition, if you wish Pint to simply test your code for style errors, so you 
 
 **By default, Pint does not require any configuration**, and it will fix coding-style issues in your code following the rules defined in the [PSR 12 Style Guide](https://www.php-fig.org/psr/psr-12).
 
-However, Pint's configuration can be defined in the `pint.json` file, which should be located at the root of your project:
+However, if you wish to customize the presets, rules, or inspected folders, you may do so by creating a `pint.json` file in your project's root directory:
 
     {
         "preset": "psr-12"
@@ -79,6 +79,17 @@ If you wish, you may opt to disable or enable rules in your `pint.json` file:
     }
 
 As mentioned above, Pint is built on top of the [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) tool, as such, you may use any of its rules to fix coding-style issues in your code: [PHP CS Fixer Configurator](https://mlocati.github.io/php-cs-fixer-configurator/)
+
+<a name="exclude-folders"></a>
+### Exclude Folders
+
+By default, Pint will inspect all `.php` files in your project, except for those in the `vendor` folder. If you wish to exclude more folders, you may do so by using the `exclude` configuration option:
+
+    {
+        "exclude": [
+            "my-specific/folder"
+        ]
+    }
 
 <a name="contributing"></a>
 ## Contributing
