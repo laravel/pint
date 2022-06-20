@@ -25,6 +25,7 @@ class ConfigurationResolverFactory
     public static $presets = [
         'laravel',
         'psr12',
+        'symfony',
     ];
 
     /**
