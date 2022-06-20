@@ -17,7 +17,7 @@
 <a name="installation"></a>
 ## Installation
 
-You may use Composer to install Pint into your new PHP project:
+You may use Composer to install Pint into your PHP project:
 
     composer require laravel/pint --dev
 
