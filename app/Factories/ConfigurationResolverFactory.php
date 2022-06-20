@@ -55,7 +55,7 @@ class ConfigurationResolverFactory
                     'presets',
                     sprintf('%s.php', $preset),
                 ]),
-                'diff' => true,
+                'diff' => $output->isVerbose(),
                 'dry-run'     => $input->getOption('test'),
                 'path-mode'   => ConfigurationResolver::PATH_MODE_OVERRIDE,
                 'cache-file'  => implode(DIRECTORY_SEPARATOR, [
