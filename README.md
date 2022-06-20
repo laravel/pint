@@ -56,14 +56,14 @@ If you wish, you may also set the preset in your `pint.json` file:
 <a name="rules"></a>
 ### Rules
 
-Rules are style guidelines that Pint will use to fix coding-style issues in your code. As mentioned above, presets already include a set of rules, as typically you don't need to worry about them.
+Rules are style guidelines that Pint will use to fix coding-style issues in your code. As mentioned above, presets already include a set of rules - the presets, so typically you don't need to worry about them.
 
 If you wish, you may opt to disable or enable rules in your `pint.json` file:
 
     {
         "preset": "laravel",
         "rules": {
-            "array_indentation" => true,
+            "array_indentation": true
         }
     }
 
