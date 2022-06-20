@@ -13,7 +13,7 @@ class SummaryOutput
     use InteractsWithSymbols;
 
     /**
-     * The list of presets, on a human readable format.
+     * The list of presets, on an human readable format.
      *
      * @var array<string, string>
      */
@@ -50,15 +50,34 @@ class SummaryOutput
     {
         renderUsing($this->output);
 
+        $issues = $this->getIssues((string) $this->input->getArgument('path'), $summary);
+
         render(
             view('summary', [
                 'totalFiles' => $totalFiles,
-                'issues' => $this->getIssues((string) $this->input->getArgument('path'), $summary),
+                'issues' => $issues,
                 'testing' => $summary->isDryRun(),
-                'isVerbose' => $this->output->isVerbose(),
                 'preset' => $this->presets[$this->config->preset()],
             ]),
         );
+
+        if ($issues->isEmpty()) {
+            $this->output->writeln('');
+        }
+
+        foreach ($issues as $issue) {
+            render(view('issue.show', [
+                'issue' => $issue,
+                'isVerbose' => $this->output->isVerbose(),
+                'testing' => $summary->isDryRun(),
+            ]));
+
+            if ($this->output->isVerbose() && $issue->code()) {
+                $this->output->writeln(
+                    $issue->code(),
+                );
+            }
+        }
     }
 
     /**

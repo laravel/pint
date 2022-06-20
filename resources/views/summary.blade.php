@@ -1,4 +1,4 @@
-<div class="mb-1 mt-2 mx-2">
+<div class="mt-2 mx-2">
     <div class="flex space-x-1">
         <span class="flex-1 content-repeat-[─] text-gray">
 
@@ -57,20 +57,4 @@
             </div>
         </span>
     </div>
-
-    @foreach ($issues as $issue)
-        <div class="flex space-x-1">
-            <span>
-                <span class="text-red font-bold">
-                    {{ $issue->symbol() }}
-                </span>
-                <span class="ml-1">
-                    {{ $issue->file() }}
-                </span>
-            </span>
-            <span class="{{ $isVerbose ? '' : 'flex-1 truncate' }} text-gray text-right">
-                {{ $issue->description($testing) }}
-            </span>
-        </div>
-    @endforeach
 </div>
