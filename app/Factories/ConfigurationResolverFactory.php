@@ -49,6 +49,7 @@ class ConfigurationResolverFactory
         $resolver = new ConfigurationResolver(
             new Config('default'),
             [
+                'allow-risky' => 'yes',
                 'config' => implode(DIRECTORY_SEPARATOR, [
                     dirname(__DIR__, 2),
                     'resources',

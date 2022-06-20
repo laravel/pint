@@ -36,7 +36,6 @@ class DefaultCommand extends Command
                 [
                     new InputArgument('path', InputArgument::OPTIONAL, 'The project\'s path.', (string) getcwd()),
                     new InputOption('preset', '', InputOption::VALUE_REQUIRED, 'The preset that should be used'),
-                    new InputOption('risky', '', InputOption::VALUE_NONE, 'If risky fixers are allowed to be used.'),
                     new InputOption('test', '', InputOption::VALUE_NONE, 'If the project\'s coding style should be tested instead.'),
                 ]
             );
