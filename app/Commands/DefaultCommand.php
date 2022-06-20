@@ -2,8 +2,6 @@
 
 namespace App\Commands;
 
-use App\Actions\ElaborateSummary;
-use App\Actions\FixCode;
 use LaravelZero\Framework\Commands\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -51,7 +49,7 @@ class DefaultCommand extends Command
      * @param  \App\Actions\ElaborateSummary  $elaborateSummary
      * @return int
      */
-    public function handle(FixCode $fixCode, ElaborateSummary $elaborateSummary)
+    public function handle($fixCode, $elaborateSummary)
     {
         [$totalFiles, $changes] = $fixCode->execute();
 
