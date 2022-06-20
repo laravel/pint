@@ -30,7 +30,11 @@ After Pint has been installed, you may run `pint` to fix coding-style issues in 
 
 By default, Pint does not require any configuration, and it will fix coding-style issues in your code following the rules defined in the [PSR 12 Style Guide](https://www.php-fig.org/psr/psr-12).
 
-However, Pint's configuration can be defined in the `pint.json` file, which should be located at the root of your project.
+However, Pint's configuration can be defined in the `pint.json` file, which should be located at the root of your project:
+
+    {
+        "preset": "psr-12"
+    }
 
 <a name="presets"></a>
 ### Presets
