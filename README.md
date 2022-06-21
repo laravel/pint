@@ -32,9 +32,7 @@ Once Pint has been installed, the `pint` binary will be available in your projec
 
 When running Pint, it will output a list of files that have been changed:
 
-<p align="center">
-    <img src="/art/changes.jpg" alt="Laravel Pint Changes" style="width:50%;">
-</p>
+<img style="float: right;" src="/art/changes.jpg" alt="Laravel Pint Changes" style="width:50%;">
 
 While most of the time it's enough, it is possible to see the changes in a more detailed manner using the `-v` option:
 
@@ -104,7 +102,7 @@ If you wish, you may opt to disable or enable rules in your `pint.json` file:
     <img src="/art/rules.jpg" alt="Laravel Pint Rules" style="width:50%;">
 </p>
 
-As mentioned above, Pint is built on top of the [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) tool, as such, you may use any of its rules to fix coding-style issues in your code: [PHP CS Fixer Configurator](https://mlocati.github.io/php-cs-fixer-configurator/)
+As mentioned above, Pint is built on top of the [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) tool, as such, you may use any of its rules to fix coding-style issues in your code: [PHP CS Fixer Configurator](https://mlocati.github.io/php-cs-fixer-configurator/).
 
 <a name="exclude-folders"></a>
 ### Exclude Folders
