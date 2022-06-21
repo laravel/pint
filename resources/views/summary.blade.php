@@ -14,8 +14,8 @@
             <div class="flex space-x-1">
 
                 @php
-                    $fixableErrors = $issues->reject->isError();
-                    $nonFixableErrors = $issues->filter->isError();
+                    $fixableErrors = $issues->filter->fixable();
+                    $nonFixableErrors = $issues->reject->fixable();
                 @endphp
 
                 @if($issues->count() == 0)

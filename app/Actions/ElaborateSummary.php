@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ElaborateSummary
 {
     /**
-     * Creates a new Fixer instance.
+     * Creates a new Elaborate Summary instance.
      *
      * @param  \PhpCsFixer\Error\ErrorsManager  $errors
      * @param  \Symfony\Component\Console\Input\InputInterface  $input

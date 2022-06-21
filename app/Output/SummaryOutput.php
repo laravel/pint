@@ -24,7 +24,7 @@ class SummaryOutput
     ];
 
     /**
-     * Creates a new Footer instance.
+     * Creates a new Summary Output instance.
      *
      * @param  \App\Repositories\ConfigurationJsonRepository  $config
      * @param  \PhpCsFixer\Error\ErrorsManager  $errors
@@ -81,7 +81,7 @@ class SummaryOutput
     }
 
     /**
-     * Get "issues" from the errors and summary.
+     * Gets the list of issues from the given summary.
      *
      * @param  string  $path
      * @param  \PhpCsFixer\Console\Report\FixReport\ReportSummary  $summary

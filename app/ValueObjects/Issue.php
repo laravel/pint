@@ -10,7 +10,7 @@ use ReflectionClass;
 class Issue
 {
     /**
-     * Creates a new Change instance.
+     * Creates a new Issue instance.
      *
      * @param  string  $path
      * @param  string  $file
@@ -54,13 +54,13 @@ class Issue
     }
 
     /**
-     * If the issue is an error.
+     * If the issue can be fixed.
      *
      * @return bool
      */
-    public function isError()
+    public function fixable()
     {
-        return empty($this->payload['appliedFixers']);
+        return ! empty($this->payload['appliedFixers']);
     }
 
     /**
@@ -70,7 +70,7 @@ class Issue
      */
     public function code()
     {
-        if ($this->isError()) {
+        if ($this->fixable()) {
             $content = file_get_contents($this->file);
 
             return (new Highlighter())->highlight($content, $this->payload['source']->getPrevious()->getLine());

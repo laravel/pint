@@ -11,21 +11,21 @@ class ProgressOutput
     use InteractsWithSymbols;
 
     /**
-     * Holds the current number of processed total.
+     * Holds the current number of processed files.
      *
      * @var int
      */
     protected $processed = 0;
 
     /**
-     * Holds the current number of symbols per line.
+     * Holds the number of symbols on the current terminal line.
      *
      * @var int
      */
     protected $symbolsPerLine = 0;
 
     /**
-     * Creates a new linting progress instance.
+     * Creates a new Progress Output instance.
      *
      * @param  \Symfony\Component\Console\Input\InputInterface  $input
      * @param  \Symfony\Component\Console\Output\OutputInterface  $output
@@ -41,7 +41,7 @@ class ProgressOutput
     }
 
     /**
-     * Listen for fixed files.
+     * Subscribes for file processed events.
      *
      * @return void
      */
@@ -51,7 +51,7 @@ class ProgressOutput
     }
 
     /**
-     * Stops listen for fixed files.
+     * Stops the file processed events subscrition.
      *
      * @return void
      */
@@ -61,7 +61,7 @@ class ProgressOutput
     }
 
     /**
-     * Handle the given processed event.
+     * Handle the given processed file event.
      *
      * @param  \PhpCsFixer\FixerFileProcessedEvent  $event
      * @return void

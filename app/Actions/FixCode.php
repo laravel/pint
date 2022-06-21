@@ -8,7 +8,7 @@ use PhpCsFixer\Runner\Runner;
 class FixCode
 {
     /**
-     * Creates a new Fixer instance.
+     * Creates a new Fix Code instance.
      *
      * @param  \PhpCsFixer\Error\ErrorsManager  $errors
      * @param  \Symfony\Component\EventDispatcher\EventDispatcher  $events
@@ -28,7 +28,7 @@ class FixCode
     }
 
     /**
-     * Fixes the project resolved by the given configuration resolver.
+     * Fixes the project resolved by the current input and output.
      *
      * @return array{int, array<int, string>}
      */

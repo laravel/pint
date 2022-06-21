@@ -28,7 +28,7 @@ class ConfigurationFactory
     ];
 
     /**
-     * Creates a configuration with the given preset of rules.
+     * Creates a PHP CS Fixer Configuration with the given array of rules.
      *
      * @param  array<string, array<string, array<int|string, string|null>|bool|string>|bool>  $rules
      * @return \PhpCsFixer\ConfigInterface

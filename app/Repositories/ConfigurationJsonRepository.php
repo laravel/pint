@@ -14,6 +14,8 @@ class ConfigurationJsonRepository
     ];
 
     /**
+     * Creates a new Configuration Json Repository instance.
+     *
      * @param  string  $path
      * @param  string|null  $preset
      * @return void
@@ -56,7 +58,7 @@ class ConfigurationJsonRepository
     }
 
     /**
-     * Gets the configuration.
+     * Gets the configuration from the "pint.json" file.
      *
      * @return array<string, array<int, string>|string>
      */
