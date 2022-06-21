@@ -96,7 +96,7 @@ If you wish, you may opt to disable or enable rules in your `pint.json` file:
     {
         "preset": "laravel",
         "rules": {
-            "array_indentation": true
+            "braces": false
         }
     }
 
