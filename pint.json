@@ -1,6 +1,6 @@
 {
     "preset": "laravel",
     "exclude": [
-        "tests/Fixtures/with-issues"
+        "tests/Fixtures"
     ]
 }
