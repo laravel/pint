@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="/art/pint-example.png" alt="Laravel Pint preview" style="width:70%;">
+    <img src="/art/overview.png" alt="Laravel Pint Overview" style="width:70%;">
 </p>
 
 <p align="center">
@@ -30,13 +30,27 @@ Once Pint has been installed, the `pint` binary will be available in your projec
 <a name="running"></a>
 ## Running Pint
 
-When running Pint, it will output a list of files that have been changed. While most of the time it's enough, it is possible to see the changes in a more detailed manner using the `-v` option:
+When running Pint, it will output a list of files that have been changed:
+
+<p align="center">
+    <img src="/art/changes.png" alt="Laravel Pint Changes" style="width:50%;">
+</p>
+
+While most of the time it's enough, it is possible to see the changes in a more detailed manner using the `-v` option:
 
     ./vendor/bin/pint -v
+
+<p align="center">
+    <img src="/art/verbose.png" alt="Laravel Pint Verbose" style="width:50%;">
+</p>
 
 In addition, if you wish Pint to simply test your code for style errors, so you can see the changes that would be made, you may use the `--test` option:
 
     ./vendor/bin/pint --test
+
+<p align="center">
+    <img src="/art/test.png" alt="Laravel Pint Test" style="width:50%;">
+</p>
 
 <a name="configuring"></a>
 ## Configuring Pint
@@ -53,6 +67,10 @@ However, if you wish to customize the presets, rules, or inspected folders, you 
 ### Presets
 
 Presets are a way to define a set of rules that can be used to fix coding-style issues in your code. By default, the `psr12` preset is used, which fixes coding-style issues following the rules defined in the [PSR 12 Style Guide](https://www.php-fig.org/psr/psr-12). 
+
+<p align="center">
+    <img src="/art/presets.png" alt="Laravel Pint Presets" style="width:50%;">
+</p>
 
 However, you can opt to use a different preset by passing the `--preset` option:
 
@@ -81,6 +99,10 @@ If you wish, you may opt to disable or enable rules in your `pint.json` file:
             "array_indentation": true
         }
     }
+
+<p align="center">
+    <img src="/art/rules.png" alt="Laravel Pint Rules" style="width:50%;">
+</p>
 
 As mentioned above, Pint is built on top of the [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) tool, as such, you may use any of its rules to fix coding-style issues in your code: [PHP CS Fixer Configurator](https://mlocati.github.io/php-cs-fixer-configurator/)
 
