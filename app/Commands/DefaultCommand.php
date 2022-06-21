@@ -20,7 +20,7 @@ class DefaultCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Fixes the project\'s coding style';
+    protected $description = 'Fix the coding style of the given path';
 
     /**
      * The configuration of the command.
@@ -34,9 +34,9 @@ class DefaultCommand extends Command
         $this
             ->setDefinition(
                 [
-                    new InputArgument('path', InputArgument::OPTIONAL, 'The project\'s path.', (string) getcwd()),
+                    new InputArgument('path', InputArgument::OPTIONAL, 'The path to fix', (string) getcwd()),
                     new InputOption('preset', '', InputOption::VALUE_REQUIRED, 'The preset that should be used'),
-                    new InputOption('test', '', InputOption::VALUE_NONE, 'If the project\'s coding style should be tested instead.'),
+                    new InputOption('test', '', InputOption::VALUE_NONE, 'Test for code style errors without fixing them'),
                 ]
             );
     }

@@ -12,12 +12,12 @@
 <a name="introduction"></a>
 ## Introduction
 
-**Laravel Pint** is a minimalist, simple, zero dependencies coding-style fixer for PHP, built on top of **[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)**, that you may use to ensure a **clean and consistent code** style-wise.
+Laravel Pint is a minimalist, simple, code style fixer for PHP, built on top of **[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)**. Pint makes it simple to ensure that your code style stays clean and consistent.
 
 <a name="installation"></a>
 ## Installation
 
-> **Requires [PHP 8.0+](https://php.net/releases/)**
+> **Laravel Pint requires [PHP 8.0+](https://php.net/releases/).**
 
 You may use Composer to install Pint into your PHP project:
 
@@ -30,20 +30,18 @@ Once Pint has been installed, the `pint` binary will be available in your projec
 <a name="running"></a>
 ## Running Pint
 
-When running Pint, it will output a list of files that have been changed:
-
-While most of the time it's enough, it is possible to see the changes in a more detailed manner using the `-v` option:
+When running Pint, it will output a list of files that have been fixed. It is possible to see the changes made in more detail using the `-v` option:
 
     ./vendor/bin/pint -v
 
-In addition, if you wish Pint to simply test your code for style errors, so you can see the changes that would be made, you may use the `--test` option:
+In addition, if you would like Pint to simply inspect your code for style errors without actually changing the files, you may use the `--test` option:
 
     ./vendor/bin/pint --test
 
 <a name="configuring"></a>
 ## Configuring Pint
 
-**By default, Pint does not require any configuration**, and it will fix coding-style issues in your code following the rules defined in the [PSR 12 Style Guide](https://www.php-fig.org/psr/psr-12).
+**By default, Pint does not require any configuration** and will fix code style issues in your code by following the rules defined in the [PSR-12 Style Guide](https://www.php-fig.org/psr/psr-12).
 
 However, if you wish to customize the presets, rules, or inspected folders, you may do so by creating a `pint.json` file in your project's root directory:
 
@@ -54,28 +52,28 @@ However, if you wish to customize the presets, rules, or inspected folders, you 
 <a name="presets"></a>
 ### Presets
 
-Presets are a way to define a set of rules that can be used to fix coding-style issues in your code. By default, the `psr12` preset is used, which fixes coding-style issues following the rules defined in the [PSR 12 Style Guide](https://www.php-fig.org/psr/psr-12).
+Presets define a set of rules that can be used to fix code style issues in your code. By default, Pint uses the `psr12` preset, which fixes issues by following the rules defined in the [PSR-12 Style Guide](https://www.php-fig.org/psr/psr-12).
 
-However, you can opt to use a different preset by passing the `--preset` option:
+However, you can use a different preset by passing the `--preset` option:
 
 ```bash
 pint --preset laravel
 ```
 
-If you wish, you may also set the preset in your `pint.json` file: 
+If you wish, you may also set the preset in your project's `pint.json` file:
 
     {
         "preset": "laravel"
     }
 
-The list of available presets is: `psr12`, `laravel`, and `symfony`.
+The currently supported presets are: `psr12`, `laravel`, and `symfony`.
 
 <a name="rules"></a>
 ### Rules
 
-Rules are style guidelines that Pint will use to fix coding-style issues in your code. As mentioned above, presets already include a set of rules - the presets, so typically you don't need to worry about them.
+Rules are style guidelines that Pint will use to fix code style issues in your code. As mentioned above, presets are predefined groups of rules that should be perfect for most PHP projects, so you typically will not need to worry about the individual rules they contain.
 
-If you wish, you may opt to disable or enable rules in your `pint.json` file:
+However, if you wish, you may enable or disable specific rules in your `pint.json` file:
 
     {
         "preset": "laravel",
@@ -84,12 +82,12 @@ If you wish, you may opt to disable or enable rules in your `pint.json` file:
         }
     }
 
-As mentioned above, Pint is built on top of the [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) tool, as such, you may use any of its rules to fix coding-style issues in your code: [PHP CS Fixer Configurator](https://mlocati.github.io/php-cs-fixer-configurator/).
+Pint is built on top of [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer). Therefore, you may use any of its rules to fix code style issues in your project: [PHP-CS-Fixer Configurator](https://mlocati.github.io/php-cs-fixer-configurator/).
 
 <a name="exclude-folders"></a>
 ### Exclude Folders
 
-By default, Pint will inspect all `.php` files in your project, except for those in the `vendor` folder. If you wish to exclude more folders, you may do so by using the `exclude` configuration option:
+By default, Pint will inspect all `.php` files in your project except those in the `vendor` folder. If you wish to exclude more folders, you may do so by using the `exclude` configuration option:
 
     {
         "exclude": [
