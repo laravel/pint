@@ -1,6 +1,6 @@
 # Release Instructions
 
-1. Pull down the latest changes on the current stable branch
+1. Pull down the latest changes on the `main` branch
 2. Update the version in [`config/app.php`](./config/app.php)
 3. Compile the binary with
 
