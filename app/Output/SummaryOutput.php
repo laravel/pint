@@ -26,15 +26,16 @@ class SummaryOutput
     /**
      * Creates a new Footer instance.
      *
+     * @param  \App\Repositories\ConfigurationJsonRepository  $config
      * @param  \PhpCsFixer\Error\ErrorsManager  $errors
      * @param  \Symfony\Component\Console\Input\InputInterface  $input
      * @param  \Symfony\Component\Console\Output\OutputInterface  $output
      * @return void
      */
     public function __construct(
+        protected $config,
         protected $errors,
         protected $input,
-        protected $config,
         protected $output,
     ) {
         // ..
@@ -62,10 +63,6 @@ class SummaryOutput
             ]),
         );
 
-        if ($issues->isEmpty()) {
-            $this->output->writeln('');
-        }
-
         foreach ($issues as $issue) {
             render(view('issue.show', [
                 'issue' => $issue,
@@ -79,6 +76,8 @@ class SummaryOutput
                 );
             }
         }
+
+        $this->output->writeln('');
     }
 
     /**

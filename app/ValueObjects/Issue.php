@@ -10,15 +10,6 @@ use ReflectionClass;
 class Issue
 {
     /**
-     * The list of ignorable trace paths while displaying the code output.
-     *
-     * @var array<int, string>
-     */
-    protected $ignorableTracePaths = [
-        'friendsofphp/php-cs-fixer',
-    ];
-
-    /**
      * Creates a new Change instance.
      *
      * @param  string  $path
@@ -128,6 +119,8 @@ class Issue
             $tokenLines = array_slice($tokenLines, 3);
 
             $method = tap($reflector->getMethod('colorLines'))->setAccessible(true);
+
+            /** @var array<int, string> $lines */
             $lines = $method->invoke($highlighter, $tokenLines);
             $lines = collect($lines)->map(function ($line) {
                 if (str($line)->startsWith('[90;3m//-')) {

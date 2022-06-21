@@ -14,7 +14,7 @@ trait InteractsWithSymbols
     /**
      * The list of status symbols.
      *
-     * @var array<int, array<int|string, array|string>>
+     * @var array<int, array<int|string, array<string, string>|string>>
      */
     protected $statuses = [
         FixerFileProcessedEvent::STATUS_UNKNOWN    => ['symbol' => '?', 'format' => '<options=bold;fg=yellow>%s</>'],

@@ -52,9 +52,9 @@ class ActionsServiceProvider extends ServiceProvider
                 resolve(InputInterface::class),
                 resolve(OutputInterface::class),
                 new SummaryOutput(
+                    resolve(ConfigurationJsonRepository::class),
                     resolve(ErrorsManager::class),
                     resolve(InputInterface::class),
-                    resolve(ConfigurationJsonRepository::class),
                     resolve(OutputInterface::class),
                 )
             );
