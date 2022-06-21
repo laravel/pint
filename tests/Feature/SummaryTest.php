@@ -8,7 +8,9 @@ it('may fail with style issues', function () {
     expect($statusCode)->toBe(1)
         ->and($output->fetch())
         ->toContain('FAIL')
-        ->toContain('1 file, 1 style issue');
+        ->toContain('1 file, 1 style issue')
+        ->toContain('⨯ file.php')
+        ->toContain('new_with_braces');
 });
 
 it('may fail with errors', function () {
@@ -19,7 +21,9 @@ it('may fail with errors', function () {
     expect($statusCode)->toBe(1)
         ->and($output->fetch())
         ->toContain('FAIL')
-        ->toContain('1 file, 1 error');
+        ->toContain('1 file, 1 error')
+        ->toContain('! file.php')
+        ->toContain('Parse error: syntax error');
 });
 
 it('may pass', function () {
