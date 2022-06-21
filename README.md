@@ -32,7 +32,9 @@ Once Pint has been installed, the `pint` binary will be available in your projec
 
 When running Pint, it will output a list of files that have been changed:
 
-<img style="float: right;" src="/art/changes.jpg" alt="Laravel Pint Changes" style="width:50%;">
+<p align="center">
+    <img src="/art/changes.jpg" alt="Laravel Pint Changes" style="width:50%;">
+</p>
 
 While most of the time it's enough, it is possible to see the changes in a more detailed manner using the `-v` option:
 
