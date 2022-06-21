@@ -3,10 +3,10 @@
 </p>
 
 <p align="center">
-<a href="https://github.com/laravel/pint/actions"><img src="https://github.com/laravel/pint/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/pint"><img src="https://img.shields.io/packagist/dt/laravel/pint" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/pint"><img src="https://img.shields.io/packagist/v/laravel/pint" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/pint"><img src="https://img.shields.io/packagist/l/laravel/pint" alt="License"></a>
+    <a href="https://github.com/laravel/pint/actions"><img src="https://github.com/laravel/pint/workflows/tests/badge.svg" alt="Build Status"></a>
+    <a href="https://packagist.org/packages/laravel/pint"><img src="https://img.shields.io/packagist/dt/laravel/pint" alt="Total Downloads"></a>
+    <a href="https://packagist.org/packages/laravel/pint"><img src="https://img.shields.io/packagist/v/laravel/pint" alt="Latest Stable Version"></a>
+    <a href="https://packagist.org/packages/laravel/pint"><img src="https://img.shields.io/packagist/l/laravel/pint" alt="License"></a>
 </p>
 
 <a name="introduction"></a>
@@ -17,16 +17,18 @@
 <a name="installation"></a>
 ## Installation
 
+> **Requires [PHP 8.0+](https://php.net/releases/)**
+
 You may use Composer to install Pint into your PHP project:
 
     composer require laravel/pint --dev
 
-Once Pint has been installed, the `pint` binary will be available in your application's `vendor/bin` directory:
+Once Pint has been installed, the `pint` binary will be available in your project's `vendor/bin` directory:
 
     ./vendor/bin/pint
 
-<a name="list-of-changes"></a>
-## List Of Changes
+<a name="running"></a>
+## Running Pint
 
 When running Pint, it will output a list of files that have been changed. While most of the time it's enough, it is possible to see the changes in a more detailed manner using the `-v` option:
 
