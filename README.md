@@ -12,7 +12,7 @@
 <a name="introduction"></a>
 ## Introduction
 
-Laravel Pint is a minimalist code style fixer for PHP, built on top of **[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)**. Pint makes it simple to ensure that your code style stays clean and consistent.
+**Laravel Pint** is a minimalist code style fixer for PHP, built on top of **[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)**. Pint makes it simple to ensure that your code style stays **clean** and **consistent**.
 
 <a name="installation"></a>
 ## Installation
