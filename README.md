@@ -1,5 +1,9 @@
 <p align="center">
-    <img src="/art/overview.png" alt="Laravel Pint Overview" style="width:70%;">
+    <img src="https://github.com/laravel/pint/raw/HEAD/art/logo.svg" alt="Logo Laravel Pint">
+</p>
+
+<p align="center">
+    <img src="/art/overview.png" alt="Overview Laravel Pint" style="width:70%;">
 </p>
 
 <p align="center">
