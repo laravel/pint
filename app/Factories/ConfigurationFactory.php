@@ -14,6 +14,7 @@ class ConfigurationFactory
      * @var array<int, string>
      */
     protected static $notName = [
+        '_ide_helper_models.php',
         '_ide_helper.php',
         '*.blade.php',
     ];
