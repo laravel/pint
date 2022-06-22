@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://github.com/laravel/pint/raw/HEAD/art/logo.svg" alt="Logo Laravel Pint">
+    <img style="width:50%;" src="https://github.com/laravel/pint/raw/HEAD/art/logo.svg" alt="Logo Laravel Pint">
 </p>
 
 <p align="center">
