@@ -9,7 +9,7 @@ final class PhpdocTagComperator
     /**
      * Groups of tags that should be allowed to immediately follow each other.
      *
-     * @var array
+     * @var array<string[]>
      */
     private static $groups = [
         ['deprecated', 'link', 'see', 'since'],
