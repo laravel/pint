@@ -105,6 +105,36 @@ However, if you wish, you may enable or disable specific rules in your `pint.jso
 
 Pint is built on top of [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer). Therefore, you may use any of its rules to fix code style issues in your project: [PHP-CS-Fixer Configurator](https://mlocati.github.io/php-cs-fixer-configurator/).
 
+### Custom Fixers
+
+If you have your own custom rules that you have created as per PHP-CS-Fixer's [documentation](https://cs.symfony.com/doc/custom_rules.html), you may enable them in
+Pint using the `fixers` configuration option:
+
+```json
+{
+    "fixers": [
+        "App\\Fixers\\ExceptionSuffixFixer"
+    ]
+}
+```
+
+If you wish to configure options for a custom fixer, you may do so from the `rules` option:
+
+```json
+{
+    "fixers": [
+        "App\\Fixers\\ExceptionSuffixFixer"
+    ],
+    "rules": {
+        "Fixers/ExceptionSuffixFixer": {
+          "suffix": "Exception"
+        }
+    }
+}
+```
+
+The key for the rule should match the return value of the `getName` method in your custom fixer.
+
 <a name="exclude-folders"></a>
 ### Exclude Folders
 
