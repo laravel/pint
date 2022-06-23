@@ -75,12 +75,17 @@ The currently supported presets are: `psr12`, `laravel`, and `symfony`.
 
 Rules are style guidelines that Pint will use to fix code style issues in your code. As mentioned above, presets are predefined groups of rules that should be perfect for most PHP projects, so you typically will not need to worry about the individual rules they contain.
 
-However, if you wish, you may enable or disable specific rules in your `pint.json` file:
+However, if you wish, you may enable, disable or configure specific rules in your `pint.json`:
 
     {
         "preset": "laravel",
         "rules": {
-            "braces": false
+            "simplified_null_return": true,
+            "braces": false,
+            "new_with_braces": {
+                "anonymous_class": false,
+                "named_class": false
+            }
         }
     }
 
