@@ -2,7 +2,7 @@
 
 namespace App\Fixers;
 
-use App\Fixers\Utils\PhpdocTagComperator;
+use App\Fixers\Utils\PhpdocTagComparator;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\DocBlock\Annotation;
 use PhpCsFixer\DocBlock\DocBlock;
@@ -120,7 +120,7 @@ function fnc($foo, $bar) {}
             }
 
             if (true === $next->getTag()->valid()) {
-                if (PhpdocTagComperator::shouldBeTogether($annotation->getTag(), $next->getTag())) {
+                if (PhpdocTagComparator::shouldBeTogether($annotation->getTag(), $next->getTag())) {
                     $this->ensureAreTogether($doc, $annotation, $next);
                 } else {
                     $this->ensureAreSeparate($doc, $annotation, $next);

@@ -4,7 +4,7 @@ namespace App\Fixers\Utils;
 
 use PhpCsFixer\DocBlock\Tag;
 
-final class PhpdocTagComperator
+final class PhpdocTagComparator
 {
     /**
      * Groups of tags that should be allowed to immediately follow each other.
