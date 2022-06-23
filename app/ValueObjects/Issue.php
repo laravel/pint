@@ -128,9 +128,19 @@ class Issue
                         ->replaceFirst('[90;3m//-', '');
                 }
 
+                if (str($line)->startsWith('//-')) {
+                    return str($line)
+                        ->replaceFirst('//-', '');
+                }
+
                 if (str($line)->startsWith('[90;3m//+')) {
                     return str($line)
                         ->replaceFirst('[90;3m//+', '');
+                }
+
+                if (str($line)->startsWith('//+')) {
+                    return str($line)
+                        ->replaceFirst('//+', '');
                 }
 
                 return $line;
