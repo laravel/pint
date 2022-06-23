@@ -26,7 +26,7 @@ class PhpdocTagComparator
      * @param  Tag $second
      * @return bool
      */
-    public static function shouldBeTogether(Tag $first, Tag $second): bool
+    public static function shouldBeTogether($first, $second)
     {
         $firstName = $first->getName();
         $secondName = $second->getName();
