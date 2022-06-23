@@ -9,7 +9,7 @@ it('may fail with style issues', function () {
         ->and($output->fetch())
         ->toContain('FAIL')
         ->toContain('1 file, 1 style issue')
-        ->toContain('⨯ file.php')
+        ->toContain('⨯ tests/Fixtures/with-fixable-issues/file.php')
         ->toContain('new_with_braces');
 });
 
@@ -22,7 +22,7 @@ it('may fail with errors', function () {
         ->and($output->fetch())
         ->toContain('FAIL')
         ->toContain('1 file, 1 error')
-        ->toContain('! file.php')
+        ->toContain('! tests/Fixtures/with-non-fixable-issues/file.php')
         ->toContain('Parse error: syntax error');
 });
 

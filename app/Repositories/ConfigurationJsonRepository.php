@@ -16,7 +16,7 @@ class ConfigurationJsonRepository
     /**
      * Creates a new Configuration Json Repository instance.
      *
-     * @param  string  $path
+     * @param  string|null $path
      * @param  string|null  $preset
      * @return void
      */
@@ -74,13 +74,8 @@ class ConfigurationJsonRepository
      */
     protected function get()
     {
-        $file = implode(DIRECTORY_SEPARATOR, [
-            $this->path,
-            'pint.json',
-        ]);
-
-        if (file_exists($file)) {
-            return json_decode(file_get_contents($file), true);
+        if (file_exists((string) $this->path)) {
+            return json_decode(file_get_contents($this->path), true);
         }
 
         return [];

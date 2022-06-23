@@ -59,6 +59,12 @@ function run($command, $arguments)
         '--test' => true,
     ], $arguments);
 
+    if (isset($arguments['path'])) {
+        $arguments['--config'] = $arguments['path'] . '/pint.json';
+    }
+
+    $arguments['path'] = [$arguments['path']];
+
     $commandInstance = match ($command) {
         'default' => resolve(DefaultCommand::class),
     };

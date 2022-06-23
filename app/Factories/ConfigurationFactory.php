@@ -2,7 +2,11 @@
 
 namespace App\Factories;
 
+use App\Fixers\LaravelPhpdocAlignmentFixer;
+use App\Fixers\LaravelPhpdocOrderFixer;
+use App\Fixers\LaravelPhpdocSeparationFixer;
 use App\Repositories\ConfigurationJsonRepository;
+use App\Support\Project;
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 use PhpCsFixer\Fixer\FixerInterface;
@@ -29,6 +33,7 @@ class ConfigurationFactory
     protected static $exclude = [
         'storage',
         'bootstrap/cache',
+        'node_modules',
     ];
 
     /**
@@ -39,7 +44,7 @@ class ConfigurationFactory
      */
     public static function preset($rules)
     {
-        $path = ConfigurationResolverFactory::$context['path'];
+        $path = Project::path();
         $localConfiguration = resolve(ConfigurationJsonRepository::class);
 
         $finder = Finder::create()
@@ -69,6 +74,11 @@ class ConfigurationFactory
             ->registerCustomFixers($fixers)
             ->setRules($rules)
             ->setRiskyAllowed(true)
-            ->setUsingCache(true);
+            ->setUsingCache(true)
+            ->registerCustomFixers([
+                new LaravelPhpdocOrderFixer(),
+                new LaravelPhpdocSeparationFixer(),
+                new LaravelPhpdocAlignmentFixer(),
+            ]);
     }
 }

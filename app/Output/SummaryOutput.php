@@ -3,6 +3,7 @@
 namespace App\Output;
 
 use App\Output\Concerns\InteractsWithSymbols;
+use App\Support\Project;
 use App\ValueObjects\Issue;
 use PhpCsFixer\FixerFileProcessedEvent;
 use function Termwind\render;
@@ -52,7 +53,7 @@ class SummaryOutput
     {
         renderUsing($this->output);
 
-        $issues = $this->getIssues((string) $this->input->getArgument('path'), $summary);
+        $issues = $this->getIssues(Project::path(), $summary);
 
         render(
             view('summary', [
