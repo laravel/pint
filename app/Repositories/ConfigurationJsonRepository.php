@@ -16,7 +16,7 @@ class ConfigurationJsonRepository
     /**
      * Creates a new Configuration Json Repository instance.
      *
-     * @param  string|null $path
+     * @param  string|null  $path
      * @param  string|null  $preset
      * @return void
      */
