@@ -80,7 +80,12 @@ However, if you wish, you may enable or disable specific rules in your `pint.jso
     {
         "preset": "laravel",
         "rules": {
-            "braces": false
+            "simplified_null_return": true,
+            "braces": false,
+            "new_with_braces": {
+                "anonymous_class": false,
+                "named_class": false
+            }
         }
     }
 
