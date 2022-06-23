@@ -1,6 +1,18 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v0.1.3...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v0.1.4...main)
+
+## [v0.1.4](https://github.com/laravel/pint/compare/v0.1.3...v0.1.4) - 2022-06-23
+
+### What's Changed
+
+- [0.x] Add multiple additional fixers by @claudiodekker in https://github.com/laravel/pint/pull/10
+
+### New Contributors
+
+- @claudiodekker made their first contribution in https://github.com/laravel/pint/pull/10
+
+**Full Changelog**: https://github.com/laravel/pint/compare/v0.1.3...v0.1.4
 
 ## [v0.1.3](https://github.com/laravel/pint/compare/v0.1.2...v0.1.3) - 2022-06-22
 
