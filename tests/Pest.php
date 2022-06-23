@@ -60,7 +60,7 @@ function run($command, $arguments)
     ], $arguments);
 
     if (isset($arguments['path'])) {
-        $arguments['--config'] = $arguments['path'] . '/pint.json';
+        $arguments['--config'] = $arguments['path'].'/pint.json';
     }
 
     $arguments['path'] = [$arguments['path']];

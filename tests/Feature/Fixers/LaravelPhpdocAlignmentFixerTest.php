@@ -10,11 +10,11 @@ it('fixes the code', function () {
         ->and($output)
         ->toContain('  ⨯')
         ->toContain(
-            <<<EOF
+            <<<'EOF'
    /**
-    * @param  string  \$foo
-  - * @param string  \$bar
-  + * @param  string  \$bar
+    * @param  string  $foo
+  - * @param string  $bar
+  + * @param  string  $bar
     * @return string
     */
 EOF,
