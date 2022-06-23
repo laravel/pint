@@ -1,6 +1,18 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v0.1.5...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v0.1.6...main)
+
+## [v0.1.6](https://github.com/laravel/pint/compare/v0.1.5...v0.1.6) - 2022-06-23
+
+### What's Changed
+
+- Doc: Clarifies rules documentation && add options by @julien-boudry in https://github.com/laravel/pint/pull/18
+
+### New Contributors
+
+- @julien-boudry made their first contribution in https://github.com/laravel/pint/pull/18
+
+**Full Changelog**: https://github.com/laravel/pint/compare/v0.1.5...v0.1.6
 
 ## [v0.1.5](https://github.com/laravel/pint/compare/v0.1.4...v0.1.5) - 2022-06-23
 
