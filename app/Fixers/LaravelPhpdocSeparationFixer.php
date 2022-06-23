@@ -176,10 +176,10 @@ function fnc($foo, $bar) {}
      * @param  \PhpCsFixer\DocBlock\Annotation $next
      * @return void
      */
-    private function ensureAreTogether($doc, $first, $second)
+    private function ensureAreTogether($doc, $annotation, $next)
     {
-        $pos = $first->getEnd();
-        $final = $second->getStart();
+        $pos = $annotation->getEnd();
+        $final = $next->getStart();
 
         for ($pos = $pos + 1; $pos < $final; $pos++) {
             $doc->getLine($pos)->remove();
@@ -196,10 +196,10 @@ function fnc($foo, $bar) {}
      * @param  \PhpCsFixer\DocBlock\Annotation $next
      * @return void
      */
-    private function ensureAreSeparate($doc, $first, $second)
+    private function ensureAreSeparate($doc, $annotation, $next)
     {
-        $pos = $first->getEnd();
-        $final = $second->getStart() - 1;
+        $pos = $annotation->getEnd();
+        $final = $next->getStart() - 1;
 
         // check if we need to add a line, or need to remove one or more lines
         if ($pos === $final) {
