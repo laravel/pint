@@ -33,6 +33,7 @@ class ConfigurationFactory
         'storage',
         'bootstrap/cache',
         'node_modules',
+        'vendor',
     ];
 
     /**
@@ -47,6 +48,7 @@ class ConfigurationFactory
         $localConfiguration = resolve(ConfigurationJsonRepository::class);
 
         $finder = Finder::create()
+            ->name('*.php')
             ->notName(static::$notName)
             ->exclude(static::$exclude)
             ->ignoreDotFiles(true)
