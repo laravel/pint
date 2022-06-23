@@ -35,7 +35,7 @@ it('may have a preset option', function () {
 });
 
 it('may have fixer options', function () {
-    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/fixers', null);
+    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/fixers/pint.json', null);
 
     expect($repository->fixers())->toBe([
         TestCustomFixer::class
