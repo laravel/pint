@@ -2,6 +2,9 @@
 
 namespace App\Factories;
 
+use App\Fixers\LaravelPhpdocAlignmentFixer;
+use App\Fixers\LaravelPhpdocOrderFixer;
+use App\Fixers\LaravelPhpdocSeparationFixer;
 use App\Repositories\ConfigurationJsonRepository;
 use App\Support\Project;
 use PhpCsFixer\Config;
@@ -60,6 +63,11 @@ class ConfigurationFactory
             ->setFinder($finder)
             ->setRules(array_merge($rules, $localConfiguration->rules()))
             ->setRiskyAllowed(true)
-            ->setUsingCache(true);
+            ->setUsingCache(true)
+            ->registerCustomFixers([
+                new LaravelPhpdocOrderFixer(),
+                new LaravelPhpdocSeparationFixer(),
+                new LaravelPhpdocAlignmentFixer(),
+            ]);
     }
 }

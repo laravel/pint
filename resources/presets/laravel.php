@@ -153,4 +153,9 @@ return ConfigurationFactory::preset([
         'elements' => ['method', 'property'],
     ],
     'whitespace_after_comma_in_array' => true,
+
+    // Custom Laravel Fixers which are not included in the PHP CS Fixer
+    'Laravel/laravel_phpdoc_alignment' => true,
+    'Laravel/laravel_phpdoc_order' => true,
+    'Laravel/laravel_phpdoc_separation' => true,
 ]);
