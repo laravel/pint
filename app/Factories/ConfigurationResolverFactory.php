@@ -32,7 +32,7 @@ class ConfigurationResolverFactory
      */
     public static function fromIO($input, $output)
     {
-        $path = (string) $input->getArgument('path');
+        $path = $input->getArgument('path');
 
         $preset = resolve(ConfigurationJsonRepository::class)->preset();
 
@@ -52,11 +52,11 @@ class ConfigurationResolverFactory
                 ]),
                 'diff' => $output->isVerbose(),
                 'dry-run'     => $input->getOption('test'),
-                'path' => [$path],
+                'path' => $path,
                 'path-mode'   => ConfigurationResolver::PATH_MODE_OVERRIDE,
                 'cache-file'  => implode(DIRECTORY_SEPARATOR, [
                     realpath(sys_get_temp_dir()),
-                    md5($path),
+                    md5(implode('|', $path)),
                 ]),
                 'stop-on-violation' => false,
                 'verbosity'         => $output->getVerbosity(),
