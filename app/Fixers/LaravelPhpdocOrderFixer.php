@@ -32,7 +32,7 @@ class LaravelPhpdocOrderFixer extends AbstractFixer
      * need a fixing, but when this method returns false then the Tokens collection
      * need no fixing for sure.
      *
-     * @param  \PhpCsFixer\Tokenizer\Tokens $tokens
+     * @param  \PhpCsFixer\Tokenizer\Tokens  $tokens
      * @return bool
      */
     public function isCandidate(Tokens $tokens): bool
@@ -86,6 +86,8 @@ class LaravelPhpdocOrderFixer extends AbstractFixer
      * - PhpdocScalarFixer
      * - PhpdocToCommentFixer
      * - PhpdocTypesFixer.
+     *
+     * @return int
      */
     public function getPriority(): int
     {
@@ -95,8 +97,8 @@ class LaravelPhpdocOrderFixer extends AbstractFixer
     /**
      * Fixes a file.
      *
-     * @param  \SplFileInfo $file
-     * @param  \PhpCsFixer\Tokenizer\Tokens $tokens
+     * @param  \SplFileInfo  $file
+     * @param  \PhpCsFixer\Tokenizer\Tokens  $tokens
      * @return void
      */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
@@ -120,7 +122,7 @@ class LaravelPhpdocOrderFixer extends AbstractFixer
     /**
      * Move all `param` annotations to be before `throws` and `return` annotations.
      *
-     * @param  string $content
+     * @param  string  $content
      * @return string
      */
     private function moveParamAnnotations($content)
@@ -159,7 +161,7 @@ class LaravelPhpdocOrderFixer extends AbstractFixer
     /**
      * Move all `return` annotations to be after `param` and `throws` annotations.
      *
-     * @param  string $content
+     * @param  string  $content
      * @return string
      */
     private function moveThrowsAnnotations($content)

@@ -33,7 +33,7 @@ class LaravelPhpdocAlignmentFixer implements FixerInterface
      * need a fixing, but when this method returns false then the Tokens collection
      * need no fixing for sure.
      *
-     * @param  \PhpCsFixer\Tokenizer\Tokens $tokens
+     * @param  \PhpCsFixer\Tokenizer\Tokens  $tokens
      * @return bool
      */
     public function isCandidate(Tokens $tokens): bool
@@ -57,8 +57,8 @@ class LaravelPhpdocAlignmentFixer implements FixerInterface
     /**
      * Fixes a file.
      *
-     * @param  \SplFileInfo $file
-     * @param  \PhpCsFixer\Tokenizer\Tokens $tokens
+     * @param  \SplFileInfo  $file
+     * @param  \PhpCsFixer\Tokenizer\Tokens  $tokens
      * @return void
      */
     public function fix(SplFileInfo $file, Tokens $tokens): void
