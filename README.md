@@ -61,6 +61,12 @@ However, if you wish to customize the presets, rules, or inspected folders, you 
 }
 ```
 
+In addition, if you wish to use a `pint.json` from a specific directory, you may use the `--config` option:
+
+```bash
+pint --config vendor/my-company/coding-style/pint.json
+```
+
 <a name="presets"></a>
 ### Presets
 
