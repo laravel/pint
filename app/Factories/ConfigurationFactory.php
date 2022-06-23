@@ -32,6 +32,7 @@ class ConfigurationFactory
     protected static $exclude = [
         'storage',
         'bootstrap/cache',
+        'node_modules',
     ];
 
     /**
