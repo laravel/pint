@@ -3,6 +3,7 @@
 namespace App\Factories;
 
 use App\Repositories\ConfigurationJsonRepository;
+use App\Support\Project;
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 
@@ -38,7 +39,7 @@ class ConfigurationFactory
      */
     public static function preset($rules)
     {
-        $path = ConfigurationResolverFactory::$context['path'];
+        $path = Project::path();
         $localConfiguration = resolve(ConfigurationJsonRepository::class);
 
         $finder = Finder::create()

@@ -35,6 +35,7 @@ class DefaultCommand extends Command
             ->setDefinition(
                 [
                     new InputArgument('path', InputArgument::OPTIONAL, 'The path to fix', (string) getcwd()),
+                    new InputOption('config', '', InputOption::VALUE_REQUIRED, 'The configuration that should be used'),
                     new InputOption('preset', '', InputOption::VALUE_REQUIRED, 'The preset that should be used'),
                     new InputOption('test', '', InputOption::VALUE_NONE, 'Test for code style errors without fixing them'),
                 ]

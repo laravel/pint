@@ -3,6 +3,7 @@
 namespace App\Factories;
 
 use App\Repositories\ConfigurationJsonRepository;
+use App\Support\Project;
 use ArrayIterator;
 use PhpCsFixer\Config;
 use PhpCsFixer\Console\ConfigurationResolver;
@@ -10,13 +11,6 @@ use PhpCsFixer\ToolInfo;
 
 class ConfigurationResolverFactory
 {
-    /**
-     * Statically holds the resolver factory context.
-     *
-     * @var array<string, string>
-     */
-    public static $context = [];
-
     /**
      * The list of available presets.
      *
@@ -46,8 +40,6 @@ class ConfigurationResolverFactory
             abort(1, 'Preset not found.');
         }
 
-        static::$context = ['path' => $path];
-
         $resolver = new ConfigurationResolver(
             new Config('default'),
             [
@@ -70,7 +62,7 @@ class ConfigurationResolverFactory
                 'verbosity'         => $output->getVerbosity(),
                 'show-progress'     => 'true',
             ],
-            getcwd(),
+            Project::path(),
             new ToolInfo(),
         );
 

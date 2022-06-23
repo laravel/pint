@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Repositories\ConfigurationJsonRepository;
+use App\Support\Project;
 use Illuminate\Support\ServiceProvider;
 use Symfony\Component\Console\Input\InputInterface;
 
@@ -29,7 +30,7 @@ class RepositoriesServiceProvider extends ServiceProvider
             $input = resolve(InputInterface::class);
 
             return new ConfigurationJsonRepository(
-                $input->getArgument('path') ?: (string) getcwd(),
+                $input->getOption('config') ?: Project::path().'/pint.json',
                 $input->getOption('preset'),
             );
         });
