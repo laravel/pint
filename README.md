@@ -23,22 +23,30 @@
 
 You may use Composer to install Pint into your PHP project:
 
-    composer require laravel/pint --dev
+```bash
+composer require laravel/pint --dev
+```
 
 Once Pint has been installed, the `pint` binary will be available in your project's `vendor/bin` directory:
 
-    ./vendor/bin/pint
+```bash
+./vendor/bin/pint
+```
 
 <a name="running"></a>
 ## Running Pint
 
 When running Pint, it will output a list of files that have been fixed. It is possible to see the changes made in more detail using the `-v` option:
 
-    ./vendor/bin/pint -v
+```bash
+./vendor/bin/pint -v
+```
 
 In addition, if you would like Pint to simply inspect your code for style errors without actually changing the files, you may use the `--test` option:
 
-    ./vendor/bin/pint --test
+```bash
+./vendor/bin/pint --test
+```
 
 <a name="configuring"></a>
 ## Configuring Pint
@@ -47,9 +55,11 @@ In addition, if you would like Pint to simply inspect your code for style errors
 
 However, if you wish to customize the presets, rules, or inspected folders, you may do so by creating a `pint.json` file in your project's root directory:
 
-    {
-        "preset": "psr12"
-    }
+```json
+{
+    "preset": "psr12"
+}
+```
 
 <a name="presets"></a>
 ### Presets
@@ -64,9 +74,11 @@ pint --preset laravel
 
 If you wish, you may also set the preset in your project's `pint.json` file:
 
-    {
-        "preset": "laravel"
-    }
+```json
+{
+    "preset": "laravel"
+}
+```
 
 The currently supported presets are: `psr12`, `laravel`, and `symfony`.
 
@@ -77,17 +89,19 @@ Rules are style guidelines that Pint will use to fix code style issues in your c
 
 However, if you wish, you may enable or disable specific rules in your `pint.json` file:
 
-    {
-        "preset": "laravel",
-        "rules": {
-            "simplified_null_return": true,
-            "braces": false,
-            "new_with_braces": {
-                "anonymous_class": false,
-                "named_class": false
-            }
+```json
+{
+    "preset": "laravel",
+    "rules": {
+        "simplified_null_return": true,
+        "braces": false,
+        "new_with_braces": {
+            "anonymous_class": false,
+            "named_class": false
         }
     }
+}
+```
 
 Pint is built on top of [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer). Therefore, you may use any of its rules to fix code style issues in your project: [PHP-CS-Fixer Configurator](https://mlocati.github.io/php-cs-fixer-configurator/).
 
@@ -96,11 +110,13 @@ Pint is built on top of [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fi
 
 By default, Pint will inspect all `.php` files in your project except those in the `vendor` folder. If you wish to exclude more folders, you may do so by using the `exclude` configuration option:
 
-    {
-        "exclude": [
-            "my-specific/folder"
-        ]
-    }
+```json
+{
+    "exclude": [
+        "my-specific/folder"
+    ]
+}
+```
 
 <a name="contributing"></a>
 ## Contributing
