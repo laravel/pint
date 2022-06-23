@@ -16,6 +16,7 @@ class ConfigurationFactory
     protected static $notName = [
         '_ide_helper_models.php',
         '_ide_helper.php',
+        '.phpstorm.meta.php',
         '*.blade.php',
     ];
 
