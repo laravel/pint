@@ -41,7 +41,6 @@ class LaravelPhpdocAlignmentFixer implements FixerInterface
         return $tokens->isAnyTokenKindsFound([\T_DOC_COMMENT]);
     }
 
-
     /**
      * Check if fixer is risky or not.
      *

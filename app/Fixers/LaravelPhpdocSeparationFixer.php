@@ -79,7 +79,6 @@ function fnc($foo, $bar) {}
         return -3;
     }
 
-
     /**
      * Check if the fixer is a candidate for given Tokens collection.
      *
