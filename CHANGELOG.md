@@ -1,6 +1,21 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v0.1.6...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v0.1.7...main)
+
+## [v0.1.7](https://github.com/laravel/pint/compare/v0.1.6...v0.1.7) - 2022-06-23
+
+### What's Changed
+
+- Fix readme code styling by @Jubeki in https://github.com/laravel/pint/pull/25
+- [0.x] Add Fixers for Laravel specific PHPDocs by @Jubeki in https://github.com/laravel/pint/pull/3
+- Ignore `node_modules` folder by @aryehraber in https://github.com/laravel/pint/pull/27
+
+### New Contributors
+
+- @Jubeki made their first contribution in https://github.com/laravel/pint/pull/25
+- @aryehraber made their first contribution in https://github.com/laravel/pint/pull/27
+
+**Full Changelog**: https://github.com/laravel/pint/compare/v0.1.6...v0.1.7
 
 ## [v0.1.6](https://github.com/laravel/pint/compare/v0.1.5...v0.1.6) - 2022-06-23
 
