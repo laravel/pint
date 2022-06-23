@@ -41,7 +41,6 @@ class ConfigurationFactory
         $localConfiguration = resolve(ConfigurationJsonRepository::class);
 
         $finder = Finder::create()
-            ->in($path)
             ->notName(static::$notName)
             ->exclude(static::$exclude)
             ->ignoreDotFiles(true)

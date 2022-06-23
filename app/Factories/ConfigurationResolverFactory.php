@@ -60,6 +60,7 @@ class ConfigurationResolverFactory
                 ]),
                 'diff' => $output->isVerbose(),
                 'dry-run'     => $input->getOption('test'),
+                'path' => [$path],
                 'path-mode'   => ConfigurationResolver::PATH_MODE_OVERRIDE,
                 'cache-file'  => implode(DIRECTORY_SEPARATOR, [
                     realpath(sys_get_temp_dir()),
@@ -69,7 +70,7 @@ class ConfigurationResolverFactory
                 'verbosity'         => $output->getVerbosity(),
                 'show-progress'     => 'true',
             ],
-            $path,
+            getcwd(),
             new ToolInfo(),
         );
 
