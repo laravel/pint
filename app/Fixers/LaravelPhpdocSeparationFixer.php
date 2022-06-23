@@ -4,7 +4,6 @@ namespace App\Fixers;
 
 use App\Fixers\Utils\PhpdocTagComparator;
 use PhpCsFixer\AbstractFixer;
-use PhpCsFixer\DocBlock\Annotation;
 use PhpCsFixer\DocBlock\DocBlock;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
@@ -15,15 +14,20 @@ use PhpCsFixer\Tokenizer\Tokens;
 class LaravelPhpdocSeparationFixer extends AbstractFixer
 {
     /**
-     * {@inheritdoc}
+     * Returns the name of the fixer.
+     * The name must match the pattern /^[A-Z][a-zA-Z0-9]*\/[a-z][a-z0-9_]*$/
+     *
+     * @return string
      */
     public function getName(): string
     {
-        return 'LaravelCodeStyle/laravel_phpdoc_separation';
+        return 'Laravel/laravel_phpdoc_separation';
     }
 
     /**
-     * {@inheritdoc}
+     * Returns the definition of the fixer.
+     *
+     * @return \PhpCsFixer\FixerDefinition\FixerDefinitionInterface
      */
     public function getDefinition(): FixerDefinitionInterface
     {
@@ -49,18 +53,42 @@ function fnc($foo, $bar) {}
     }
 
     /**
-     * {@inheritdoc}
+     * Returns the priority of the fixer.
      *
-     * Must run before PhpdocAlignFixer.
-     * Must run after AlignMultilineCommentFixer, CommentToPhpdocFixer, GeneralPhpdocAnnotationRemoveFixer, PhpdocIndentFixer, PhpdocNoAccessFixer, PhpdocNoEmptyReturnFixer, PhpdocNoPackageFixer, PhpdocOrderFixer, PhpdocScalarFixer, PhpdocToCommentFixer, PhpdocTypesFixer.
+     * The default priority is 0 and higher priorities are executed first.
+     *
+     * Must run before
+     * - PhpdocAlignFixer
+     *
+     * Must run after
+     * - AlignMultilineCommentFixer
+     * - CommentToPhpdocFixer
+     * - GeneralPhpdocAnnotationRemoveFixer
+     * - PhpdocIndentFixer, PhpdocNoAccessFixer
+     * - PhpdocNoEmptyReturnFixer
+     * - PhpdocNoPackageFixer
+     * - PhpdocOrderFixer
+     * - PhpdocScalarFixer
+     * - PhpdocToCommentFixer
+     * - PhpdocTypesFixer.
      */
     public function getPriority(): int
     {
         return -3;
     }
 
+
     /**
-     * {@inheritdoc}
+     * Check if the fixer is a candidate for given Tokens collection.
+     *
+     * Fixer is a candidate when the collection contains tokens that may be fixed
+     * during fixer work. This could be considered as some kind of bloom filter.
+     * When this method returns true then to the Tokens collection may or may not
+     * need a fixing, but when this method returns false then the Tokens collection
+     * need no fixing for sure.
+     *
+     * @param  \PhpCsFixer\Tokenizer\Tokens $tokens
+     * @return bool
      */
     public function isCandidate(Tokens $tokens): bool
     {
@@ -68,7 +96,11 @@ function fnc($foo, $bar) {}
     }
 
     /**
-     * {@inheritdoc}
+     * Fixes a file.
+     *
+     * @param  \SplFileInfo $file
+     * @param  \PhpCsFixer\Tokenizer\Tokens $tokens
+     * @return void
      */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
@@ -87,8 +119,11 @@ function fnc($foo, $bar) {}
 
     /**
      * Make sure the description is separated from the annotations.
+     *
+     * @param \PhpCsFixer\DocBlock\DocBlock $doc
+     * @return void
      */
-    private function fixDescription(DocBlock $doc): void
+    private function fixDescription($doc)
     {
         foreach ($doc->getLines() as $index => $line) {
             if ($line->containsATag()) {
@@ -109,8 +144,11 @@ function fnc($foo, $bar) {}
 
     /**
      * Make sure the annotations are correctly separated.
+     *
+     * @param \PhpCsFixer\DocBlock\DocBlock $doc
+     * @return void
      */
-    private function fixAnnotations(DocBlock $doc): void
+    private function fixAnnotations($doc)
     {
         foreach ($doc->getAnnotations() as $index => $annotation) {
             $next = $doc->getAnnotation($index + 1);
@@ -131,8 +169,14 @@ function fnc($foo, $bar) {}
 
     /**
      * Force the given annotations to immediately follow each other.
+     * This is done by removing the blank lines between them.
+     *
+     * @param  \PhpCsFixer\DocBlock\DocBlock $doc
+     * @param  \PhpCsFixer\DocBlock\Annotation $annotation
+     * @param  \PhpCsFixer\DocBlock\Annotation $next
+     * @return void
      */
-    private function ensureAreTogether(DocBlock $doc, Annotation $first, Annotation $second): void
+    private function ensureAreTogether($doc, $first, $second)
     {
         $pos = $first->getEnd();
         $final = $second->getStart();
@@ -144,8 +188,15 @@ function fnc($foo, $bar) {}
 
     /**
      * Force the given annotations to have one empty line between each other.
+     * This is done by adding a blank line between them or reducing the number
+     * of blank lines between them to one.
+     *
+     * @param  \PhpCsFixer\DocBlock\DocBlock $doc
+     * @param  \PhpCsFixer\DocBlock\Annotation $annotation
+     * @param  \PhpCsFixer\DocBlock\Annotation $next
+     * @return void
      */
-    private function ensureAreSeparate(DocBlock $doc, Annotation $first, Annotation $second): void
+    private function ensureAreSeparate($doc, $first, $second)
     {
         $pos = $first->getEnd();
         $final = $second->getStart() - 1;

@@ -14,15 +14,40 @@ use SplFileInfo;
 class LaravelPhpdocAlignmentFixer implements FixerInterface
 {
     /**
-     * {@inheritdoc}
+     * Returns the name of the fixer.
+     * The name must match the pattern /^[A-Z][a-zA-Z0-9]*\/[a-z][a-z0-9_]*$/
+     *
+     * @return string
+     */
+    public function getName(): string
+    {
+        return 'Laravel/laravel_phpdoc_alignment';
+    }
+
+    /**
+     * Check if the fixer is a candidate for given Tokens collection.
+     *
+     * Fixer is a candidate when the collection contains tokens that may be fixed
+     * during fixer work. This could be considered as some kind of bloom filter.
+     * When this method returns true then to the Tokens collection may or may not
+     * need a fixing, but when this method returns false then the Tokens collection
+     * need no fixing for sure.
+     *
+     * @param  \PhpCsFixer\Tokenizer\Tokens $tokens
+     * @return bool
      */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_DOC_COMMENT]);
     }
 
+
     /**
-     * {@inheritdoc}
+     * Check if fixer is risky or not.
+     *
+     * Risky fixer could change code behavior!
+     *
+     * @return bool
      */
     public function isRisky(): bool
     {
@@ -30,7 +55,11 @@ class LaravelPhpdocAlignmentFixer implements FixerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Fixes a file.
+     *
+     * @param  \SplFileInfo $file
+     * @param  \PhpCsFixer\Tokenizer\Tokens $tokens
+     * @return void
      */
     public function fix(SplFileInfo $file, Tokens $tokens): void
     {
@@ -56,7 +85,9 @@ class LaravelPhpdocAlignmentFixer implements FixerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Returns the definition of the fixer.
+     *
+     * @return \PhpCsFixer\FixerDefinition\FixerDefinitionInterface
      */
     public function getDefinition(): FixerDefinitionInterface
     {
@@ -73,15 +104,11 @@ function a($foo, $bar) {}
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getName(): string
-    {
-        return 'LaravelCodeStyle/laravel_phpdoc_alignment';
-    }
-
-    /**
-     * {@inheritdoc}
+     * Returns the priority of the fixer.
+     *
+     * The default priority is 0 and higher priorities are executed first.
+     *
+     * @return int
      */
     public function getPriority(): int
     {
@@ -89,7 +116,9 @@ function a($foo, $bar) {}
     }
 
     /**
-     * {@inheritdoc}
+     * Returns true if the file is supported by this fixer.
+     *
+     * @return bool
      */
     public function supports(SplFileInfo $file): bool
     {

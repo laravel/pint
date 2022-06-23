@@ -13,15 +13,27 @@ use PhpCsFixer\Tokenizer\Tokens;
 class LaravelPhpdocOrderFixer extends AbstractFixer
 {
     /**
-     * {@inheritdoc}
+     * Returns the name of the fixer.
+     * The name must match the pattern /^[A-Z][a-zA-Z0-9]*\/[a-z][a-z0-9_]*$/
+     *
+     * @return string
      */
     public function getName(): string
     {
-        return 'LaravelCodeStyle/laravel_phpdoc_order';
+        return 'Laravel/laravel_phpdoc_order';
     }
 
     /**
-     * {@inheritdoc}
+     * Check if the fixer is a candidate for given Tokens collection.
+     *
+     * Fixer is a candidate when the collection contains tokens that may be fixed
+     * during fixer work. This could be considered as some kind of bloom filter.
+     * When this method returns true then to the Tokens collection may or may not
+     * need a fixing, but when this method returns false then the Tokens collection
+     * need no fixing for sure.
+     *
+     * @param  \PhpCsFixer\Tokenizer\Tokens $tokens
+     * @return bool
      */
     public function isCandidate(Tokens $tokens): bool
     {
@@ -29,7 +41,9 @@ class LaravelPhpdocOrderFixer extends AbstractFixer
     }
 
     /**
-     * {@inheritdoc}
+     * Returns the definition of the fixer.
+     *
+     * @return \PhpCsFixer\FixerDefinition\FixerDefinitionInterface
      */
     public function getDefinition(): FixerDefinitionInterface
     {
@@ -54,10 +68,24 @@ class LaravelPhpdocOrderFixer extends AbstractFixer
     }
 
     /**
-     * {@inheritdoc}
+     * Returns the priority of the fixer.
      *
-     * Must run before PhpdocAlignFixer, PhpdocSeparationFixer, PhpdocTrimFixer.
-     * Must run after AlignMultilineCommentFixer, CommentToPhpdocFixer, PhpdocAddMissingParamAnnotationFixer, PhpdocIndentFixer, PhpdocNoEmptyReturnFixer, PhpdocScalarFixer, PhpdocToCommentFixer, PhpdocTypesFixer.
+     * The default priority is 0 and higher priorities are executed first.
+     *
+     * Must run before
+     * - PhpdocAlignFixer
+     * - PhpdocSeparationFixer
+     * - PhpdocTrimFixer.
+     *
+     * Must run after
+     * - AlignMultilineCommentFixer
+     * - CommentToPhpdocFixer
+     * - PhpdocAddMissingParamAnnotationFixer
+     * - PhpdocIndentFixer
+     * - PhpdocNoEmptyReturnFixer
+     * - PhpdocScalarFixer
+     * - PhpdocToCommentFixer
+     * - PhpdocTypesFixer.
      */
     public function getPriority(): int
     {
@@ -65,7 +93,11 @@ class LaravelPhpdocOrderFixer extends AbstractFixer
     }
 
     /**
-     * {@inheritdoc}
+     * Fixes a file.
+     *
+     * @param  \SplFileInfo $file
+     * @param  \PhpCsFixer\Tokenizer\Tokens $tokens
+     * @return void
      */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
@@ -86,9 +118,12 @@ class LaravelPhpdocOrderFixer extends AbstractFixer
     }
 
     /**
-     * Move all param annotations in before throws and return annotations.
+     * Move all `param` annotations to be before `throws` and `return` annotations.
+     *
+     * @param  string $content
+     * @return string
      */
-    private function moveParamAnnotations(string $content): string
+    private function moveParamAnnotations($content)
     {
         $doc = new DocBlock($content);
         $params = $doc->getAnnotationsOfType('param');
@@ -122,9 +157,12 @@ class LaravelPhpdocOrderFixer extends AbstractFixer
     }
 
     /**
-     * Move all return annotations after param and throws annotations.
+     * Move all `return` annotations to be after `param` and `throws` annotations.
+     *
+     * @param  string $content
+     * @return string
      */
-    private function moveThrowsAnnotations(string $content): string
+    private function moveThrowsAnnotations($content)
     {
         $doc = new DocBlock($content);
         $throws = $doc->getAnnotationsOfType('throws');

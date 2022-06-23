@@ -2,8 +2,6 @@
 
 namespace App\Fixers\Utils;
 
-use PhpCsFixer\DocBlock\Tag;
-
 class PhpdocTagComparator
 {
     /**
@@ -20,7 +18,7 @@ class PhpdocTagComparator
     ];
 
     /**
-     * Should the given tags be kept together, or kept apart?
+     * Decide if the the given tags be kept together or kept apart?
      *
      * @param  \PhpCsFixer\DocBlock\Tag $first
      * @param  \PhpCsFixer\DocBlock\Tag $second
