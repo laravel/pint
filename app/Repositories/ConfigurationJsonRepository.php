@@ -48,6 +48,16 @@ class ConfigurationJsonRepository
     }
 
     /**
+     * Gets a list of custom rules to use.
+     *
+     * @return array<int, string>
+     */
+    public function fixers()
+    {
+        return $this->get()['fixers'] ?? [];
+    }
+
+    /**
      * Gets the preset option.
      *
      * @return string

@@ -1,6 +1,7 @@
 <?php
 
 use App\Repositories\ConfigurationJsonRepository;
+use Tests\Mocks\TestCustomFixer;
 
 it('works without json file', function () {
     $repository = new ConfigurationJsonRepository(__DIR__, 'psr12');
@@ -31,4 +32,12 @@ it('may have a preset option', function () {
     $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/preset', null);
 
     expect($repository->preset())->toBe('laravel');
+});
+
+it('may have fixer options', function () {
+    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/fixers', null);
+
+    expect($repository->fixers())->toBe([
+        TestCustomFixer::class
+    ]);
 });

@@ -1,0 +1,5 @@
+{
+    "fixers": [
+        "Tests\\Mocks\\TestCustomFixer"
+    ]
+}

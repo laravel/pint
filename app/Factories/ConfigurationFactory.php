@@ -5,6 +5,7 @@ namespace App\Factories;
 use App\Repositories\ConfigurationJsonRepository;
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
+use PhpCsFixer\Fixer\FixerInterface;
 
 class ConfigurationFactory
 {
@@ -55,9 +56,18 @@ class ConfigurationFactory
             $finder->{$method}($arguments);
         }
 
+        $fixers = array_map(fn (string $fixer) => new $fixer(), $localConfiguration->fixers());
+
+        $rules = array_merge(
+            array_fill_keys(array_map(fn (FixerInterface $fixer) => $fixer->getName(), $fixers), true),
+            $rules,
+            $localConfiguration->rules(),
+        );
+
         return (new Config())
             ->setFinder($finder)
-            ->setRules(array_merge($rules, $localConfiguration->rules()))
+            ->registerCustomFixers($fixers)
+            ->setRules($rules)
             ->setRiskyAllowed(true)
             ->setUsingCache(true);
     }
