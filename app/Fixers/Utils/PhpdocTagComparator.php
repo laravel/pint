@@ -4,7 +4,7 @@ namespace App\Fixers\Utils;
 
 use PhpCsFixer\DocBlock\Tag;
 
-final class PhpdocTagComparator
+class PhpdocTagComparator
 {
     /**
      * Groups of tags that should be allowed to immediately follow each other.
@@ -21,6 +21,10 @@ final class PhpdocTagComparator
 
     /**
      * Should the given tags be kept together, or kept apart?
+     *
+     * @param  Tag $first
+     * @param  Tag $second
+     * @return bool
      */
     public static function shouldBeTogether(Tag $first, Tag $second): bool
     {

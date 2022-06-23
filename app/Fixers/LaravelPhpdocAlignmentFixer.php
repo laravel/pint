@@ -11,7 +11,7 @@ use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 use SplFileInfo;
 
-final class LaravelPhpdocAlignmentFixer implements FixerInterface
+class LaravelPhpdocAlignmentFixer implements FixerInterface
 {
     /**
      * {@inheritdoc}

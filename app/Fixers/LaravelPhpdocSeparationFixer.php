@@ -12,7 +12,7 @@ use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
-final class LaravelPhpdocSeparationFixer extends AbstractFixer
+class LaravelPhpdocSeparationFixer extends AbstractFixer
 {
     /**
      * {@inheritdoc}

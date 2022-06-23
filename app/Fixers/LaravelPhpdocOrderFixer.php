@@ -10,7 +10,7 @@ use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
-final class LaravelPhpdocOrderFixer extends AbstractFixer
+class LaravelPhpdocOrderFixer extends AbstractFixer
 {
     /**
      * {@inheritdoc}
