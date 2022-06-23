@@ -22,8 +22,8 @@ class PhpdocTagComparator
     /**
      * Should the given tags be kept together, or kept apart?
      *
-     * @param  Tag $first
-     * @param  Tag $second
+     * @param  \PhpCsFixer\DocBlock\Tag $first
+     * @param  \PhpCsFixer\DocBlock\Tag $second
      * @return bool
      */
     public static function shouldBeTogether($first, $second)
