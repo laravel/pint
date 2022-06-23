@@ -4,7 +4,6 @@ namespace App\Fixers;
 
 use PhpCsFixer\DocBlock\TypeExpression;
 use PhpCsFixer\Fixer\FixerInterface;
-use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Tokenizer\Token;
@@ -14,10 +13,7 @@ use SplFileInfo;
 class LaravelPhpdocAlignmentFixer implements FixerInterface
 {
     /**
-     * Returns the name of the fixer.
-     * The name must match the pattern /^[A-Z][a-zA-Z0-9]*\/[a-z][a-z0-9_]*$/
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getName(): string
     {
@@ -25,28 +21,15 @@ class LaravelPhpdocAlignmentFixer implements FixerInterface
     }
 
     /**
-     * Check if the fixer is a candidate for given Tokens collection.
-     *
-     * Fixer is a candidate when the collection contains tokens that may be fixed
-     * during fixer work. This could be considered as some kind of bloom filter.
-     * When this method returns true then to the Tokens collection may or may not
-     * need a fixing, but when this method returns false then the Tokens collection
-     * need no fixing for sure.
-     *
-     * @param  \PhpCsFixer\Tokenizer\Tokens  $tokens
-     * @return bool
+     * @inheritdoc
      */
     public function isCandidate(Tokens $tokens): bool
     {
-        return $tokens->isAnyTokenKindsFound([\T_DOC_COMMENT]);
+        return $tokens->isAnyTokenKindsFound([T_DOC_COMMENT]);
     }
 
     /**
-     * Check if fixer is risky or not.
-     *
-     * Risky fixer could change code behavior!
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function isRisky(): bool
     {
@@ -54,11 +37,7 @@ class LaravelPhpdocAlignmentFixer implements FixerInterface
     }
 
     /**
-     * Fixes a file.
-     *
-     * @param  \SplFileInfo  $file
-     * @param  \PhpCsFixer\Tokenizer\Tokens  $tokens
-     * @return void
+     * @inheritdoc
      */
     public function fix(SplFileInfo $file, Tokens $tokens): void
     {
@@ -69,45 +48,28 @@ class LaravelPhpdocAlignmentFixer implements FixerInterface
 
             $newContent = preg_replace_callback(
                 '/(?P<tag>@param)\s+(?P<hint>(?:'.TypeExpression::REGEX_TYPES.')?)\s+(?P<var>(?:&|\.{3})?\$\S+)/ux',
-                function ($matches) {
-                    return $matches['tag'].'  '.$matches['hint'].'  '.$matches['var'];
-                },
+                fn ($matches) => $matches['tag'].'  '.$matches['hint'].'  '.$matches['var'],
                 $tokens[$index]->getContent()
             );
 
-            if ($newContent === $tokens[$index]->getContent()) {
+            if ($newContent == $tokens[$index]->getContent()) {
                 continue;
             }
 
-            $tokens[$index] = new Token([\T_DOC_COMMENT, $newContent]);
+            $tokens[$index] = new Token([T_DOC_COMMENT, $newContent]);
         }
     }
 
     /**
-     * Returns the definition of the fixer.
-     *
-     * @return \PhpCsFixer\FixerDefinition\FixerDefinitionInterface
+     * @inheritdoc
      */
     public function getDefinition(): FixerDefinitionInterface
     {
-        return new FixerDefinition('After @param must be two spaces and after the Type Definition must also be two spaces.', [
-            new CodeSample('<?php
-/**
- * @param string $foo
- * @param  string  $bar
- * @return string
- */
-function a($foo, $bar) {}
-'),
-        ]);
+        return new FixerDefinition('@param and type definition must be followed by two spaces.', []);
     }
 
     /**
-     * Returns the priority of the fixer.
-     *
-     * The default priority is 0 and higher priorities are executed first.
-     *
-     * @return int
+     * @inheritdoc
      */
     public function getPriority(): int
     {
@@ -115,9 +77,7 @@ function a($foo, $bar) {}
     }
 
     /**
-     * Returns true if the file is supported by this fixer.
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function supports(SplFileInfo $file): bool
     {

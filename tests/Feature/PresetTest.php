@@ -6,7 +6,7 @@ it('uses the PSR 12 by default', function () {
     ]);
 
     expect($statusCode)->toBe(0)
-        ->and($output->fetch())
+        ->and($output)
         ->toContain('── PSR 12');
 });
 
@@ -17,7 +17,7 @@ it('may use the PSR 12 preset', function () {
     ]);
 
     expect($statusCode)->toBe(0)
-        ->and($output->fetch())
+        ->and($output)
         ->toContain('── PSR 12');
 });
 
@@ -28,7 +28,7 @@ it('may use the Laravel preset', function () {
     ]);
 
     expect($statusCode)->toBe(0)
-        ->and($output->fetch())
+        ->and($output)
         ->toContain('── Laravel');
 });
 
@@ -39,6 +39,6 @@ it('may use the Symfony preset', function () {
     ]);
 
     expect($statusCode)->toBe(0)
-        ->and($output->fetch())
+        ->and($output)
         ->toContain('── Symfony');
 });

@@ -2,22 +2,31 @@
 
 namespace App\Fixers;
 
-use App\Fixers\Utils\PhpdocTagComparator;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\DocBlock\DocBlock;
-use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
+use SplFileInfo;
 
 class LaravelPhpdocSeparationFixer extends AbstractFixer
 {
     /**
-     * Returns the name of the fixer.
-     * The name must match the pattern /^[A-Z][a-zA-Z0-9]*\/[a-z][a-z0-9_]*$/
+     * Groups of tags that should be allowed to immediately follow each other.
      *
-     * @return string
+     * @var array<int, array<int, string>>
+     */
+    protected $groups = [
+        ['deprecated', 'link', 'see', 'since'],
+        ['author', 'copyright', 'license'],
+        ['category', 'package', 'subpackage'],
+        ['property', 'property-read', 'property-write'],
+        ['param', 'return'],
+    ];
+
+    /**
+     * @inheritdoc
      */
     public function getName(): string
     {
@@ -25,54 +34,15 @@ class LaravelPhpdocSeparationFixer extends AbstractFixer
     }
 
     /**
-     * Returns the definition of the fixer.
-     *
-     * @return \PhpCsFixer\FixerDefinition\FixerDefinitionInterface
+     * @inheritdoc
      */
     public function getDefinition(): FixerDefinitionInterface
     {
-        return new FixerDefinition(
-            'Annotations in PHPDoc should be grouped together so that annotations of the same type immediately follow each other, and annotations of a different type are separated by a single blank line. @param and @return are of the same type',
-            [
-                new CodeSample(
-                    '<?php
-/**
- * Description.
- * @param string $foo
- *
- *
- * @param bool   $bar Bar
- * @throws Exception|RuntimeException
- * @return bool
- */
-function fnc($foo, $bar) {}
-'
-                ),
-            ]
-        );
+        return new FixerDefinition('Annotations should be grouped together.', []);
     }
 
     /**
-     * Returns the priority of the fixer.
-     *
-     * The default priority is 0 and higher priorities are executed first.
-     *
-     * Must run before
-     * - PhpdocAlignFixer
-     *
-     * Must run after
-     * - AlignMultilineCommentFixer
-     * - CommentToPhpdocFixer
-     * - GeneralPhpdocAnnotationRemoveFixer
-     * - PhpdocIndentFixer, PhpdocNoAccessFixer
-     * - PhpdocNoEmptyReturnFixer
-     * - PhpdocNoPackageFixer
-     * - PhpdocOrderFixer
-     * - PhpdocScalarFixer
-     * - PhpdocToCommentFixer
-     * - PhpdocTypesFixer.
-     *
-     * @return int
+     * @inheritdoc
      */
     public function getPriority(): int
     {
@@ -80,16 +50,7 @@ function fnc($foo, $bar) {}
     }
 
     /**
-     * Check if the fixer is a candidate for given Tokens collection.
-     *
-     * Fixer is a candidate when the collection contains tokens that may be fixed
-     * during fixer work. This could be considered as some kind of bloom filter.
-     * When this method returns true then to the Tokens collection may or may not
-     * need a fixing, but when this method returns false then the Tokens collection
-     * need no fixing for sure.
-     *
-     * @param  \PhpCsFixer\Tokenizer\Tokens  $tokens
-     * @return bool
+     * @inheritdoc
      */
     public function isCandidate(Tokens $tokens): bool
     {
@@ -97,13 +58,9 @@ function fnc($foo, $bar) {}
     }
 
     /**
-     * Fixes a file.
-     *
-     * @param  \SplFileInfo  $file
-     * @param  \PhpCsFixer\Tokenizer\Tokens  $tokens
-     * @return void
+     * Applies the rule fix to the given file.
      */
-    protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
+    protected function applyFix(SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {
             if (! $token->isGivenKind(T_DOC_COMMENT)) {
@@ -124,7 +81,7 @@ function fnc($foo, $bar) {}
      * @param  \PhpCsFixer\DocBlock\DocBlock  $doc
      * @return void
      */
-    private function fixDescription($doc)
+    protected function fixDescription($doc)
     {
         foreach ($doc->getLines() as $index => $line) {
             if ($line->containsATag()) {
@@ -134,7 +91,7 @@ function fnc($foo, $bar) {}
             if ($line->containsUsefulContent()) {
                 $next = $doc->getLine($index + 1);
 
-                if (null !== $next && $next->containsATag()) {
+                if ($next != null && $next->containsATag()) {
                     $line->addBlank();
 
                     break;
@@ -149,17 +106,17 @@ function fnc($foo, $bar) {}
      * @param  \PhpCsFixer\DocBlock\DocBlock  $doc
      * @return void
      */
-    private function fixAnnotations($doc)
+    protected function fixAnnotations($doc)
     {
         foreach ($doc->getAnnotations() as $index => $annotation) {
             $next = $doc->getAnnotation($index + 1);
 
-            if (null === $next) {
+            if ($next == null) {
                 break;
             }
 
-            if (true === $next->getTag()->valid()) {
-                if (PhpdocTagComparator::shouldBeTogether($annotation->getTag(), $next->getTag())) {
+            if ($next->getTag()->valid() == true) {
+                if ($this->shouldBeTogether($annotation->getTag(), $next->getTag())) {
                     $this->ensureAreTogether($doc, $annotation, $next);
                 } else {
                     $this->ensureAreSeparate($doc, $annotation, $next);
@@ -169,15 +126,14 @@ function fnc($foo, $bar) {}
     }
 
     /**
-     * Force the given annotations to immediately follow each other.
-     * This is done by removing the blank lines between them.
+     * Ensure the given annotations to immediately follow each other.
      *
      * @param  \PhpCsFixer\DocBlock\DocBlock  $doc
      * @param  \PhpCsFixer\DocBlock\Annotation  $annotation
      * @param  \PhpCsFixer\DocBlock\Annotation  $next
      * @return void
      */
-    private function ensureAreTogether($doc, $annotation, $next)
+    protected function ensureAreTogether($doc, $annotation, $next)
     {
         $pos = $annotation->getEnd();
         $final = $next->getStart();
@@ -188,21 +144,18 @@ function fnc($foo, $bar) {}
     }
 
     /**
-     * Force the given annotations to have one empty line between each other.
-     * This is done by adding a blank line between them or reducing the number
-     * of blank lines between them to one.
+     * Ensure the given annotations to have one empty line between each other.
      *
      * @param  \PhpCsFixer\DocBlock\DocBlock  $doc
      * @param  \PhpCsFixer\DocBlock\Annotation  $annotation
      * @param  \PhpCsFixer\DocBlock\Annotation  $next
      * @return void
      */
-    private function ensureAreSeparate($doc, $annotation, $next)
+    protected function ensureAreSeparate($doc, $annotation, $next)
     {
         $pos = $annotation->getEnd();
         $final = $next->getStart() - 1;
 
-        // check if we need to add a line, or need to remove one or more lines
         if ($pos === $final) {
             $doc->getLine($pos)->addBlank();
 
@@ -212,5 +165,26 @@ function fnc($foo, $bar) {}
         for ($pos = $pos + 1; $pos < $final; $pos++) {
             $doc->getLine($pos)->remove();
         }
+    }
+
+    /**
+     * If the given tags should be together or apart.
+     *
+     * @param  \PhpCsFixer\DocBlock\Tag  $first
+     * @param  \PhpCsFixer\DocBlock\Tag  $second
+     * @return bool
+     */
+    protected function shouldBeTogether($first, $second)
+    {
+        $firstName = $first->getName();
+        $secondName = $second->getName();
+
+        if ($firstName == $secondName) {
+            return true;
+        }
+
+        return collect($this->groups)
+            ->filter(fn ($group) => in_array($firstName, $group, true) && in_array($secondName, $group, true))
+            ->isNotEmpty();
     }
 }

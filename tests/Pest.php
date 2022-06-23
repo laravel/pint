@@ -70,12 +70,16 @@ function run($command, $arguments)
     };
 
     $input = new ArrayInput($arguments, $commandInstance->getDefinition());
-    $output = new BufferedOutput();
+    $output = new BufferedOutput(
+        BufferedOutput::VERBOSITY_VERBOSE,
+    );
 
     app()->singleton(InputInterface::class, fn () => $input);
     app()->singleton(OutputInterface::class, fn () => $output);
 
     $statusCode = resolve(Kernel::class)->call($command, $arguments, $output);
+
+    $output = preg_replace('#\\x1b[[][^A-Za-z]*[A-Za-z]#', '', $output->fetch());
 
     return [$statusCode, $output];
 }

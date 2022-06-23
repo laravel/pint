@@ -66,6 +66,7 @@ class ConfigurationFactory
             ->setRiskyAllowed(true)
             ->setUsingCache(true)
             ->registerCustomFixers([
+                // Laravel...
                 new LaravelPhpdocOrderFixer(),
                 new LaravelPhpdocSeparationFixer(),
                 new LaravelPhpdocAlignmentFixer(),
