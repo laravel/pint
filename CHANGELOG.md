@@ -1,6 +1,18 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v0.1.4...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v0.1.5...main)
+
+## [v0.1.5](https://github.com/laravel/pint/compare/v0.1.4...v0.1.5) - 2022-06-23
+
+### What's Changed
+
+- Ignore .phpstorm.meta.php by @fieu in https://github.com/laravel/pint/pull/16
+
+### New Contributors
+
+- @fieu made their first contribution in https://github.com/laravel/pint/pull/16
+
+**Full Changelog**: https://github.com/laravel/pint/compare/v0.1.4...v0.1.5
 
 ## [v0.1.4](https://github.com/laravel/pint/compare/v0.1.3...v0.1.4) - 2022-06-23
 
