@@ -25,10 +25,10 @@ it('may have finder options', function () {
             'my-dir',
         ],
         'notName' => [
-            '*-my-file.php'
+            '*-my-file.php',
         ],
         'notPath' => [
-            'path/to/excluded-file.php'
+            'path/to/excluded-file.php',
         ],
     ]);
 });

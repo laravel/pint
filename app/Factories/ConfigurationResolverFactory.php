@@ -56,7 +56,8 @@ class ConfigurationResolverFactory
                 'path-mode'   => ConfigurationResolver::PATH_MODE_OVERRIDE,
                 'cache-file'  => implode(DIRECTORY_SEPARATOR, [
                     realpath(sys_get_temp_dir()),
-                    md5(app()->isProduction()
+                    md5(
+                        app()->isProduction()
                         ? implode('|', $path)
                         : (string) microtime()
                     ),

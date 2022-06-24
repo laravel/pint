@@ -6,7 +6,6 @@ use App\Fixers\LaravelPhpdocAlignmentFixer;
 use App\Fixers\LaravelPhpdocOrderFixer;
 use App\Fixers\LaravelPhpdocSeparationFixer;
 use App\Repositories\ConfigurationJsonRepository;
-use App\Support\Project;
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 
