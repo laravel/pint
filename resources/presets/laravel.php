@@ -14,7 +14,13 @@ return ConfigurationFactory::preset([
     'blank_line_before_statement' => [
         'statements' => ['return'],
     ],
-    'braces' => true,
+    'braces' => [
+        'allow_single_line_anonymous_class_with_empty_body' => true,
+        'allow_single_line_closure' => true,
+        'position_after_control_structures' => 'next',
+        'position_after_functions_and_oop_constructs' => 'next',
+        'position_after_anonymous_constructs' => 'next',
+    ],
     'cast_spaces' => true,
     'class_attributes_separation' => [
         'elements' => [
