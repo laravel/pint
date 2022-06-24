@@ -17,7 +17,7 @@ return ConfigurationFactory::preset([
     'braces' => [
         'allow_single_line_anonymous_class_with_empty_body' => true,
         'allow_single_line_closure' => true,
-        'position_after_control_structures' => 'next',
+        'position_after_control_structures' => 'same',
         'position_after_functions_and_oop_constructs' => 'next',
         'position_after_anonymous_constructs' => 'next',
     ],
