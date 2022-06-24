@@ -51,7 +51,7 @@ class ProgressOutput
     }
 
     /**
-     * Stops the file processed events subscrition.
+     * Stops the file processed event subscription.
      *
      * @return void
      */
