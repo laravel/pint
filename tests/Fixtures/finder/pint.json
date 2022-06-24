@@ -1,5 +1,9 @@
 {
     "exclude": [
         "my-dir"
+    ],
+    "notName": [
+        "*-my-file.php"
+    ],
     ]
 }
