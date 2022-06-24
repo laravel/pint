@@ -51,7 +51,7 @@ In addition, if you would like Pint to simply inspect your code for style errors
 <a name="configuring"></a>
 ## Configuring Pint
 
-**By default, Pint does not require any configuration** and will fix code style issues in your code by following the opinioned coding style of Laravel.
+**By default, Pint does not require any configuration** and will fix code style issues in your code by following the opinionated coding style of Laravel.
 
 However, if you wish to customize the presets, rules, or inspected folders, you may do so by creating a `pint.json` file in your project's root directory:
 
@@ -70,7 +70,7 @@ pint --config vendor/my-company/coding-style/pint.json
 <a name="presets"></a>
 ### Presets
 
-Presets define a set of rules that can be used to fix code style issues in your code. By default, Pint uses the `laravel` preset, which fixes issues by following the opinioned coding style of Laravel.
+Presets define a set of rules that can be used to fix code style issues in your code. By default, Pint uses the `laravel` preset, which fixes issues by following the opinionated coding style of Laravel.
 
 However, you can use a different preset by passing the `--preset` option:
 
