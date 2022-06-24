@@ -1,13 +1,13 @@
 <?php
 
-it('uses the PSR 12 by default', function () {
+it('uses the laravel preset by default', function () {
     [$statusCode, $output] = run('default', [
         'path' => base_path('tests/Fixtures/without-issues'),
     ]);
 
     expect($statusCode)->toBe(0)
         ->and($output)
-        ->toContain('── PSR 12');
+        ->toContain('── Laravel');
 });
 
 it('may use the PSR 12 preset', function () {

@@ -51,13 +51,13 @@ In addition, if you would like Pint to simply inspect your code for style errors
 <a name="configuring"></a>
 ## Configuring Pint
 
-**By default, Pint does not require any configuration** and will fix code style issues in your code by following the rules defined in the [PSR-12 Style Guide](https://www.php-fig.org/psr/psr-12).
+**By default, Pint does not require any configuration** and will fix code style issues in your code by following the opinioned coding style of Laravel.
 
 However, if you wish to customize the presets, rules, or inspected folders, you may do so by creating a `pint.json` file in your project's root directory:
 
 ```json
 {
-    "preset": "psr12"
+    "preset": "laravel"
 }
 ```
 
@@ -70,23 +70,23 @@ pint --config vendor/my-company/coding-style/pint.json
 <a name="presets"></a>
 ### Presets
 
-Presets define a set of rules that can be used to fix code style issues in your code. By default, Pint uses the `psr12` preset, which fixes issues by following the rules defined in the [PSR-12 Style Guide](https://www.php-fig.org/psr/psr-12).
+Presets define a set of rules that can be used to fix code style issues in your code. By default, Pint uses the `laravel` preset, which fixes issues by following the opinioned coding style of Laravel.
 
 However, you can use a different preset by passing the `--preset` option:
 
 ```bash
-pint --preset laravel
+pint --preset psr12
 ```
 
 If you wish, you may also set the preset in your project's `pint.json` file:
 
 ```json
 {
-    "preset": "laravel"
+    "preset": "psr12"
 }
 ```
 
-The currently supported presets are: `psr12`, `laravel`, and `symfony`.
+The currently supported presets are: `laravel`, `psr12`, and `symfony`.
 
 <a name="rules"></a>
 ### Rules

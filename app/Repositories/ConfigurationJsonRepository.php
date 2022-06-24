@@ -56,7 +56,7 @@ class ConfigurationJsonRepository
      */
     public function preset()
     {
-        return $this->preset ?: ($this->get()['preset'] ?? 'psr12');
+        return $this->preset ?: ($this->get()['preset'] ?? 'laravel');
     }
 
     /**
