@@ -5,5 +5,7 @@
     "notName": [
         "*-my-file.php"
     ],
+    "notPath": [
+        "path/to/excluded-file.php"
     ]
 }
