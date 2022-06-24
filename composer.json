@@ -18,6 +18,7 @@
     "require": {
         "php": "^8.0",
         "ext-json": "*",
+        "ext-mbstring": "*",
         "ext-tokenizer": "*",
         "ext-xml": "*"
     },
