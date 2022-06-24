@@ -73,7 +73,9 @@ class Issue
         if (! $this->fixable()) {
             $content = file_get_contents($this->file);
 
-            return (new Highlighter())->highlight($content, $this->payload['source']->getPrevious()->getLine());
+            $exception = $this->payload['source']->getPrevious() ?: $this->payload['source'];
+
+            return (new Highlighter())->highlight($content, $exception->getLine());
         }
 
         return $this->diff();
