@@ -11,6 +11,7 @@ class ConfigurationJsonRepository
      */
     protected $finderOptions = [
         'exclude',
+        'notPath',
     ];
 
     /**
