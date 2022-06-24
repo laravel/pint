@@ -124,6 +124,29 @@ By default, Pint will inspect all `.php` files in your project except those in t
 }
 ```
 
+<a name="exclude-files"></a>
+### Exclude Files
+
+If you wish to exclude file with specified name, you may do so by using the `notName` configuration option:
+
+```json
+{
+    "notName": [
+        "*-my-file.php"
+    ]
+}
+```
+
+If you want to exclude file from exact path, you may do so by using the `notPath` configuration option:
+
+```json
+{
+    "notPath": [
+        "path/to/excluded-file.php"
+    ]
+}
+```
+
 <a name="contributing"></a>
 ## Contributing
 
