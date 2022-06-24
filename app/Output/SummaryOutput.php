@@ -14,7 +14,7 @@ class SummaryOutput
     use InteractsWithSymbols;
 
     /**
-     * The list of presets, on an human readable format.
+     * The list of presets, in a human-readable format.
      *
      * @var array<string, string>
      */
