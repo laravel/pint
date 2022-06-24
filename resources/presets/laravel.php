@@ -133,7 +133,7 @@ return ConfigurationFactory::preset([
     'phpdoc_types' => true,
     'phpdoc_var_without_name' => true,
     'return_type_declaration' => ['space_before' => 'none'],
-    'self_accessor' => true,
+    'self_accessor' => false,
     'short_scalar_cast' => true,
     'simplified_null_return' => false,
     'single_blank_line_at_eof' => true,
