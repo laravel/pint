@@ -44,7 +44,6 @@ class ConfigurationFactory
      */
     public static function preset($rules)
     {
-        $path = Project::path();
         $localConfiguration = resolve(ConfigurationJsonRepository::class);
 
         $finder = Finder::create()
