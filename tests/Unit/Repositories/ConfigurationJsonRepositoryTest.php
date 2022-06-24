@@ -24,6 +24,12 @@ it('may have finder options', function () {
         'exclude' => [
             'my-dir',
         ],
+        'notName' => [
+            '*-my-file.php'
+        ],
+        'notPath' => [
+            'path/to/excluded-file.php'
+        ],
     ]);
 });
 
