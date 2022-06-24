@@ -25,5 +25,13 @@ EOF,
        // ..
    };
 EOF,
+        )->toContain(
+            <<<'EOF'
+  -new class extends stdClass {
+  +new class extends stdClass
+  +{
+       // ..
+   };
+EOF,
         );
 });
