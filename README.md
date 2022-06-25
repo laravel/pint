@@ -112,6 +112,27 @@ However, if you wish, you may enable or disable specific rules in your `pint.jso
 Pint is built on top of [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer). Therefore, you may use any of its rules to fix code style issues in your project: [PHP-CS-Fixer Configurator](https://mlocati.github.io/php-cs-fixer-configurator/).
 
 <a name="exclude-folders"></a>
+
+### Brace Style (Allman / K&R)
+
+By default PHP-CS-Fixer uses the[Allman style](https://en.wikipedia.org/wiki/Indentation_style#Allman_style) for the braces where the braces are placed in the new line after the function name. If you rather like the [K&R style](https://en.wikipedia.org/wiki/Indentation_style#K&R_style) where the braces stay on the same line, you can change the pint.json like this.
+
+```json
+{
+    "preset": "laravel",
+    "rules": {
+        "simplified_null_return": true,
+        "braces": {
+            "position_after_functions_and_oop_constructs": "same"
+        },
+        "new_with_braces": {
+            "anonymous_class": false,
+            "named_class": false
+        }
+    }
+}
+```
+
 ### Exclude Folders
 
 By default, Pint will inspect all `.php` files in your project except those in the `vendor` folder. If you wish to exclude more folders, you may do so by using the `exclude` configuration option:
