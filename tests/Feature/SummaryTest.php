@@ -10,8 +10,9 @@ it('may fail with style issues', function () {
         ->and($output)
         ->toContain('FAIL')
         ->toContain('1 file, 1 style issue')
-        ->toContain('⨯ tests/Fixtures/with-fixable-issues/file.php')
-        ->toContain('new_with_braces');
+        ->toContain(sprintf('⨯ %s', implode(DIRECTORY_SEPARATOR, [
+            'tests', 'Fixtures', 'with-fixable-issues', 'file.php',
+        ])))->toContain('new_with_braces');
 });
 
 it('may fail with errors', function () {
@@ -23,8 +24,9 @@ it('may fail with errors', function () {
         ->and($output)
         ->toContain('FAIL')
         ->toContain('1 file, 1 error')
-        ->toContain('! tests/Fixtures/with-non-fixable-issues/file.php')
-        ->toContain('Parse error: syntax error');
+        ->toContain(sprintf('! %s', implode(DIRECTORY_SEPARATOR, [
+            'tests', 'Fixtures', 'with-non-fixable-issues', 'file.php',
+        ])))->toContain('Parse error: syntax error');
 });
 
 it('may pass', function () {
