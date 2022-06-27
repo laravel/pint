@@ -8,14 +8,15 @@ on:
 
 jobs:
   tests:
-    runs-on: ubuntu-20.04
+    runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: true
       matrix:
-        php: ['8.0', 8.1]
+        os: [ubuntu-20.04, windows-2019]
+        php: ['8.0', '8.1']
 
-    name: PHP ${{ matrix.php }}
+    name: PHP ${{ matrix.php }} - ${{ matrix.os }}
 
     steps:
       - name: Checkout code
