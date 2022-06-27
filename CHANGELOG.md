@@ -1,6 +1,21 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v0.2.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v0.2.1...main)
+
+## [v0.2.1](https://github.com/laravel/pint/compare/v0.2.0...v0.2.1) - 2022-06-27
+
+### What's Changed
+
+- Fix actions versions for PHAR deployment job. by @lucasmichot in https://github.com/laravel/pint/pull/49
+- Remove unused imports by @shuvroroy in https://github.com/laravel/pint/pull/48
+- [0.x] Tests against windows by @nunomaduro in https://github.com/laravel/pint/pull/53
+
+### New Contributors
+
+- @shuvroroy made their first contribution in https://github.com/laravel/pint/pull/48
+- @nunomaduro made their first contribution in https://github.com/laravel/pint/pull/53
+
+**Full Changelog**: https://github.com/laravel/pint/compare/v0.2.0...v0.2.1
 
 ## [v0.2.0](https://github.com/laravel/pint/compare/v0.1.7...v0.2.0) - 2022-06-24
 
