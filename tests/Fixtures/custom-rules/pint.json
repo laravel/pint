@@ -1,0 +1,6 @@
+{
+    "preset": "psr12",
+    "custom": {
+        "\\Tests\\Fixtures\\CustomFixer": "ACMECorp/custom_rule"
+    }
+}

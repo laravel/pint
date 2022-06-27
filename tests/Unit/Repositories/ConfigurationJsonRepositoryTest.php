@@ -18,10 +18,10 @@ it('may have rules options', function () {
 });
 
 it('may have custom rules options', function () {
-    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/rules/pint.json', null);
+    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/custom-rules/pint.json', null);
 
     expect($repository->custom())->toBe([
-        '\ACMECorp\Fixers\MyCustomFixer' => 'ACMECorp/my_custom_rule',
+        '\Tests\Fixtures\CustomFixer' => 'ACMECorp/custom_rule',
     ]);
 });
 

@@ -59,9 +59,13 @@ class ConfigurationFactory
             $finder->{$method}($arguments);
         }
 
+        $custom = $localConfiguration->custom();
+        $customRules = array_map(fn () => true, array_flip($custom));
+        $customFixers = array_map(fn ($fixer) => (new $fixer), array_keys($custom));
+
         return (new Config())
             ->setFinder($finder)
-            ->setRules(array_merge($rules, $localConfiguration->rules()))
+            ->setRules(array_merge($rules, $localConfiguration->rules(), $customRules))
             ->setRiskyAllowed(true)
             ->setUsingCache(true)
             ->registerCustomFixers([
@@ -69,6 +73,7 @@ class ConfigurationFactory
                 new LaravelPhpdocOrderFixer(),
                 new LaravelPhpdocSeparationFixer(),
                 new LaravelPhpdocAlignmentFixer(),
+                ...$customFixers
             ]);
     }
 }

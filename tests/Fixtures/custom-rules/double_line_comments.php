@@ -1,0 +1,3 @@
+<?php
+
+// custom fixer test

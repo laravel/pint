@@ -1,8 +1,5 @@
 {
     "rules": {
         "no_unused_imports": false
-    },
-    "custom": {
-        "\\ACMECorp\\Fixers\\MyCustomFixer": "ACMECorp/my_custom_rule"
     }
 }
