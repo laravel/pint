@@ -2,7 +2,6 @@
 
 namespace App\ValueObjects;
 
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use NunoMaduro\Collision\Highlighter;
 use ReflectionClass;
