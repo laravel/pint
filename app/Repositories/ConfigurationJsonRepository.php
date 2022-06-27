@@ -50,6 +50,16 @@ class ConfigurationJsonRepository
     }
 
     /**
+     * Gets the custom rules options.
+     *
+     * @return array<int, string>
+     */
+    public function custom()
+    {
+        return $this->get()['custom'] ?? [];
+    }
+
+    /**
      * Gets the preset option.
      *
      * @return string
