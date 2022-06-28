@@ -9,13 +9,9 @@ jobs:
     name: Release PHAR
 
     steps:
-      - name: Extract the tag name
+      - name: Extract the tag version
         id: tag
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            return context.payload.ref.replace(/\/refs\/tags\//, '').replace('v', '');
+        run: echo ::set-output name=tag::${GITHUB_REF##*v}
 
       - name: Checkout the code
         uses: actions/checkout@v3
@@ -33,7 +29,7 @@ jobs:
         run: composer install --prefer-dist --no-progress
 
       - name: Create the PHAR file.
-        run: ./pint app:build pint.phar --build-version=${{ steps.tag.outputs.result }}
+        run: ./pint app:build pint.phar --build-version=${{ steps.tag.outputs.tag }}
 
       - name: Upload the PHAR to release
         uses: JasonEtco/upload-to-release@master
