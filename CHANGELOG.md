@@ -1,6 +1,19 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v0.2.1...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v0.2.2...main)
+
+## [v0.2.2](https://github.com/laravel/pint/compare/v0.2.1...v0.2.2) - 2022-07-01
+
+### What's Changed
+
+- Fix the tag version extraction. by @lucasmichot in https://github.com/laravel/pint/pull/57
+- List syntax rule by @brandonferens in https://github.com/laravel/pint/pull/66
+
+### New Contributors
+
+- @brandonferens made their first contribution in https://github.com/laravel/pint/pull/66
+
+**Full Changelog**: https://github.com/laravel/pint/compare/v0.2.1...v0.2.2
 
 ## [v0.2.1](https://github.com/laravel/pint/compare/v0.2.0...v0.2.1) - 2022-06-27
 
