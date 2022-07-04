@@ -1,6 +1,15 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v0.2.2...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v0.2.3...main)
+
+## [v0.2.3](https://github.com/laravel/pint/compare/v0.2.2...v0.2.3) - 2022-07-04
+
+### What's Changed
+
+- Keep {@inheritdoc} unchanged. by @lucasmichot in https://github.com/laravel/pint/pull/68
+- Also ensure that the double arrow has a single space on each side. by @lucasmichot in https://github.com/laravel/pint/pull/67
+
+**Full Changelog**: https://github.com/laravel/pint/compare/v0.2.2...v0.2.3
 
 ## [v0.2.2](https://github.com/laravel/pint/compare/v0.2.1...v0.2.2) - 2022-07-01
 
