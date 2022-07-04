@@ -36,7 +36,7 @@ use SplFileInfo;
 class LaravelPhpdocAlignmentFixer implements FixerInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getName(): string
     {
@@ -44,7 +44,7 @@ class LaravelPhpdocAlignmentFixer implements FixerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isCandidate(Tokens $tokens): bool
     {
@@ -52,7 +52,7 @@ class LaravelPhpdocAlignmentFixer implements FixerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isRisky(): bool
     {
@@ -60,7 +60,7 @@ class LaravelPhpdocAlignmentFixer implements FixerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function fix(SplFileInfo $file, Tokens $tokens): void
     {
@@ -84,7 +84,7 @@ class LaravelPhpdocAlignmentFixer implements FixerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getDefinition(): FixerDefinitionInterface
     {
@@ -92,7 +92,7 @@ class LaravelPhpdocAlignmentFixer implements FixerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getPriority(): int
     {
@@ -100,7 +100,7 @@ class LaravelPhpdocAlignmentFixer implements FixerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function supports(SplFileInfo $file): bool
     {

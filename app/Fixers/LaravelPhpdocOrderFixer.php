@@ -36,7 +36,7 @@ use SplFileInfo;
 class LaravelPhpdocOrderFixer extends AbstractFixer
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getName(): string
     {
@@ -44,7 +44,7 @@ class LaravelPhpdocOrderFixer extends AbstractFixer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isCandidate(Tokens $tokens): bool
     {
@@ -52,7 +52,7 @@ class LaravelPhpdocOrderFixer extends AbstractFixer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getDefinition(): FixerDefinitionInterface
     {
@@ -63,7 +63,7 @@ class LaravelPhpdocOrderFixer extends AbstractFixer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getPriority(): int
     {
@@ -71,7 +71,7 @@ class LaravelPhpdocOrderFixer extends AbstractFixer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function applyFix(SplFileInfo $file, Tokens $tokens): void
     {

@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Kernel extends BaseKernel
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function handle($input, $output = null)
     {

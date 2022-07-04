@@ -49,7 +49,7 @@ class LaravelPhpdocSeparationFixer extends AbstractFixer
     ];
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getName(): string
     {
@@ -57,7 +57,7 @@ class LaravelPhpdocSeparationFixer extends AbstractFixer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getDefinition(): FixerDefinitionInterface
     {
@@ -65,7 +65,7 @@ class LaravelPhpdocSeparationFixer extends AbstractFixer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getPriority(): int
     {
@@ -73,7 +73,7 @@ class LaravelPhpdocSeparationFixer extends AbstractFixer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isCandidate(Tokens $tokens): bool
     {
