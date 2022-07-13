@@ -20,6 +20,15 @@ return ConfigurationFactory::preset([
         'position_after_functions_and_oop_constructs' => 'next',
         'position_after_anonymous_constructs' => 'next',
     ],
+    'curly_braces_position' => [
+        'control_structures_opening_brace' => 'same_line',
+        'functions_opening_brace' => 'next_line_unless_newline_at_signature_end',
+        'anonymous_functions_opening_brace' => 'same_line',
+        'classes_opening_brace' => 'next_line_unless_newline_at_signature_end',
+        'anonymous_classes_opening_brace' => 'next_line_unless_newline_at_signature_end',
+        'allow_single_line_empty_anonymous_classes' => false,
+        'allow_single_line_anonymous_functions' => false,
+    ],
     'cast_spaces' => true,
     'class_attributes_separation' => [
         'elements' => [
@@ -153,6 +162,7 @@ return ConfigurationFactory::preset([
     'single_quote' => true,
     'space_after_semicolon' => true,
     'standardize_not_equals' => true,
+    'statement_indentation' => false,
     'switch_case_semicolon_to_colon' => true,
     'switch_case_space' => true,
     'ternary_operator_spaces' => true,

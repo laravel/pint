@@ -57,10 +57,5 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "scripts": {
-        "post-autoload-dump": [
-            "Scripts\\ModifiesVendor::postAutoloadDump"
-        ]
-    },
     "bin": ["builds/pint"]
 }
