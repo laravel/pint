@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v0.2.3...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v0.2.4...main)
+
+## [v0.2.4](https://github.com/laravel/pint/compare/v0.2.3...v0.2.4) - 2022-07-13
+
+**Full Changelog**: https://github.com/laravel/pint/compare/v0.2.3...v0.2.4
 
 ## [v0.2.3](https://github.com/laravel/pint/compare/v0.2.2...v0.2.3) - 2022-07-04
 
