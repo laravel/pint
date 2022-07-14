@@ -59,9 +59,15 @@ class ConfigurationFactory
             $finder->{$method}($arguments);
         }
 
+        foreach ($localConfiguration->rules() as $rule => $value) {
+            if (array_key_exists($rule, $rules)) unset($rules[$rule]);
+
+            $rules[$rule] = $value;
+        }
+
         return (new Config())
             ->setFinder($finder)
-            ->setRules(array_merge($rules, $localConfiguration->rules()))
+            ->setRules($rules)
             ->setRiskyAllowed(true)
             ->setUsingCache(true)
             ->registerCustomFixers([
