@@ -31,9 +31,10 @@ class ElaborateSummary
      *
      * @param  int  $totalFiles
      * @param  array<int, string>  $changes
+     * @param  \PhpCsFixer\Console\Report\FixReport\ReporterInterface  $reporter
      * @return int
      */
-    public function execute($totalFiles, $changes)
+    public function execute($totalFiles, $changes, $reporter)
     {
         $summary = new ReportSummary(
             $changes,
@@ -44,7 +45,14 @@ class ElaborateSummary
             $this->output->isDecorated()
         );
 
-        tap($summary, fn () => $this->summaryOutput->handle($summary, $totalFiles))->getChanged();
+        $this->format($reporter, $summary);
+
+        if (
+            $this->input->getOption('format') === 'txt'
+            || $this->input->getOption('report') !== null
+        ) {
+            tap($summary, fn() => $this->summaryOutput->handle($summary, $totalFiles))->getChanged();
+        }
 
         $failure = ($summary->isDryRun() && count($changes) > 0)
             || count($this->errors->getInvalidErrors()) > 0
@@ -52,5 +60,24 @@ class ElaborateSummary
             || count($this->errors->getLintErrors()) > 0;
 
         return $failure ? Command::FAILURE : Command::SUCCESS;
+    }
+
+    /**
+     * @param  \PhpCsFixer\Console\Report\FixReport\ReporterInterface  $reporter
+     * @param  ReportSummary  $summary
+     * @return void
+     */
+    private function format($reporter, $summary)
+    {
+        if ($this->input->getOption('format') === 'txt') {
+            return;
+        }
+
+        $report = $reporter->generate($summary);
+        if ($this->input->getOption('report') === null) {
+            $this->output->writeln($report);
+        } else {
+            file_put_contents($this->input->getOption('report'), stripcslashes($report), LOCK_EX);
+        }
     }
 }
