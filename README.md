@@ -147,6 +147,44 @@ If you want to exclude file from exact path, you may do so by using the `notPath
 }
 ```
 
+### Format output
+
+You can output results in different [format](https://cs.symfony.com/doc/usage.html) supported by PHP-CS-Fixer. 
+This is especially useful in CI/CD pipelines (for example, [Annotations via the Checks API](https://docs.github.com/en/rest/checks)):
+
+```bash
+pint --test --format=checkstyle
+```
+
+Then you can send output to the tool that will read it and create annotations for you. For example, for GitHub Actions 
+you can implement following job:
+
+```yaml
+- name: Show Pint results in PR
+run: pint --test --format=checkstyle | cs2pr
+```
+
+### Save report to the file
+If you run `pint` with [--format](#format-output) option, it will suppress standard pint's output. If you want to see 
+both standard and formatted output, you can save formatted output to report file:
+
+```bash
+pint --test --format=checkstyle --report=checkstyle.xml
+```
+
+This is especially useful in CI/CD pipelines (for example, [Annotations via the Checks API](https://docs.github.com/en/rest/checks)) 
+when you want to have both job logs and job annotations. You can have one job to generate report file and second job 
+to read from report file. For example, for GitHub Actions you can implement following jobs:
+
+```yaml
+- name: Check PHP code style
+continue-on-error: true
+run: pint --test --format=checkstyle --report=./pint-report.xml
+
+- name: Show Pint results in PR
+run: cs2pr ./pint-report.xml
+```
+
 <a name="contributing"></a>
 ## Contributing
 

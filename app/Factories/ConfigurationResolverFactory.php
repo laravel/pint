@@ -65,6 +65,7 @@ class ConfigurationResolverFactory
                 'stop-on-violation' => false,
                 'verbosity' => $output->getVerbosity(),
                 'show-progress' => 'true',
+                'format' => $input->getOption('format'),
             ],
             Project::path(),
             new ToolInfo(),
