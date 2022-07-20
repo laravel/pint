@@ -72,7 +72,10 @@ class ElaborateSummary
             return;
         }
 
-        $report = $this->report($summary);
+        if (($report = $this->report($summary)) === null) {
+            return;
+        }
+
         if ($this->input->getOption('report') === null) {
             $this->output->writeln($report);
         } else {
@@ -82,7 +85,7 @@ class ElaborateSummary
 
     /**
      * @param ReportSummary $summary
-     * @return string
+     * @return string|null
      */
     private function report($summary)
     {
@@ -94,5 +97,7 @@ class ElaborateSummary
                 return $reporter->generate($summary);
             }
         }
+
+        return null;
     }
 }
