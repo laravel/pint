@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\App;
 use PhpCsFixer\Console\Report\FixReport\ReportSummary;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -31,10 +32,9 @@ class ElaborateSummary
      *
      * @param  int  $totalFiles
      * @param  array<int, string>  $changes
-     * @param  \PhpCsFixer\Console\Report\FixReport\ReporterInterface  $reporter
      * @return int
      */
-    public function execute($totalFiles, $changes, $reporter)
+    public function execute($totalFiles, $changes)
     {
         $summary = new ReportSummary(
             $changes,
@@ -45,13 +45,13 @@ class ElaborateSummary
             $this->output->isDecorated()
         );
 
-        $this->format($reporter, $summary);
+        $this->format($summary);
 
         if (
             $this->input->getOption('format') === 'txt'
             || $this->input->getOption('report') !== null
         ) {
-            tap($summary, fn() => $this->summaryOutput->handle($summary, $totalFiles))->getChanged();
+            tap($summary, fn () => $this->summaryOutput->handle($summary, $totalFiles))->getChanged();
         }
 
         $failure = ($summary->isDryRun() && count($changes) > 0)
@@ -63,21 +63,36 @@ class ElaborateSummary
     }
 
     /**
-     * @param  \PhpCsFixer\Console\Report\FixReport\ReporterInterface  $reporter
      * @param  ReportSummary  $summary
      * @return void
      */
-    private function format($reporter, $summary)
+    private function format($summary)
     {
         if ($this->input->getOption('format') === 'txt') {
             return;
         }
 
-        $report = $reporter->generate($summary);
+        $report = $this->report($summary);
         if ($this->input->getOption('report') === null) {
             $this->output->writeln($report);
         } else {
             file_put_contents($this->input->getOption('report'), stripcslashes($report), LOCK_EX);
+        }
+    }
+
+    /**
+     * @param ReportSummary $summary
+     * @return string
+     */
+    private function report($summary)
+    {
+        $reporters = App::tagged('reporters');
+        $format = $this->input->getOption('format');
+
+        foreach ($reporters as $reporter) {
+            if ($format === $reporter->getFormat()) {
+                return $reporter->generate($summary);
+            }
         }
     }
 }
