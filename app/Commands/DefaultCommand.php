@@ -55,6 +55,6 @@ class DefaultCommand extends Command
     {
         [$totalFiles, $changes] = $fixCode->execute();
 
-        return $elaborateSummary->execute($totalFiles, $changes, $fixCode->getReporter());
+        return $elaborateSummary->execute($totalFiles, $changes);
     }
 }
