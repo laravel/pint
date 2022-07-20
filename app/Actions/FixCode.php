@@ -7,9 +7,6 @@ use PhpCsFixer\Runner\Runner;
 
 class FixCode
 {
-    /** @var \PhpCsFixer\Console\Report\FixReport\ReporterInterface */
-    protected $reporter;
-
     /**
      * Creates a new Fix Code instance.
      *
@@ -60,16 +57,6 @@ class FixCode
             $resolver->shouldStopOnViolation()
         ))->fix();
 
-        $this->reporter = $resolver->getReporter();
-
         return tap([$totalFiles, $changes], fn () => $this->progress->unsubscribe());
-    }
-
-    /**
-     * @return \PhpCsFixer\Console\Report\FixReport\ReporterInterface
-     */
-    public function getReporter()
-    {
-        return $this->reporter;
     }
 }
