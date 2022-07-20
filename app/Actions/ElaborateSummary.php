@@ -3,8 +3,14 @@
 namespace App\Actions;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\App;
+use PhpCsFixer\Console\Report\FixReport\CheckstyleReporter;
+use PhpCsFixer\Console\Report\FixReport\GitlabReporter;
+use PhpCsFixer\Console\Report\FixReport\JsonReporter;
+use PhpCsFixer\Console\Report\FixReport\JunitReporter;
 use PhpCsFixer\Console\Report\FixReport\ReportSummary;
+use PhpCsFixer\Console\Report\FixReport\TextReporter;
+use PhpCsFixer\Console\Report\FixReport\XmlReporter;
+use Symfony\Component\Console\Exception\InvalidOptionException;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ElaborateSummary
@@ -72,9 +78,7 @@ class ElaborateSummary
             return;
         }
 
-        if (($report = $this->report($summary)) === null) {
-            return;
-        }
+        $report = $this->report($summary);
 
         if ($this->input->getOption('report') === null) {
             $this->output->writeln($report);
@@ -84,20 +88,24 @@ class ElaborateSummary
     }
 
     /**
-     * @param ReportSummary $summary
-     * @return string|null
+     * @param  ReportSummary  $summary
+     * @return string
+     *
+     * @throws InvalidOptionException
      */
     private function report($summary)
     {
-        $reporters = App::tagged('reporters');
         $format = $this->input->getOption('format');
+        $reporter = match ($format) {
+            'checkstyle' => new CheckstyleReporter(),
+            'gitlab' => new GitlabReporter(),
+            'json' => new JsonReporter(),
+            'junit' => new JunitReporter(),
+            'txt' => new TextReporter(),
+            'xml' => new XmlReporter(),
+            default => throw new InvalidOptionException(sprintf('Format "%s" is not supported.', $format))
+        };
 
-        foreach ($reporters as $reporter) {
-            if ($format === $reporter->getFormat()) {
-                return $reporter->generate($summary);
-            }
-        }
-
-        return null;
+        return $reporter->generate($summary);
     }
 }
