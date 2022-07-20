@@ -1,7 +1,7 @@
 <?php
 
 it('saves report file', function () {
-    $report = getcwd() . '/checkstyle.xml';
+    $report = getcwd().'/checkstyle.xml';
     [$statusCode, $output] = run('default', [
         'path' => base_path('tests/Fixtures/with-fixable-issues'),
         '--preset' => 'psr12',
