@@ -38,6 +38,7 @@ class DefaultCommand extends Command
                     new InputOption('config', '', InputOption::VALUE_REQUIRED, 'The configuration that should be used'),
                     new InputOption('preset', '', InputOption::VALUE_REQUIRED, 'The preset that should be used'),
                     new InputOption('test', '', InputOption::VALUE_NONE, 'Test for code style errors without fixing them'),
+                    new InputOption('format', '', InputOption::VALUE_REQUIRED, 'The output format that should be used'),
                 ]
             );
     }

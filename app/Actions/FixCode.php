@@ -36,7 +36,9 @@ class FixCode
     {
         [$resolver, $totalFiles] = ConfigurationResolverFactory::fromIO($this->input, $this->output);
 
-        $this->progress->subscribe();
+        if (is_null($this->input->getOption('format'))) {
+            $this->progress->subscribe();
+        }
 
         /** @var array<int, string> $changes */
         $changes = with(new Runner(

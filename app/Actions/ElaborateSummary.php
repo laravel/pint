@@ -3,7 +3,7 @@
 namespace App\Actions;
 
 use Illuminate\Console\Command;
-use PhpCsFixer\Console\Report\FixReport\ReportSummary;
+use PhpCsFixer\Console\Report\FixReport;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ElaborateSummary
@@ -35,7 +35,7 @@ class ElaborateSummary
      */
     public function execute($totalFiles, $changes)
     {
-        $summary = new ReportSummary(
+        $summary = new FixReport\ReportSummary(
             $changes,
             0,
             0,
@@ -44,7 +44,11 @@ class ElaborateSummary
             $this->output->isDecorated()
         );
 
-        tap($summary, fn () => $this->summaryOutput->handle($summary, $totalFiles))->getChanged();
+        if ($this->input->getOption('format')) {
+            $this->displayUsingFormatter($summary, $totalFiles);
+        } else {
+            $this->summaryOutput->handle($summary, $totalFiles);
+        }
 
         $failure = ($summary->isDryRun() && count($changes) > 0)
             || count($this->errors->getInvalidErrors()) > 0
@@ -52,5 +56,27 @@ class ElaborateSummary
             || count($this->errors->getLintErrors()) > 0;
 
         return $failure ? Command::FAILURE : Command::SUCCESS;
+    }
+
+    /**
+     * Formats the given summary using the "selected" formatter.
+     *
+     * @param  \PhpCsFixer\Console\Report\FixReport\ReportSummary  $summary
+     * @param  int  $totalFiles
+     * @return void
+     */
+    protected function displayUsingFormatter($summary, $totalFiles)
+    {
+        $reporter = match ($format = $this->input->getOption('format')) {
+            'checkstyle' => new FixReport\CheckstyleReporter(),
+            'gitlab' => new FixReport\GitlabReporter(),
+            'json' => new FixReport\JsonReporter(),
+            'junit' => new FixReport\JunitReporter(),
+            'txt' => new FixReport\TextReporter(),
+            'xml' => new FixReport\XmlReporter(),
+            default => abort(1, sprintf('Format [%s] is not supported.', $format)),
+        };
+
+        $this->output->write($reporter->generate($summary));
     }
 }
