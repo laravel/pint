@@ -3,14 +3,7 @@
 namespace App\Actions;
 
 use Illuminate\Console\Command;
-use PhpCsFixer\Console\Report\FixReport\CheckstyleReporter;
-use PhpCsFixer\Console\Report\FixReport\GitlabReporter;
-use PhpCsFixer\Console\Report\FixReport\JsonReporter;
-use PhpCsFixer\Console\Report\FixReport\JunitReporter;
-use PhpCsFixer\Console\Report\FixReport\ReportSummary;
-use PhpCsFixer\Console\Report\FixReport\TextReporter;
-use PhpCsFixer\Console\Report\FixReport\XmlReporter;
-use Symfony\Component\Console\Exception\InvalidOptionException;
+use PhpCsFixer\Console\Report\FixReport;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ElaborateSummary
@@ -42,7 +35,7 @@ class ElaborateSummary
      */
     public function execute($totalFiles, $changes)
     {
-        $summary = new ReportSummary(
+        $summary = new FixReport\ReportSummary(
             $changes,
             0,
             0,
@@ -51,13 +44,10 @@ class ElaborateSummary
             $this->output->isDecorated()
         );
 
-        $this->format($summary);
-
-        if (
-            $this->input->getOption('format') === 'txt'
-            || $this->input->getOption('report') !== null
-        ) {
-            tap($summary, fn () => $this->summaryOutput->handle($summary, $totalFiles))->getChanged();
+        if ($this->input->getOption('format')) {
+            $this->displayUsingFormatter($summary, $totalFiles);
+        } else {
+            $this->summaryOutput->handle($summary, $totalFiles);
         }
 
         $failure = ($summary->isDryRun() && count($changes) > 0)
@@ -69,43 +59,24 @@ class ElaborateSummary
     }
 
     /**
-     * @param  ReportSummary  $summary
+     * Formats the given summary using the "selected" formatter.
+     *
+     * @param  \PhpCsFixer\Console\Report\FixReport\ReportSummary  $summary
+     * @param  int  $totalFiles
      * @return void
      */
-    private function format($summary)
+    protected function displayUsingFormatter($summary, $totalFiles)
     {
-        if ($this->input->getOption('format') === 'txt') {
-            return;
-        }
-
-        $report = $this->report($summary);
-
-        if ($this->input->getOption('report') === null) {
-            $this->output->writeln($report);
-        } else {
-            file_put_contents($this->input->getOption('report'), stripcslashes($report), LOCK_EX);
-        }
-    }
-
-    /**
-     * @param  ReportSummary  $summary
-     * @return string
-     *
-     * @throws InvalidOptionException
-     */
-    private function report($summary)
-    {
-        $format = $this->input->getOption('format');
-        $reporter = match ($format) {
-            'checkstyle' => new CheckstyleReporter(),
-            'gitlab' => new GitlabReporter(),
-            'json' => new JsonReporter(),
-            'junit' => new JunitReporter(),
-            'txt' => new TextReporter(),
-            'xml' => new XmlReporter(),
-            default => throw new InvalidOptionException(sprintf('Format "%s" is not supported.', $format))
+        $reporter = match ($format = $this->input->getOption('format')) {
+            'checkstyle' => new FixReport\CheckstyleReporter(),
+            'gitlab' => new FixReport\GitlabReporter(),
+            'json' => new FixReport\JsonReporter(),
+            'junit' => new FixReport\JunitReporter(),
+            'txt' => new FixReport\TextReporter(),
+            'xml' => new FixReport\XmlReporter(),
+            default => abort(1, sprintf('Format [%s] is not supported.', $format)),
         };
 
-        return $reporter->generate($summary);
+        $this->output->write($reporter->generate($summary));
     }
 }

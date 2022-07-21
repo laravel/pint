@@ -36,10 +36,7 @@ class FixCode
     {
         [$resolver, $totalFiles] = ConfigurationResolverFactory::fromIO($this->input, $this->output);
 
-        if (
-            $this->input->getOption('format') === 'txt'
-            || $this->input->getOption('report') !== null
-        ) {
+        if (is_null($this->input->getOption('format'))) {
             $this->progress->subscribe();
         }
 
