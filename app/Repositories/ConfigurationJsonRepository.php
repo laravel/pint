@@ -67,7 +67,11 @@ class ConfigurationJsonRepository
     protected function get()
     {
         if (file_exists((string) $this->path)) {
-            return json_decode(file_get_contents($this->path), true);
+            return tap(json_decode(file_get_contents($this->path), true), function ($configuration) {
+                if (! is_array($configuration)) {
+                    abort(1, sprintf('The configuration file [%s] is not valid JSON format.', $this->path));
+                }
+            });
         }
 
         return [];
