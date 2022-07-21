@@ -43,9 +43,6 @@ jobs:
       - name: Execute lint with Laravel preset
         run: ./pint
 
-      - name: Execute lint with PSR 12 preset
-        run: ./pint --preset=psr12
-
       - name: Execute static analysis
         run: vendor/bin/phpstan
         if: matrix.php == '8.1'
