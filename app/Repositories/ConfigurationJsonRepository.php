@@ -2,6 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Support\Project;
+use Illuminate\Support\Arr;
+
 class ConfigurationJsonRepository
 {
     /**
@@ -67,13 +70,39 @@ class ConfigurationJsonRepository
     protected function get()
     {
         if (file_exists((string) $this->path)) {
-            return tap(json_decode(file_get_contents($this->path), true), function ($configuration) {
-                if (! is_array($configuration)) {
-                    abort(1, sprintf('The configuration file [%s] is not valid JSON.', $this->path));
-                }
-            });
+            $configuration = json_decode(file_get_contents($this->path), true);
+
+            if (! is_array($configuration)) {
+                abort(1, sprintf('The configuration file [%s] is not valid JSON.', $this->path));
+            }
+
+            if ($configuration['extend'] ?? null) {
+                $configuration = $this->resolve($configuration);
+            }
+
+            return $configuration;
         }
 
         return [];
+    }
+
+    /**
+     * Resolves the "pint.json" file from extended configuration.
+     *
+     * @param  array<string, array<int, string>|string>  $configuration
+     * @return array<string, array<int, string>|string>
+     */
+    protected function resolve($configuration)
+    {
+        if (! file_exists(Project::path().DIRECTORY_SEPARATOR.$configuration['extend'])) {
+            abort(1, sprintf('The configuration file [%s] does not exist.', $configuration['extend']));
+        }
+
+        $parentConfiguration = (new ConfigurationJsonRepository($configuration['extend'], $this->preset))->get();
+
+        $configuration = array_merge(Arr::except($parentConfiguration, 'rules'), $configuration);
+        $configuration['rules'] = array_merge($parentConfiguration['rules'] ?? [], $configuration['rules'] ?? []);
+
+        return $configuration;
     }
 }

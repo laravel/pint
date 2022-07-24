@@ -1,0 +1,10 @@
+{
+  "preset": "laravel",
+  "notName": [
+    "*-my-file.php"
+  ],
+  "rules": {
+    "declare_strict_types": true,
+    "octal_notation": true
+  }
+}
