@@ -30,7 +30,7 @@ class ElaborateSummary
      * Elaborates the summary of the given changes.
      *
      * @param  int  $totalFiles
-     * @param  array<int, string>  $changes
+     * @param  array<string, array{appliedFixers: array<int, string>, diff: string}>  $changes
      * @return int
      */
     public function execute($totalFiles, $changes)

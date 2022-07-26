@@ -30,7 +30,7 @@ class FixCode
     /**
      * Fixes the project resolved by the current input and output.
      *
-     * @return array{int, array<int, string>}
+     * @return array{int, array<string, array{appliedFixers: array<int, string>, diff: string}>}
      */
     public function execute()
     {
@@ -40,7 +40,7 @@ class FixCode
             $this->progress->subscribe();
         }
 
-        /** @var array<int, string> $changes */
+        /** @var array<string, array{appliedFixers: array<int, string>, diff: string}> $changes */
         $changes = with(new Runner(
             $resolver->getFinder(),
             $resolver->getFixers(),
