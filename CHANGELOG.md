@@ -1,6 +1,16 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.0.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.1.0...main)
+
+## [v1.1.0](https://github.com/laravel/pint/compare/v1.0.0...v1.1.0) - 2022-07-26
+
+### Added
+
+- [1.x] Adds `--format` option by @nunomaduro in https://github.com/laravel/pint/pull/87
+
+### Fixed
+
+- [1.x] Ensures the configuration file is valid by @nunomaduro in https://github.com/laravel/pint/pull/86
 
 ## [v1.0.0](https://github.com/laravel/pint/compare/v0.2.4...v1.0.0) - 2022-07-14
 
