@@ -32,8 +32,7 @@ jobs:
         run: ./pint app:build pint.phar --build-version=${{ steps.tag.outputs.tag }}
 
       - name: Upload the PHAR to release
-        uses: JasonEtco/upload-to-release@master
+        uses: actions/upload-artifact@v3
         with:
-          args: builds/pint.phar application/php
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: pint.phar
+          path: builds/pint.phar
