@@ -13,7 +13,7 @@ return ConfigurationFactory::preset([
     'blank_line_before_statement' => [
         'statements' => [
             'continue',
-            'return'
+            'return',
         ],
     ],
     'braces' => [
