@@ -74,7 +74,9 @@ return ConfigurationFactory::preset([
     'lowercase_static_reference' => true,
     'magic_method_casing' => true,
     'magic_constant_casing' => true,
-    'method_argument_space' => true,
+    'method_argument_space' => [
+        'on_multiline' => 'ignore',
+    ],
     'multiline_whitespace_before_semicolons' => [
         'strategy' => 'no_multi_line',
     ],
