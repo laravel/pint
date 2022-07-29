@@ -37,7 +37,7 @@ class ConfigurationResolverFactory
         $preset = resolve(ConfigurationJsonRepository::class)->preset();
 
         $resolver = new ConfigurationResolver(
-            static::config($preset),
+            self::config($preset),
             [
                 'allow-risky' => 'yes',
                 'diff' => $output->isVerbose(),
@@ -71,7 +71,7 @@ class ConfigurationResolverFactory
      * Get the config from the preset.
      *
      * @param  string  $preset
-     * @return \PhpCsFixer\Config
+     * @return \PhpCsFixer\ConfigInterface
      */
     private static function config($preset)
     {
