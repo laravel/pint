@@ -84,6 +84,10 @@ class ConfigurationResolverFactory
             ]);
         }
 
-        abort(1, 'Preset not found.');
+        if (! file_exists($preset) || ($config = json_decode(file_get_contents($preset), true)) === null) {
+            abort(1, 'Preset not found.');
+        }
+
+        return ConfigurationFactory::preset($config);
     }
 }

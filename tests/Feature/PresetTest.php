@@ -42,3 +42,16 @@ it('may use the Symfony preset', function () {
         ->and($output)
         ->toContain('── Symfony');
 });
+
+it('may use custom preset', function () {
+    chdir(base_path('tests/Fixtures/custom-preset'));
+
+    [$statusCode, $output] = run('default', [
+        'path' => base_path('tests/Fixtures/custom-preset'),
+        '--preset' => 'preset.json',
+    ]);
+
+    expect($statusCode)->toBe(0)
+        ->and($output)
+        ->toContain('── preset.json');
+});
