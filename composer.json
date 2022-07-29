@@ -23,12 +23,12 @@
         "ext-xml": "*"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.8.0",
-        "illuminate/view": "^9.17.0",
-        "laravel-zero/framework": "^9.1.1",
+        "friendsofphp/php-cs-fixer": "^3.9.5",
+        "illuminate/view": "^9.22.1",
+        "laravel-zero/framework": "^9.1.2",
         "mockery/mockery": "^1.5.0",
-        "nunomaduro/larastan": "^2.1.11",
-        "nunomaduro/termwind": "^1.10.1",
+        "nunomaduro/larastan": "^2.1.12",
+        "nunomaduro/termwind": "^1.13.0",
         "pestphp/pest": "^1.21.3"
     },
     "autoload": {
