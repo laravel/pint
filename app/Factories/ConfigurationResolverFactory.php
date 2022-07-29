@@ -36,20 +36,10 @@ class ConfigurationResolverFactory
 
         $preset = resolve(ConfigurationJsonRepository::class)->preset();
 
-        if (! in_array($preset, static::$presets)) {
-            abort(1, 'Preset not found.');
-        }
-
         $resolver = new ConfigurationResolver(
-            new Config('default'),
+            static::config($preset),
             [
                 'allow-risky' => 'yes',
-                'config' => implode(DIRECTORY_SEPARATOR, [
-                    dirname(__DIR__, 2),
-                    'resources',
-                    'presets',
-                    sprintf('%s.php', $preset),
-                ]),
                 'diff' => $output->isVerbose(),
                 'dry-run' => $input->getOption('test'),
                 'path' => $path,
@@ -75,5 +65,25 @@ class ConfigurationResolverFactory
         )));
 
         return [$resolver, $totalFiles];
+    }
+
+    /**
+     * Get the config from the preset.
+     *
+     * @param  string  $preset
+     * @return \PhpCsFixer\Config
+     */
+    private static function config($preset)
+    {
+        if (in_array($preset, static::$presets)) {
+            return require implode(DIRECTORY_SEPARATOR, [
+                dirname(__DIR__, 2),
+                'resources',
+                'presets',
+                sprintf('%s.php', $preset),
+            ]);
+        }
+
+        abort(1, 'Preset not found.');
     }
 }
