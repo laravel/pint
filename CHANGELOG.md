@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.1.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.1.1...main)
+
+## [v1.1.1](https://github.com/laravel/pint/compare/v1.1.0...v1.1.1) - 2022-08-02
+
+### Changed
+
+- Laravel Preset - include `continue` in `blank_line_before_statement` by @jrseliga in https://github.com/laravel/pint/pull/95
 
 ## [v1.1.0](https://github.com/laravel/pint/compare/v1.0.0...v1.1.0) - 2022-07-26
 
