@@ -38,3 +38,12 @@ it('may have a preset option', function () {
 
     expect($repository->preset())->toBe('laravel');
 });
+
+it('works with php file', function () {
+    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/php-config/pint.php', null);
+
+    expect($repository->preset())->toBe('psr12')
+        ->and($repository->rules())->toBe([
+            'no_unused_imports' => false,
+        ]);
+});

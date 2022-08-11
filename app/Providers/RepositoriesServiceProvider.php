@@ -29,8 +29,14 @@ class RepositoriesServiceProvider extends ServiceProvider
         $this->app->singleton(ConfigurationJsonRepository::class, function () {
             $input = resolve(InputInterface::class);
 
+            if (file_exists(Project::path().'/pint.php') && ! file_exists(Project::path().'/pint.json')) {
+                $config = Project::path().'/pint.php';
+            } else {
+                $config = Project::path().'/pint.json';
+            }
+
             return new ConfigurationJsonRepository(
-                $input->getOption('config') ?: Project::path().'/pint.json',
+                $input->getOption('config') ?: $config,
                 $input->getOption('preset'),
             );
         });

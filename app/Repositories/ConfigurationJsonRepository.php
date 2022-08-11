@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use Illuminate\Support\Str;
+
 class ConfigurationJsonRepository
 {
     /**
@@ -60,18 +62,25 @@ class ConfigurationJsonRepository
     }
 
     /**
-     * Gets the configuration from the "pint.json" file.
+     * Gets the configuration from the "pint.json" or "pint.php" file.
      *
      * @return array<string, array<int, string>|string>
      */
     protected function get()
     {
-        if (file_exists((string) $this->path)) {
+        if (! file_exists((string) $this->path)) {
+            return [];
+        }
+
+        if (Str::endsWith($this->path, '.json')) {
             return tap(json_decode(file_get_contents($this->path), true), function ($configuration) {
                 if (! is_array($configuration)) {
                     abort(1, sprintf('The configuration file [%s] is not valid JSON.', $this->path));
                 }
             });
+        }
+        if (Str::endsWith($this->path, '.php')) {
+            return require $this->path;
         }
 
         return [];
