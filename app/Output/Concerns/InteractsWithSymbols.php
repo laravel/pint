@@ -17,7 +17,6 @@ trait InteractsWithSymbols
      * @var array<int, array<int|string, array<string, string>|string>>
      */
     protected $statuses = [
-        FixerFileProcessedEvent::STATUS_UNKNOWN => ['symbol' => '?', 'format' => '<options=bold;fg=yellow>%s</>'],
         FixerFileProcessedEvent::STATUS_INVALID => ['symbol' => '!', 'format' => '<options=bold;fg=red>%s</>'],
         FixerFileProcessedEvent::STATUS_SKIPPED => ['symbol' => '.', 'format' => '<fg=gray>%s</>'],
         FixerFileProcessedEvent::STATUS_NO_CHANGES => ['symbol' => '.', 'format' => '<fg=gray>%s</>'],
