@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.1.1...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.1.2...main)
+
+## [v1.1.2](https://github.com/laravel/pint/compare/v1.1.1...v1.1.2) - 2022-08-30
+
+### Changed
+
+- Adds support for `friendsofphp/php-cs-fixer:^3.10.0` by @nunomaduro in https://github.com/laravel/pint/pull/107
 
 ## [v1.1.1](https://github.com/laravel/pint/compare/v1.1.0...v1.1.1) - 2022-08-02
 
