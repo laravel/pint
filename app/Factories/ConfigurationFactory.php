@@ -30,9 +30,10 @@ class ConfigurationFactory
      * @var array<int, string>
      */
     protected static $exclude = [
-        'storage',
         'bootstrap/cache',
+        'build',
         'node_modules',
+        'storage',
     ];
 
     /**
