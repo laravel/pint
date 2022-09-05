@@ -41,7 +41,7 @@ class FixCode
         }
 
         /** @var array<string, array{appliedFixers: array<int, string>, diff: string}> $changes */
-        $changes = with(new Runner(
+        $changes = (new Runner(
             $resolver->getFinder(),
             $resolver->getFixers(),
             $resolver->getDiffer(),
