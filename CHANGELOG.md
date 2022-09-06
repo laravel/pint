@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.1.2...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.1.3...main)
+
+## [v1.1.3](https://github.com/laravel/pint/compare/v1.1.2...v1.1.3) - 2022-09-06
+
+### Changed
+
+- Ignores `build` folder by default by @nunomaduro in https://github.com/laravel/pint/pull/108
+- Update to PHP-CS-Fixer v3.11 by @Jubeki in https://github.com/laravel/pint/pull/109
 
 ## [v1.1.2](https://github.com/laravel/pint/compare/v1.1.1...v1.1.2) - 2022-08-30
 
