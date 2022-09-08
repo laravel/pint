@@ -50,6 +50,16 @@ class ConfigurationJsonRepository
     }
 
     /**
+     * Gets the cache file.
+     *
+     * @return string|null
+     */
+    public function cacheFile()
+    {
+        return $this->get()['cache-file'] ?? null;
+    }
+
+    /**
      * Gets the preset option.
      *
      * @return string
