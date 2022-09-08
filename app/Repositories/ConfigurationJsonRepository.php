@@ -16,7 +16,7 @@ class ConfigurationJsonRepository
     ];
 
     /**
-     * Creates a new Configuration Json Repository instance.
+     * Create a new Configuration Json Repository instance.
      *
      * @param  string|null  $path
      * @param  string|null  $preset
@@ -28,7 +28,7 @@ class ConfigurationJsonRepository
     }
 
     /**
-     * Gets the finder options.
+     * Get the finder options.
      *
      * @return array<string, array<int, string>|string>
      */
@@ -40,7 +40,7 @@ class ConfigurationJsonRepository
     }
 
     /**
-     * Gets the rules options.
+     * Get the rules options.
      *
      * @return array<int, string>
      */
@@ -50,7 +50,17 @@ class ConfigurationJsonRepository
     }
 
     /**
-     * Gets the preset option.
+     * Get the cache file location.
+     *
+     * @return string|null
+     */
+    public function cacheFile()
+    {
+        return $this->get()['cache-file'] ?? null;
+    }
+
+    /**
+     * Get the preset option.
      *
      * @return string
      */
@@ -60,7 +70,7 @@ class ConfigurationJsonRepository
     }
 
     /**
-     * Gets the configuration from the "pint.json" file.
+     * Get the configuration from the "pint.json" file.
      *
      * @return array<string, array<int, string>|string>
      */

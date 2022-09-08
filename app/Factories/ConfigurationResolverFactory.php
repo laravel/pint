@@ -34,7 +34,9 @@ class ConfigurationResolverFactory
     {
         $path = $input->getArgument('path');
 
-        $preset = resolve(ConfigurationJsonRepository::class)->preset();
+        $localConfiguration = resolve(ConfigurationJsonRepository::class);
+
+        $preset = $localConfiguration->preset();
 
         if (! in_array($preset, static::$presets)) {
             abort(1, 'Preset not found.');
@@ -54,7 +56,7 @@ class ConfigurationResolverFactory
                 'dry-run' => $input->getOption('test'),
                 'path' => $path,
                 'path-mode' => ConfigurationResolver::PATH_MODE_OVERRIDE,
-                'cache-file' => implode(DIRECTORY_SEPARATOR, [
+                'cache-file' => $localConfiguration->cacheFile() ?? implode(DIRECTORY_SEPARATOR, [
                     realpath(sys_get_temp_dir()),
                     md5(
                         app()->isProduction()
