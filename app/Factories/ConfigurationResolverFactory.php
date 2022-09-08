@@ -35,6 +35,7 @@ class ConfigurationResolverFactory
         $path = $input->getArgument('path');
 
         $localConfiguration = resolve(ConfigurationJsonRepository::class);
+
         $preset = $localConfiguration->preset();
 
         if (! in_array($preset, static::$presets)) {
