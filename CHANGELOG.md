@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.1.3...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.2.0...main)
+
+## [v1.2.0](https://github.com/laravel/pint/compare/v1.1.3...v1.2.0) - 2022-09-13
+
+### Added
+
+- Add configuration option to overwrite cache file location by @wouter2203 in https://github.com/laravel/pint/pull/111
 
 ## [v1.1.3](https://github.com/laravel/pint/compare/v1.1.2...v1.1.3) - 2022-09-06
 
