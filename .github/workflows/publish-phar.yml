@@ -1,6 +1,8 @@
 name: Publish the released PHAR
 
-on: release
+on:
+  release:
+    types: [created]
 
 jobs:
   publish:
