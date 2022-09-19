@@ -31,8 +31,13 @@ jobs:
       - name: Create the PHAR file.
         run: ./pint app:build pint.phar --build-version=${{ steps.tag.outputs.tag }}
 
-      - name: Upload the PHAR to release
+      - name: Upload the PHAR artifact
         uses: actions/upload-artifact@v3
         with:
           name: pint.phar
           path: builds/pint.phar
+
+      - name: Upload the PHAR to release
+        run: gh release upload v${{ steps.tag.outputs.tag }} builds/pint.phar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
