@@ -62,7 +62,7 @@ class ConfigurationFactory
 
         return (new Config())
             ->setFinder($finder)
-            ->setRules(array_merge($rules, $localConfiguration->rules()))
+            ->setRules(array_merge($localConfiguration->rules(), $rules))
             ->setRiskyAllowed(true)
             ->setUsingCache(true)
             ->registerCustomFixers([
