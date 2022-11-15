@@ -159,6 +159,7 @@ return ConfigurationFactory::preset([
     'phpdoc_trim' => true,
     'phpdoc_types' => true,
     'phpdoc_var_without_name' => true,
+    'no_superfluous_phpdoc_tags' => true,
     'return_type_declaration' => ['space_before' => 'none'],
     'self_accessor' => false,
     'short_scalar_cast' => true,
