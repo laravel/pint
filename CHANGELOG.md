@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.2.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.2.1...main)
+
+## [v1.2.1](https://github.com/laravel/pint/compare/v1.2.0...v1.2.1) - 2022-11-29
+
+### Changed
+
+- Enable types_spaces rule in Laravel preset by @zepfietje in https://github.com/laravel/pint/pull/128
 
 ## [v1.2.0](https://github.com/laravel/pint/compare/v1.1.3...v1.2.0) - 2022-09-13
 
