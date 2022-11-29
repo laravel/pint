@@ -170,6 +170,7 @@ return ConfigurationFactory::preset([
     'ternary_operator_spaces' => true,
     'trailing_comma_in_multiline' => ['elements' => ['arrays']],
     'trim_array_spaces' => true,
+    'types_spaces' => true,
     'unary_operator_spaces' => true,
     'visibility_required' => [
         'elements' => ['method', 'property'],
