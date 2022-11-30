@@ -32,7 +32,7 @@ class ConfigurationResolverFactory
      */
     public static function fromIO($input, $output)
     {
-        $path = $input->getArgument('path');
+        $path = Project::paths($input);
 
         $localConfiguration = resolve(ConfigurationJsonRepository::class);
 
