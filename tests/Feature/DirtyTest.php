@@ -2,7 +2,7 @@
 
 it('uses Git to determine dirty files', function () {
     \Facades\App\Support\Git::expects('dirtyFiles')
-        ->andReturn([[base_path('tests/fixtures/without-issues/file.php')], true]);
+        ->andReturn([[base_path('tests/Fixtures/without-issues/file.php')], true]);
 
     [$statusCode, $output] = run('default', ['--dirty' => true]);
 
@@ -13,7 +13,7 @@ it('uses Git to determine dirty files', function () {
 
 it('ignores the path argument', function () {
     \Facades\App\Support\Git::expects('dirtyFiles')
-        ->andReturn([[base_path('tests/fixtures/without-issues/file.php')], true]);
+        ->andReturn([[base_path('tests/Fixtures/without-issues/file.php')], true]);
 
     [$statusCode, $output] = run('default', [
         '--dirty' => true,
