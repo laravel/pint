@@ -9,7 +9,7 @@ class Project
      * based on the options and arguments passed.
      *
      * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @return array<string>
+     * @return string[]
      */
     public static function paths(\Symfony\Component\Console\Input\InputInterface $input): array
     {

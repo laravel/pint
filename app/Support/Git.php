@@ -10,7 +10,7 @@ class Git
      * Determine the files which were added, modified,
      * copied, or renamed since the last commit.
      *
-     * @return array<array<string>, bool>
+     * @return array{string[], bool}
      */
     public function dirtyFiles(): array
     {
