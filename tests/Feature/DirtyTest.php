@@ -1,8 +1,18 @@
 <?php
 
-it('uses Git to determine dirty files', function () {
-    \Facades\App\Support\Git::expects('dirtyFiles')
-        ->andReturn([[base_path('tests/Fixtures/without-issues/file.php')], true]);
+use App\Contracts\PathsRepository;
+
+it('determines dirty files', function () {
+    $paths = Mockery::mock(PathsRepository::class);
+
+    $paths
+        ->shouldReceive('dirty')
+        ->once()
+        ->andReturn([
+            base_path('tests/Fixtures/without-issues/file.php'),
+        ]);
+
+    $this->swap(PathsRepository::class, $paths);
 
     [$statusCode, $output] = run('default', ['--dirty' => true]);
 
@@ -12,8 +22,16 @@ it('uses Git to determine dirty files', function () {
 });
 
 it('ignores the path argument', function () {
-    \Facades\App\Support\Git::expects('dirtyFiles')
-        ->andReturn([[base_path('tests/Fixtures/without-issues/file.php')], true]);
+    $paths = Mockery::mock(PathsRepository::class);
+
+    $paths
+        ->shouldReceive('dirty')
+        ->once()
+        ->andReturn([
+            base_path('tests/Fixtures/without-issues/file.php'),
+        ]);
+
+    $this->swap(PathsRepository::class, $paths);
 
     [$statusCode, $output] = run('default', [
         '--dirty' => true,
@@ -25,16 +43,15 @@ it('ignores the path argument', function () {
         ->toContain('── Laravel', ' 1 file');
 });
 
-it('fails when not successful', function () {
-    \Facades\App\Support\Git::expects('dirtyFiles')
-        ->andReturn([[], false]);
-
-    run('default', ['--dirty' => true]);
-})->throws(Exception::class, 'Option [dirty] must be used within a Git repository.');
-
 it('aborts when there are no dirty files', function () {
-    \Facades\App\Support\Git::expects('dirtyFiles')
-        ->andReturn([[], true]);
+    $paths = Mockery::mock(PathsRepository::class);
+
+    $paths
+        ->shouldReceive('dirty')
+        ->once()
+        ->andReturn([]);
+
+    $this->swap(PathsRepository::class, $paths);
 
     run('default', ['--dirty' => true]);
 })->throws(Exception::class, 'No dirty files found.');

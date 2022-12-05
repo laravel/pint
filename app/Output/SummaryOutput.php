@@ -3,7 +3,7 @@
 namespace App\Output;
 
 use App\Output\Concerns\InteractsWithSymbols;
-use App\Support\Project;
+use App\Project;
 use App\ValueObjects\Issue;
 use PhpCsFixer\FixerFileProcessedEvent;
 use function Termwind\render;

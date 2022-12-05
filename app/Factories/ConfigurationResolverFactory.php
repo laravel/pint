@@ -2,8 +2,8 @@
 
 namespace App\Factories;
 
+use App\Project;
 use App\Repositories\ConfigurationJsonRepository;
-use App\Support\Project;
 use ArrayIterator;
 use PhpCsFixer\Config;
 use PhpCsFixer\Console\ConfigurationResolver;
