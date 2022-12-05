@@ -38,7 +38,7 @@ class Project
      */
     public static function resolveDirtyPaths()
     {
-        $files = resolve(PathsRepository::class)->dirty();
+        $files = app(PathsRepository::class)->dirty();
 
         if (empty($files)) {
             abort(1, 'No dirty files found.');
