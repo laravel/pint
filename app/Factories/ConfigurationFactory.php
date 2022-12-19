@@ -3,8 +3,6 @@
 namespace App\Factories;
 
 use App\Fixers\LaravelPhpdocAlignmentFixer;
-use App\Fixers\LaravelPhpdocOrderFixer;
-use App\Fixers\LaravelPhpdocSeparationFixer;
 use App\Repositories\ConfigurationJsonRepository;
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
@@ -67,8 +65,6 @@ class ConfigurationFactory
             ->setUsingCache(true)
             ->registerCustomFixers([
                 // Laravel...
-                new LaravelPhpdocOrderFixer(),
-                new LaravelPhpdocSeparationFixer(),
                 new LaravelPhpdocAlignmentFixer(),
             ]);
     }

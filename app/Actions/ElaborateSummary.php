@@ -37,6 +37,7 @@ class ElaborateSummary
     {
         $summary = new FixReport\ReportSummary(
             $changes,
+            $totalFiles,
             0,
             0,
             OutputInterface::VERBOSITY_VERBOSE <= $this->output->getVerbosity(),
