@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.2.1...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.3.0...main)
+
+## [v1.3.0](https://github.com/laravel/pint/compare/v1.2.1...v1.3.0) - 2022-12-20
+
+### Changed
+
+- Use native php-cs-fixers for phpdoc order and separation by @GrahamCampbell in https://github.com/laravel/pint/pull/133
 
 ## [v1.2.1](https://github.com/laravel/pint/compare/v1.2.0...v1.2.1) - 2022-11-29
 
