@@ -56,7 +56,17 @@ class ConfigurationJsonRepository
      */
     public function cacheFile()
     {
-        return $this->get()['cache-file'] ?? null;
+        return $this->get()['cache-file'] ?? $this->get()['cacheFile'] ?? null;
+    }
+
+    /**
+     * Get the line ending option.
+     *
+     * @return string|null
+     */
+    public function lineEnding()
+    {
+        return $this->get()['lineEnding'] ?? null;
     }
 
     /**

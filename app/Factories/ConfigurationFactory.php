@@ -58,7 +58,7 @@ class ConfigurationFactory
             $finder->{$method}($arguments);
         }
 
-        return (new Config())
+        return tap((new Config())
             ->setFinder($finder)
             ->setRules(array_merge($rules, $localConfiguration->rules()))
             ->setRiskyAllowed(true)
@@ -66,6 +66,10 @@ class ConfigurationFactory
             ->registerCustomFixers([
                 // Laravel...
                 new LaravelPhpdocAlignmentFixer(),
-            ]);
+            ]), function ($config) use ($localConfiguration) {
+                if ($localConfiguration->lineEnding()) {
+                    $config->setLineEnding($localConfiguration->lineEnding());
+                }
+            });
     }
 }

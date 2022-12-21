@@ -17,6 +17,16 @@ it('may have rules options', function () {
     ]);
 });
 
+it('may have line ending options', function () {
+    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/line-ending/pint.json', 'psr12');
+
+    expect($repository->lineEnding())->toBe("\r\n");
+
+    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/finder/pint.json', null);
+
+    expect($repository->lineEnding())->toBeNull();
+});
+
 it('may have finder options', function () {
     $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/finder/pint.json', null);
 
