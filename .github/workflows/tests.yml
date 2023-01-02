@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ubuntu-20.04, windows-2019]
+        os: [ubuntu-22.04, windows-2019]
         php: ['8.0', 8.1, 8.2]
 
     name: PHP ${{ matrix.php }} - ${{ matrix.os }}
@@ -28,7 +28,7 @@ jobs:
           git config --global core.eol lf
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
