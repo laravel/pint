@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Contracts\PathsRepository;
+use App\Factories\ConfigurationFactory;
 use Symfony\Component\Process\Process;
 
 class GitPathsRepository implements PathsRepository
@@ -40,6 +41,18 @@ class GitPathsRepository implements PathsRepository
             abort(1, 'The [--dirty] option is only available when using Git.');
         }
 
-        return preg_split('/\R+/', $process->getOutput(), flags: PREG_SPLIT_NO_EMPTY);
+        $dirtyFiles = array_map(
+            fn ($file) => $this->path.DIRECTORY_SEPARATOR.$file,
+            preg_split('/\R+/', $process->getOutput(), flags: PREG_SPLIT_NO_EMPTY),
+        );
+
+        $files = array_values(array_map(function ($splFile) {
+            return $splFile->getPathname();
+        }, iterator_to_array(ConfigurationFactory::finder()
+            ->in($this->path)
+            ->files()
+        )));
+
+        return array_values(array_intersect($files, $dirtyFiles));
     }
 }
