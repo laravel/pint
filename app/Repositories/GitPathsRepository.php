@@ -30,16 +30,20 @@ class GitPathsRepository implements PathsRepository
      */
     public function dirty()
     {
-        $process = tap(Process::fromShellCommandline('git status --short | cut -c4-'))->run();
+        $process = tap(Process::fromShellCommandline('git status --short'))->run();
 
         if (! $process->isSuccessful()) {
             abort(1, 'The [--dirty] option is only available when using Git.');
         }
 
         $dirtyFiles = array_map(
-            fn ($file) => $this->path.DIRECTORY_SEPARATOR.$file,
+            fn ($file) => $this->path.DIRECTORY_SEPARATOR.substr($file, 3),
             preg_split('/\R+/', $process->getOutput(), flags: PREG_SPLIT_NO_EMPTY),
         );
+
+        $dirtyFiles = array_values(array_filter(
+            $dirtyFiles, fn ($file) => file_exists($file),
+        ));
 
         $files = array_values(array_map(function ($splFile) {
             return $splFile->getPathname();
