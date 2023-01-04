@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Contracts\PathsRepository;
 use App\Factories\ConfigurationFactory;
+use Illuminate\Support\Str;
 use Symfony\Component\Process\Process;
 
 class GitPathsRepository implements PathsRepository
@@ -30,20 +31,19 @@ class GitPathsRepository implements PathsRepository
      */
     public function dirty()
     {
-        $process = tap(Process::fromShellCommandline('git status --short'))->run();
+        $process = tap(new Process(['git', 'status', '--short', '--', '*.php']))->run();
 
         if (! $process->isSuccessful()) {
             abort(1, 'The [--dirty] option is only available when using Git.');
         }
 
-        $dirtyFiles = array_map(
-            fn ($file) => $this->path.DIRECTORY_SEPARATOR.substr($file, 3),
-            preg_split('/\R+/', $process->getOutput(), flags: PREG_SPLIT_NO_EMPTY),
-        );
-
-        $dirtyFiles = array_values(array_filter(
-            $dirtyFiles, fn ($file) => file_exists($file),
-        ));
+        $dirtyFiles = collect(preg_split('/\R+/', $process->getOutput(), flags: PREG_SPLIT_NO_EMPTY))
+            ->mapWithKeys(fn ($file) => [substr($file, 3) => trim(substr($file, 0, 3))])
+            ->reject(fn ($status) => $status === 'D')
+            ->map(fn ($status, $file) => $status === 'R' ? Str::after($file, ' -> ') : $file)
+            ->map(fn ($file) => $this->path.DIRECTORY_SEPARATOR.$file)
+            ->values()
+            ->all();
 
         $files = array_values(array_map(function ($splFile) {
             return $splFile->getPathname();
