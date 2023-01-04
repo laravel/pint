@@ -42,6 +42,24 @@ class ConfigurationFactory
      */
     public static function preset($rules)
     {
+        return (new Config())
+            ->setFinder(self::finder())
+            ->setRules(array_merge($rules, resolve(ConfigurationJsonRepository::class)->rules()))
+            ->setRiskyAllowed(true)
+            ->setUsingCache(true)
+            ->registerCustomFixers([
+                // Laravel...
+                new LaravelPhpdocAlignmentFixer(),
+            ]);
+    }
+
+    /**
+     * Creates the finder instance.
+     *
+     * @return \PhpCsFixer\Finder
+     */
+    public static function finder()
+    {
         $localConfiguration = resolve(ConfigurationJsonRepository::class);
 
         $finder = Finder::create()
@@ -58,14 +76,6 @@ class ConfigurationFactory
             $finder->{$method}($arguments);
         }
 
-        return (new Config())
-            ->setFinder($finder)
-            ->setRules(array_merge($rules, $localConfiguration->rules()))
-            ->setRiskyAllowed(true)
-            ->setUsingCache(true)
-            ->registerCustomFixers([
-                // Laravel...
-                new LaravelPhpdocAlignmentFixer(),
-            ]);
+        return $finder;
     }
 }

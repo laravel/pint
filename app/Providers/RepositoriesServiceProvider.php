@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Contracts\PathsRepository;
+use App\Project;
 use App\Repositories\ConfigurationJsonRepository;
-use App\Support\Project;
+use App\Repositories\GitPathsRepository;
 use Illuminate\Support\ServiceProvider;
 use Symfony\Component\Console\Input\InputInterface;
 
@@ -32,6 +34,12 @@ class RepositoriesServiceProvider extends ServiceProvider
             return new ConfigurationJsonRepository(
                 $input->getOption('config') ?: Project::path().'/pint.json',
                 $input->getOption('preset'),
+            );
+        });
+
+        $this->app->singleton(PathsRepository::class, function () {
+            return new GitPathsRepository(
+                Project::path(),
             );
         });
     }
