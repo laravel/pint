@@ -38,7 +38,7 @@ class DefaultCommand extends Command
                     new InputOption('config', '', InputOption::VALUE_REQUIRED, 'The configuration that should be used'),
                     new InputOption('preset', '', InputOption::VALUE_REQUIRED, 'The preset that should be used'),
                     new InputOption('test', '', InputOption::VALUE_NONE, 'Test for code style errors without fixing them'),
-                    new InputOption('dirty', '', InputOption::VALUE_NONE, 'Fix only the files that have uncommitted changes'),
+                    new InputOption('dirty', '', InputOption::VALUE_NONE, 'Only fix files that have uncommitted changes'),
                     new InputOption('format', '', InputOption::VALUE_REQUIRED, 'The output format that should be used'),
                 ]
             );
