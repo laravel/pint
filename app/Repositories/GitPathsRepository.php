@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Contracts\PathsRepository;
 use App\Factories\ConfigurationFactory;
-use Illuminate\Support\Str;
 use Symfony\Component\Process\Process;
 
 class GitPathsRepository implements PathsRepository
@@ -31,16 +30,15 @@ class GitPathsRepository implements PathsRepository
      */
     public function dirty()
     {
-        $process = tap(new Process(['git', 'status', '--short', '--', '*.php']))->run();
+        // Get ready-to-use paths of files that were added, modified, moved or renamed
+        $process = tap(new Process(['git', 'diff', 'HEAD', '--name-only', '--diff-filter=ACMR', '--', '*.php']))->run();
 
         if (! $process->isSuccessful()) {
             abort(1, 'The [--dirty] option is only available when using Git.');
         }
 
-        $dirtyFiles = collect(preg_split('/\R+/', $process->getOutput(), flags: PREG_SPLIT_NO_EMPTY))
-            ->mapWithKeys(fn ($file) => [substr($file, 3) => trim(substr($file, 0, 3))])
-            ->reject(fn ($status) => $status === 'D')
-            ->map(fn ($status, $file) => $status === 'R' ? Str::after($file, ' -> ') : $file)
+        $dirtyFiles = collect(explode("\n", $process->getOutput()))
+            ->filter()
             ->map(fn ($file) => $this->path.DIRECTORY_SEPARATOR.$file)
             ->values()
             ->all();
