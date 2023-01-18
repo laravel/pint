@@ -15,7 +15,9 @@ class Project
     public static function paths($input)
     {
         if ($input->getOption('dirty')) {
-            return static::resolveDirtyPaths();
+            return static::resolveDirtyPaths(
+                $input->getOption('ignore-no-changes')
+            );
         }
 
         return $input->getArgument('path');
@@ -34,13 +36,14 @@ class Project
     /**
      * Resolves the dirty paths, if any.
      *
+     * @param  bool  $ignoreNoChanges
      * @return array<int, string>
      */
-    public static function resolveDirtyPaths()
+    public static function resolveDirtyPaths($ignoreNoChanges)
     {
         $files = app(PathsRepository::class)->dirty();
 
-        if (empty($files)) {
+        if (empty($files) && !$ignoreNoChanges) {
             abort(1, 'No dirty files found.');
         }
 

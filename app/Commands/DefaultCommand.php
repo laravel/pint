@@ -39,6 +39,7 @@ class DefaultCommand extends Command
                     new InputOption('preset', '', InputOption::VALUE_REQUIRED, 'The preset that should be used'),
                     new InputOption('test', '', InputOption::VALUE_NONE, 'Test for code style errors without fixing them'),
                     new InputOption('dirty', '', InputOption::VALUE_NONE, 'Only fix files that have uncommitted changes'),
+                    new InputOption('ignore-no-changes', '', InputOption::VALUE_NONE, "Ignore the 'No dirty files found.' error."),
                     new InputOption('format', '', InputOption::VALUE_REQUIRED, 'The output format that should be used'),
                 ]
             );
