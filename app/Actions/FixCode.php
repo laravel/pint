@@ -2,8 +2,8 @@
 
 namespace App\Actions;
 
-use App\Exceptions\IgnoringNoDirtyFiles;
 use App\Factories\ConfigurationResolverFactory;
+use LaravelZero\Framework\Exceptions\ConsoleException;
 use PhpCsFixer\Runner\Runner;
 
 class FixCode
@@ -37,8 +37,8 @@ class FixCode
     {
         try {
             [$resolver, $totalFiles] = ConfigurationResolverFactory::fromIO($this->input, $this->output);
-        } catch (IgnoringNoDirtyFiles $exception) {
-            return [0, []];
+        } catch (ConsoleException $exception) {
+            return [$exception->getCode(), []];
         }
 
         if (is_null($this->input->getOption('format'))) {
