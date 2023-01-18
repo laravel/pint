@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Contracts\PathsRepository;
+use App\Exceptions\IgnoringNoDirtyFiles;
 
 class Project
 {
@@ -38,12 +39,17 @@ class Project
      *
      * @param  bool  $ignoreNoChanges
      * @return array<int, string>
+     * @throws \App\Exceptions\IgnoringNoDirtyFiles
      */
     public static function resolveDirtyPaths($ignoreNoChanges)
     {
         $files = app(PathsRepository::class)->dirty();
 
-        if (empty($files) && !$ignoreNoChanges) {
+        if ($ignoreNoChanges && empty($files)) {
+            throw new IgnoringNoDirtyFiles();
+        }
+
+        if (empty($files)) {
             abort(1, 'No dirty files found.');
         }
 

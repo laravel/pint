@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Exceptions\IgnoringNoDirtyFiles;
 use App\Factories\ConfigurationResolverFactory;
 use PhpCsFixer\Runner\Runner;
 
@@ -34,7 +35,11 @@ class FixCode
      */
     public function execute()
     {
-        [$resolver, $totalFiles] = ConfigurationResolverFactory::fromIO($this->input, $this->output);
+        try {
+            [$resolver, $totalFiles] = ConfigurationResolverFactory::fromIO($this->input, $this->output);
+        } catch (IgnoringNoDirtyFiles $exception) {
+            return [0, []];
+        }
 
         if (is_null($this->input->getOption('format'))) {
             $this->progress->subscribe();

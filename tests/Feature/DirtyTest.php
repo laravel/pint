@@ -55,3 +55,23 @@ it('aborts when there are no dirty files', function () {
 
     run('default', ['--dirty' => true]);
 })->throws(Exception::class, 'No dirty files found.');
+
+it('does not abort there are no dirty files and this is ignored', function () {
+    $paths = Mockery::mock(PathsRepository::class);
+
+    $paths
+        ->shouldReceive('dirty')
+        ->once()
+        ->andReturn([]);
+
+    $this->swap(PathsRepository::class, $paths);
+
+    [$statusCode, $output] = run('default', [
+        '--dirty' => true,
+        '--ignore-no-changes' => true,
+    ]);
+
+    expect($statusCode)->toBe(0)
+        ->and($output)
+        ->toContain('── Laravel', ' 0 files');
+});
