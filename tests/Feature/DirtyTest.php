@@ -43,7 +43,7 @@ it('ignores the path argument', function () {
         ->toContain('── Laravel', ' 1 file');
 });
 
-it('aborts when there are no dirty files', function () {
+it('does not abort when there are no dirty files', function () {
     $paths = Mockery::mock(PathsRepository::class);
 
     $paths
@@ -53,5 +53,11 @@ it('aborts when there are no dirty files', function () {
 
     $this->swap(PathsRepository::class, $paths);
 
-    run('default', ['--dirty' => true]);
-})->throws(Exception::class, 'No dirty files found.');
+    [$statusCode, $output] = run('default', [
+        '--dirty' => true,
+    ]);
+
+    expect($statusCode)->toBe(0)
+        ->and($output)
+        ->toContain('── Laravel', ' 0 files');
+});

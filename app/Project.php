@@ -41,7 +41,7 @@ class Project
         $files = app(PathsRepository::class)->dirty();
 
         if (empty($files)) {
-            abort(1, 'No dirty files found.');
+            abort(0, 'No dirty files found.');
         }
 
         return $files;

@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Factories\ConfigurationResolverFactory;
+use LaravelZero\Framework\Exceptions\ConsoleException;
 use PhpCsFixer\Runner\Runner;
 
 class FixCode
@@ -34,7 +35,11 @@ class FixCode
      */
     public function execute()
     {
-        [$resolver, $totalFiles] = ConfigurationResolverFactory::fromIO($this->input, $this->output);
+        try {
+            [$resolver, $totalFiles] = ConfigurationResolverFactory::fromIO($this->input, $this->output);
+        } catch (ConsoleException $exception) {
+            return [$exception->getCode(), []];
+        }
 
         if (is_null($this->input->getOption('format'))) {
             $this->progress->subscribe();
