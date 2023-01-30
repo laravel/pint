@@ -23,7 +23,7 @@
         "ext-xml": "*"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "~3.13.1",
+        "friendsofphp/php-cs-fixer": "^3.14",
         "illuminate/view": "^9.32.0",
         "laravel-zero/framework": "^9.2.0",
         "mockery/mockery": "^1.5.1",
