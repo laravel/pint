@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.4.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.4.1...main)
+
+## [v1.4.1](https://github.com/laravel/pint/compare/v1.4.0...v1.4.1) - 2023-01-31
+
+### Changed
+
+- Add option to ignore no changes for --dirty by @joelbutcher in https://github.com/laravel/pint/pull/140
 
 ## [v1.4.0](https://github.com/laravel/pint/compare/v1.3.0...v1.4.0) - 2023-01-10
 
