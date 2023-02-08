@@ -112,6 +112,10 @@ return ConfigurationFactory::preset([
         'positions' => ['inside', 'outside'],
     ],
     'no_spaces_inside_parenthesis' => true,
+    'no_superfluous_phpdoc_tags' => [
+        'allow_mixed' => true,
+        'allow_unused_params' => true,
+    ],
     'no_trailing_comma_in_singleline' => true,
     'no_trailing_whitespace' => true,
     'no_trailing_whitespace_in_comment' => true,
