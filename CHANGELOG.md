@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.4.1...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.5.0...main)
+
+## [v1.5.0](https://github.com/laravel/pint/compare/v1.4.1...v1.5.0) - 2023-02-14
+
+### Changed
+
+- Removes superfluous annotations by @nunomaduro in https://github.com/laravel/pint/pull/126
 
 ## [v1.4.1](https://github.com/laravel/pint/compare/v1.4.0...v1.4.1) - 2023-01-31
 
