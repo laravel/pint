@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": "^8.0",
+        "php": "^8.1.0",
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-tokenizer": "*",
@@ -24,8 +24,8 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.14.4",
-        "illuminate/view": "^9.51.0",
-        "laravel-zero/framework": "^9.2.0",
+        "illuminate/view": "^10.0.0",
+        "laravel-zero/framework": "^10.0.0",
         "mockery/mockery": "^1.5.1",
         "nunomaduro/larastan": "^2.4.0",
         "nunomaduro/termwind": "^1.15.1",
@@ -49,7 +49,7 @@
         "sort-packages": true,
         "optimize-autoloader": true,
         "platform": {
-            "php": "8.0.2"
+            "php": "8.1.0"
         },
         "allow-plugins": {
             "pestphp/pest-plugin": true
