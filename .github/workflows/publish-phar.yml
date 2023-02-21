@@ -3,6 +3,11 @@ name: Publish the released PHAR
 on:
   release:
     types: [created]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag release version'
+        required: true
 
 jobs:
   publish:
@@ -13,7 +18,11 @@ jobs:
     steps:
       - name: Extract the tag version
         id: tag
-        run: echo ::set-output name=tag::${GITHUB_REF##*v}
+        run: |
+          if [ "${{ github.event_name == 'workflow_dispatch' }}" ]; then
+            GITHUB_REF=${{ github.event.inputs.tag }}
+          fi          
+          echo "tag=${GITHUB_REF##*v}" >> "$GITHUB_OUTPUT"
 
       - name: Checkout the code
         uses: actions/checkout@v3
