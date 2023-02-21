@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.5.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.6.0...main)
+
+## [v1.6.0](https://github.com/laravel/pint/compare/v1.5.0...v1.6.0) - 2023-02-21
+
+- Migrates to Laravel Zero 10 by @nunomaduro in https://github.com/laravel/pint/pull/149
+- Support Windows paths for --dirty option by @Rigby90 in https://github.com/laravel/pint/pull/150
 
 ## [v1.5.0](https://github.com/laravel/pint/compare/v1.4.1...v1.5.0) - 2023-02-14
 
