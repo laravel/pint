@@ -165,6 +165,7 @@ return ConfigurationFactory::preset([
     'phpdoc_var_without_name' => true,
     'return_type_declaration' => ['space_before' => 'none'],
     'self_accessor' => false,
+    'self_static_accessor' => true,
     'short_scalar_cast' => true,
     'simplified_null_return' => false,
     'single_blank_line_at_eof' => true,
