@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.6.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.7.0...main)
+
+## [v1.7.0](https://github.com/laravel/pint/compare/v1.6.0...v1.7.0) - 2023-03-21
+
+- Enhancement: Enable self_static_accessor fixer by @localheinz in https://github.com/laravel/pint/pull/154
 
 ## [v1.6.0](https://github.com/laravel/pint/compare/v1.5.0...v1.6.0) - 2023-02-21
 
