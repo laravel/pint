@@ -2,7 +2,6 @@
 
 namespace App\Factories;
 
-use App\Fixers\LaravelPhpdocAlignmentFixer;
 use App\Repositories\ConfigurationJsonRepository;
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
@@ -42,15 +41,14 @@ class ConfigurationFactory
      */
     public static function preset($rules)
     {
+        $localConfiguration = resolve(ConfigurationJsonRepository::class);
+
         return (new Config())
             ->setFinder(self::finder())
-            ->setRules(array_merge($rules, resolve(ConfigurationJsonRepository::class)->rules()))
+            ->setRules(array_merge($rules, $localConfiguration->rules()))
             ->setRiskyAllowed(true)
             ->setUsingCache(true)
-            ->registerCustomFixers([
-                // Laravel...
-                new LaravelPhpdocAlignmentFixer(),
-            ]);
+            ->registerCustomFixers($localConfiguration->customFixers());
     }
 
     /**
