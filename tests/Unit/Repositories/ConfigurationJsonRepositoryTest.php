@@ -1,5 +1,7 @@
 <?php
 
+use Another\Directory\IsNotAFixer;
+use App\Fixers\LaravelPhpdocAlignmentFixer;
 use App\Repositories\ConfigurationJsonRepository;
 
 it('works without json file', function () {
@@ -15,6 +17,18 @@ it('may have rules options', function () {
     expect($repository->rules())->toBe([
         'no_unused_imports' => false,
     ]);
+});
+
+it('may have custom fixers options', function () {
+    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/custom/pint.json', null);
+
+    expect($repository->customFixers())
+        ->ToBeArray()
+        ->toContainOnlyInstancesOf(\PhpCsFixer\Fixer\FixerInterface::class)
+        ->toMatchArray([
+            new LaravelPhpdocAlignmentFixer,
+            new IsNotAFixer,
+        ]);
 });
 
 it('may have finder options', function () {
