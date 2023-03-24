@@ -2,6 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Project;
+use PhpToken;
+
 class ConfigurationJsonRepository
 {
     /**
@@ -13,6 +16,15 @@ class ConfigurationJsonRepository
         'exclude',
         'notPath',
         'notName',
+    ];
+
+    /**
+     * Lists the custom fixers.
+     *
+     * @var array<int, string>
+     */
+    protected $customFixerList = [
+        'App\Fixers\LaravelPhpdocAlignmentFixer'
     ];
 
     /**
@@ -67,6 +79,51 @@ class ConfigurationJsonRepository
     public function preset()
     {
         return $this->preset ?: ($this->get()['preset'] ?? 'laravel');
+    }
+
+    /**
+     * Get the custom fixers.
+     *
+     * @return array<int, CustomFixerInterface>
+     */
+    public function customFixers()
+    {
+        $fixers = $this->getRegisteredClasses($this->get()['custom-fixers'] ?? []);
+
+        $this->customFixerList = [...$this->customFixerList, ...$fixers];
+
+        return collect($this->customFixerList)
+            ->map(fn ($fixer) => new $fixer())
+            ->toArray();
+    }
+
+    /**
+     * Get fixer classes name from the "pint.json" file.
+     *
+     * @return array<int, string>
+     */
+    protected function getRegisteredClasses(array $classes)
+    {
+
+        return collect($classes)
+            ->map(function ($class) {
+                $file = Project::path() . "/" . $class;
+
+                spl_autoload_register(fn() => require_once($file));
+
+                $tokens = PhpToken::tokenize(file_get_contents($file));
+
+                $namespace = null;
+
+                foreach($tokens as $key=>$token){
+                    if($token->id == T_NAMESPACE){
+                        $namespace = $tokens[$key+2]->text;
+                        break;
+                    }
+                }
+
+                return $namespace ."\\". basename($class, '.php');
+            })->toArray();
     }
 
     /**
