@@ -84,7 +84,7 @@ class ConfigurationJsonRepository
     /**
      * Get the custom fixers.
      *
-     * @return array<int, CustomFixerInterface>
+     * @return array<int, \PhpCsFixer\Fixer\FixerInterface>
      */
     public function customFixers()
     {
@@ -100,7 +100,8 @@ class ConfigurationJsonRepository
     /**
      * Get fixer classes name from the "pint.json" file.
      *
-     * @return array<int, string>
+     * @param  array<int, string>  $classes
+     * @return array<string, string>
      */
     protected function getRegisteredClasses(array $classes)
     {
