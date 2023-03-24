@@ -24,7 +24,7 @@ class ConfigurationJsonRepository
      * @var array<int, string>
      */
     protected $customFixerList = [
-        'App\Fixers\LaravelPhpdocAlignmentFixer'
+        'App\Fixers\LaravelPhpdocAlignmentFixer',
     ];
 
     /**
@@ -104,25 +104,24 @@ class ConfigurationJsonRepository
      */
     protected function getRegisteredClasses(array $classes)
     {
-
         return collect($classes)
             ->map(function ($class) {
-                $file = Project::path() . "/" . $class;
+                $file = Project::path().'/'.$class;
 
-                spl_autoload_register(fn() => require_once($file));
+                spl_autoload_register(fn () => require_once($file));
 
                 $tokens = PhpToken::tokenize(file_get_contents($file));
 
                 $namespace = null;
 
-                foreach($tokens as $key=>$token){
-                    if($token->id == T_NAMESPACE){
-                        $namespace = $tokens[$key+2]->text;
+                foreach ($tokens as $key => $token) {
+                    if ($token->id == T_NAMESPACE) {
+                        $namespace = $tokens[$key + 2]->text;
                         break;
                     }
                 }
 
-                return $namespace ."\\". basename($class, '.php');
+                return $namespace.'\\'.basename($class, '.php');
             })->toArray();
     }
 
