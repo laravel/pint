@@ -19,6 +19,7 @@ class SummaryOutput
      * @var array<string, string>
      */
     protected $presets = [
+        'per' => 'PER',
         'psr12' => 'PSR 12',
         'laravel' => 'Laravel',
         'symfony' => 'Symfony',
