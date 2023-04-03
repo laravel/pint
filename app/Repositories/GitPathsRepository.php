@@ -31,7 +31,7 @@ class GitPathsRepository implements PathsRepository
      */
     public function dirty()
     {
-        $process = tap(new Process(['git', 'status', '--short', '--', '*.php']))->run();
+        $process = tap(new Process(['git', 'status', '--short', '--', '**.php']))->run();
 
         if (! $process->isSuccessful()) {
             abort(1, 'The [--dirty] option is only available when using Git.');
