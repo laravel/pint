@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.7.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.8.0...main)
+
+## [v1.8.0](https://github.com/laravel/pint/compare/v1.7.0...v1.8.0) - 2023-04-04
+
+- Fixes `--dirty` detection of subfolders on Ubuntu by @nunomaduro in https://github.com/laravel/pint/pull/164
+- Adds `per` preset by @vinkla in https://github.com/laravel/pint/pull/163
+- Replace deprecated braces rule by @Jubeki in https://github.com/laravel/pint/pull/166
 
 ## [v1.7.0](https://github.com/laravel/pint/compare/v1.6.0...v1.7.0) - 2023-03-21
 
