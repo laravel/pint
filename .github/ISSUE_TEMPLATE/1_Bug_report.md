@@ -1,15 +1,34 @@
----
-name: "Bug report"
-about: "Report something that's broken. Please ensure you are running the latest version of Pint: https://github.com/laravel/pint/releases"
----
-
-<!-- DO NOT THROW THIS AWAY -->
-<!-- Fill out the FULL versions with patch versions -->
-
-- Pint Version: #.#.#
-- PHP Version: #.#.#
-
-### Description:
-
-
-### Steps To Reproduce:
+name: Bug Report
+description: "Report a general library issue."
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: "Before submitting your report, [please ensure your Laravel version is still supported](https://laravel.com/docs/releases#support-policy)."
+  - type: input
+    attributes:
+      label: Pint Version
+      description: Provide the Pint version that you are using.
+      placeholder: 1.6.1
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: PHP Version
+      description: Provide the PHP version that you are using.
+      placeholder: 8.1.4
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Description
+      description: Provide a detailed description of the issue you are facing.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps To Reproduce
+      description: Provide detailed steps to reproduce your issue. If necessary, please provide a GitHub repository to demonstrate your issue using `laravel new bug-report --github="--public"`.
+    validations:
+      required: true
+      
