@@ -10,6 +10,7 @@
 /.gitattributes export-ignore
 /.github export-ignore
 /.gitignore export-ignore
+/Dockerfile export-ignore
 /CHANGELOG.md export-ignore
 /README.md export-ignore
 /RELEASE.md export-ignore
