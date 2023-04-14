@@ -75,6 +75,7 @@ return ConfigurationFactory::preset([
     'method_argument_space' => [
         'on_multiline' => 'ignore',
     ],
+    'method_chaining_indentation' => true,
     'multiline_whitespace_before_semicolons' => [
         'strategy' => 'no_multi_line',
     ],
