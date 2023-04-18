@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.8.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.9.0...main)
+
+## [v1.9.0](https://github.com/laravel/pint/compare/v1.8.0...v1.9.0) - 2023-04-18
+
+- Enable `method_chaining_indentation` fixer by @driesvints in https://github.com/laravel/pint/pull/172
 
 ## [v1.8.0](https://github.com/laravel/pint/compare/v1.7.0...v1.8.0) - 2023-04-04
 
