@@ -18,11 +18,11 @@ class ConfigurationJsonRepository
     /**
      * Create a new Configuration Json Repository instance.
      *
-     * @param  string|array<int, string>|null  $path
+     * @param  array<int, string>|null  $paths
      * @param  string|null  $preset
      * @return void
      */
-    public function __construct(protected $path, protected $preset)
+    public function __construct(protected $paths, protected $preset)
     {
         //
     }
@@ -76,9 +76,7 @@ class ConfigurationJsonRepository
      */
     protected function get()
     {
-        $paths = is_array($this->path) ? $this->path : [$this->path];
-
-        return array_reduce($paths, function ($carry, $path) {
+        return array_reduce($this->paths ?? [], function ($carry, $path) {
             if (! file_exists((string) $path)) {
                 return $carry;
             }

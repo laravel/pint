@@ -32,7 +32,7 @@ class RepositoriesServiceProvider extends ServiceProvider
             $input = resolve(InputInterface::class);
 
             return new ConfigurationJsonRepository(
-                $input->getOption('config') ?: Project::path().'/pint.json',
+                [$input->getOption('config') ?: Project::path().'/pint.json'],
                 $input->getOption('preset'),
             );
         });
