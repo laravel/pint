@@ -38,3 +38,20 @@ it('may have a preset option', function () {
 
     expect($repository->preset())->toBe('laravel');
 });
+
+it('works with multiple configurations', function () {
+    $repository = new ConfigurationJsonRepository([
+        dirname(__DIR__, 2).'/Fixtures/multiple/pint-1.json',
+        dirname(__DIR__, 2).'/Fixtures/multiple/pint-2.json',
+    ], null);
+
+    expect($repository->preset())->toBe('laravel')
+        ->and($repository->finder())->toBe([
+            'exclude' => [
+                'my-dir',
+            ]])
+        ->and($repository->rules())->toBe([
+            'simplified_null_return' => true,
+            'braces' => false,
+        ]);
+});

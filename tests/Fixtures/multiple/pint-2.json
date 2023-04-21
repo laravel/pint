@@ -1,0 +1,9 @@
+{
+    "rules": {
+        "simplified_null_return": true,
+        "braces": false
+    },
+    "exclude": [
+        "my-dir"
+    ]
+}
