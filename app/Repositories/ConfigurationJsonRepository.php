@@ -18,7 +18,7 @@ class ConfigurationJsonRepository
     /**
      * Create a new Configuration Json Repository instance.
      *
-     * @param  string|null  $path
+     * @param  string|array<int, string>|null  $path
      * @param  string|null  $preset
      * @return void
      */
@@ -76,14 +76,24 @@ class ConfigurationJsonRepository
      */
     protected function get()
     {
-        if (file_exists((string) $this->path)) {
-            return tap(json_decode(file_get_contents($this->path), true), function ($configuration) {
-                if (! is_array($configuration)) {
-                    abort(1, sprintf('The configuration file [%s] is not valid JSON.', $this->path));
-                }
-            });
-        }
+        $paths = is_array($this->path) ? $this->path : [$this->path];
 
-        return [];
+        return array_reduce($paths, function ($carry, $path) {
+            if (! file_exists((string) $path)) {
+                return $carry;
+            }
+
+            return array_merge(
+                $carry,
+                tap(
+                    json_decode(file_get_contents($path), true),
+                    function ($configuration) use ($path) {
+                        if (! is_array($configuration)) {
+                            abort(1, sprintf('The configuration file [%s] is not valid JSON.', $path));
+                        }
+                    }
+                )
+            );
+        }, []);
     }
 }
