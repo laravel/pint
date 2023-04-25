@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.9.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.10.0...main)
+
+## [v1.10.0](https://github.com/laravel/pint/compare/v1.9.0...v1.10.0) - 2023-04-25
+
+- Enable statement_indentation rule in Laravel preset by @hjanos1 in https://github.com/laravel/pint/pull/178
 
 ## [v1.9.0](https://github.com/laravel/pint/compare/v1.8.0...v1.9.0) - 2023-04-18
 
