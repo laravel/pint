@@ -7,3 +7,10 @@ it('ensures configuration file is valid', function () {
         'path' => base_path('tests/Fixtures/with-invalid-configuration'),
     ]);
 })->throws(ConsoleException::class, 'is not valid JSON.');
+
+it('ensures yaml configuration file is valid', function () {
+    [$statusCode, $output] = run('default', [
+        'path' => base_path('tests/Fixtures/with-invalid-yaml-configuration'),
+    ]);
+    dump($statusCode, $output);
+})->throws(ConsoleException::class, 'is not valid YAML.');

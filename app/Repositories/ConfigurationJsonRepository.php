@@ -2,6 +2,9 @@
 
 namespace App\Repositories;
 
+use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Yaml\Yaml;
+
 class ConfigurationJsonRepository
 {
     /**
@@ -77,7 +80,17 @@ class ConfigurationJsonRepository
     protected function get()
     {
         if (file_exists((string) $this->path)) {
-            return tap(json_decode(file_get_contents($this->path), true), function ($configuration) {
+            if (preg_match('/\.ya?ml$/', $this->path)) {
+                try {
+                    $config = Yaml::parse(file_get_contents($this->path));
+                } catch (ParseException) {
+                    abort(1, sprintf('The configuration file [%s] is not valid YAML.', $this->path));
+                }
+            } else {
+                $config = json_decode(file_get_contents($this->path), true);
+            }
+
+            return tap($config, function ($configuration) {
                 if (! is_array($configuration)) {
                     abort(1, sprintf('The configuration file [%s] is not valid JSON.', $this->path));
                 }

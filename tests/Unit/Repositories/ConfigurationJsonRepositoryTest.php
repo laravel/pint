@@ -34,7 +34,7 @@ it('may have finder options', function () {
 });
 
 it('may have a preset option', function () {
-    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/preset/pint.json', null);
+    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/preset/pint.yaml', null);
 
     expect($repository->preset())->toBe('laravel');
 });

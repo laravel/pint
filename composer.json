@@ -20,7 +20,8 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-tokenizer": "*",
-        "ext-xml": "*"
+        "ext-xml": "*",
+        "symfony/yaml": "^6.2"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.16.0",
