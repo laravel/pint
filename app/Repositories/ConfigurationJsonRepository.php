@@ -92,7 +92,7 @@ class ConfigurationJsonRepository
 
             return tap($config, function ($configuration) {
                 if (! is_array($configuration)) {
-                    abort(1, sprintf('The configuration file [%s] is not valid JSON.', $this->path));
+                    abort(1, sprintf('The configuration file [%s] is not valid configuration.', $this->path));
                 }
             });
         }
