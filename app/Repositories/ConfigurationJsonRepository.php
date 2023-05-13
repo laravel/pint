@@ -73,7 +73,7 @@ class ConfigurationJsonRepository
     }
 
     /**
-     * Get the configuration from the "pint.json" file.
+     * Get the configuration from the "pint.{json,yaml,yml}" file.
      *
      * @return array<string, array<int, string>|string>
      */

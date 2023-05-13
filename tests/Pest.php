@@ -60,8 +60,8 @@ function run($command, $arguments)
     ], $arguments);
 
     if (isset($arguments['path'])) {
-        $configPath = $arguments['path'].'/pint.json';
-        $arguments['--config'] = (file_exists($configPath) ? $configPath : $arguments['path'].'/pint.yaml');
+        $configFile = $arguments['path'].'/pint.json';
+        $arguments['--config'] = (file_exists($configFile) ? $configFile : $arguments['path'].'/pint.yaml');
         $arguments['path'] = [$arguments['path']];
     }
 
