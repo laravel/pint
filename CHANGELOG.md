@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.10.1...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.10.2...main)
+
+## [v1.10.2](https://github.com/laravel/pint/compare/v1.10.1...v1.10.2) - 2023-06-12
+
+- Version by @driesvints
 
 ## [v1.10.1](https://github.com/laravel/pint/compare/v1.10.0...v1.10.1) - 2023-06-03
 
