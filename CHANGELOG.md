@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.10.2...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.10.3...main)
+
+## [v1.10.3](https://github.com/laravel/pint/compare/v1.10.2...v1.10.3) - 2023-06-20
+
+- Update Dependencies and replace deprecated rules by @Jubeki in https://github.com/laravel/pint/pull/188
 
 ## [v1.10.2](https://github.com/laravel/pint/compare/v1.10.1...v1.10.2) - 2023-06-12
 
