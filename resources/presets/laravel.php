@@ -133,6 +133,9 @@ return ConfigurationFactory::preset([
     'normalize_index_brace' => true,
     'not_operator_with_successor_space' => true,
     'nullable_type_declaration' => true,
+    'nullable_type_declaration_for_default_null_value' => [
+        'use_nullable_type_declaration' => false,
+    ],
     'object_operator_without_whitespace' => true,
     'ordered_imports' => ['sort_algorithm' => 'alpha'],
     'psr_autoloading' => false,
