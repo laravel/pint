@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.10.3...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.10.4...main)
+
+## [v1.10.4](https://github.com/laravel/pint/compare/v1.10.3...v1.10.4) - 2023-07-11
+
+- Update Dependencies by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/pint/pull/191
+- Add Rule: type_declaration_spaces by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/pint/pull/194
+- Add Rule: nullable_type_declaration by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/pint/pull/193
+- Add Rule: nullable_type_declaration_for_default_null_value by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/pint/pull/192
 
 ## [v1.10.3](https://github.com/laravel/pint/compare/v1.10.2...v1.10.3) - 2023-06-20
 
