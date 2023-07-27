@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use Illuminate\Support\Facades\Http;
+
 class ConfigurationJsonRepository
 {
     /**
@@ -18,11 +20,9 @@ class ConfigurationJsonRepository
     /**
      * Create a new Configuration Json Repository instance.
      *
-     * @param  string|null  $path
-     * @param  string|null  $preset
      * @return void
      */
-    public function __construct(protected $path, protected $preset)
+    public function __construct(protected ?string $path, protected ?string $preset, protected ConfigurationLoaderResolver $configurationLoader)
     {
         //
     }
@@ -76,8 +76,11 @@ class ConfigurationJsonRepository
      */
     protected function get()
     {
-        if (file_exists((string) $this->path)) {
-            return tap(json_decode(file_get_contents($this->path), true), function ($configuration) {
+        $loader = $this->configurationLoader->resolveFor($this->path);
+        $config = $loader->load($this->path);
+
+        if ($config) {
+            return tap(json_decode($config, true), function ($configuration) {
                 if (! is_array($configuration)) {
                     abort(1, sprintf('The configuration file [%s] is not valid JSON.', $this->path));
                 }
@@ -85,5 +88,10 @@ class ConfigurationJsonRepository
         }
 
         return [];
+    }
+
+    protected function fileExists(string $path): bool
+    {
+        return file_exists($path) || (filter_var($this->path, FILTER_VALIDATE_URL) && Http::get($path)->ok());
     }
 }

@@ -24,6 +24,8 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.21.1",
+        "guzzlehttp/guzzle": "^7.7",
+        "illuminate/http": "^10.16",
         "illuminate/view": "^10.5.1",
         "laravel-zero/framework": "^10.1.1",
         "mockery/mockery": "^1.5.1",
