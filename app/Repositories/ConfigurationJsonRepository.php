@@ -92,7 +92,7 @@ class ConfigurationJsonRepository
      *
      * @return bool
      */
-    public function fileExists(string $path)
+    protected function fileExists(string $path)
     {
         return match (true) {
             str_starts_with($this->path ?: '', 'http') => str_contains(get_headers($path)[0], '200 OK'),
