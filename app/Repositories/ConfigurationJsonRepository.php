@@ -88,14 +88,15 @@ class ConfigurationJsonRepository
     }
 
     /**
-     * Checks if a local or remote file exists
+     * Determine if a local or remote file exists.
      *
+     * @param  string  $path
      * @return bool
      */
     protected function fileExists(string $path)
     {
         return match (true) {
-            str_starts_with($path, 'http') => str_contains(get_headers($path)[0], '200 OK'),
+            str_starts_with($path, 'http://') || str_starts_with($path, 'https://') => str_contains(get_headers($path)[0], '200 OK'),
             default => file_exists($path)
         };
     }
