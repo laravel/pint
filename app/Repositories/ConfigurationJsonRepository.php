@@ -76,7 +76,7 @@ class ConfigurationJsonRepository
      */
     protected function get()
     {
-        if (file_exists((string) $this->path)) {
+        if ($this->fileExists((string) $this->path)) {
             return tap(json_decode(file_get_contents($this->path), true), function ($configuration) {
                 if (! is_array($configuration)) {
                     abort(1, sprintf('The configuration file [%s] is not valid JSON.', $this->path));
@@ -85,5 +85,18 @@ class ConfigurationJsonRepository
         }
 
         return [];
+    }
+
+    /**
+     * Checks if a local or remote file exists
+     *
+     * @param  string $path
+     * @return bool
+     */
+    public function fileExists(string $path) {
+        return match (true){
+            str_starts_with($this->path ?: '', 'http') => str_contains(get_headers($path)[0], "200 OK"),
+            default => file_exists($path)
+        };
     }
 }
