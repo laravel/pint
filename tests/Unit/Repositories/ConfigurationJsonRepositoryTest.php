@@ -9,6 +9,14 @@ it('works without json file', function () {
         ->and($repository->rules())->toBeEmpty();
 });
 
+it('works with a remote json file', function () {
+    $repository = new ConfigurationJsonRepository('https://raw.githubusercontent.com/laravel/pint/main/tests/Fixtures/rules/pint.json', 'psr12');
+
+    expect($repository->rules())->toBe([
+        'no_unused_imports' => false,
+    ]);
+});
+
 it('may have rules options', function () {
     $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/rules/pint.json', 'psr12');
 
