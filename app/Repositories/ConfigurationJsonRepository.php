@@ -90,7 +90,6 @@ class ConfigurationJsonRepository
     /**
      * Determine if a local or remote file exists.
      *
-     * @param  string  $path
      * @return bool
      */
     protected function fileExists(string $path)
