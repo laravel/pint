@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.10.5...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.10.6...main)
+
+## [v1.10.6](https://github.com/laravel/pint/compare/v1.10.5...v1.10.6) - 2023-08-08
+
+- Remove deprecated function_typehint_space rule by [@goodjack](https://github.com/goodjack) in https://github.com/laravel/pint/pull/197
+- Allow for remote config files by [@kevinpijning](https://github.com/kevinpijning) in https://github.com/laravel/pint/pull/201
 
 ## [v1.10.5](https://github.com/laravel/pint/compare/v1.10.4...v1.10.5) - 2023-07-14
 
