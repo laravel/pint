@@ -16,6 +16,7 @@ return ConfigurationFactory::preset([
             'return',
         ],
     ],
+    'blank_line_between_import_groups' => true,
     'blank_lines_before_namespace' => true,
     'control_structure_braces' => true,
     'control_structure_continuation_position' => [
@@ -136,7 +137,7 @@ return ConfigurationFactory::preset([
         'use_nullable_type_declaration' => false,
     ],
     'object_operator_without_whitespace' => true,
-    'ordered_imports' => ['sort_algorithm' => 'alpha'],
+    'ordered_imports' => ['sort_algorithm' => 'alpha', 'imports_order' => ['const', 'class', 'function']],
     'psr_autoloading' => false,
     'phpdoc_indent' => true,
     'phpdoc_inline_tag_normalizer' => true,
