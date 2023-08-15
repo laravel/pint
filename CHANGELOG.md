@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.10.6...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.11.0...main)
+
+## [v1.11.0](https://github.com/laravel/pint/compare/v1.10.6...v1.11.0) - 2023-08-15
+
+- Improves imports when using `functions` by [@nunomaduro](https://github.com/nunomaduro) in https://github.com/laravel/pint/pull/205
 
 ## [v1.10.6](https://github.com/laravel/pint/compare/v1.10.5...v1.10.6) - 2023-08-08
 
