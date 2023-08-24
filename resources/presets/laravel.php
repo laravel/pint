@@ -112,7 +112,6 @@ return ConfigurationFactory::preset([
     'no_spaces_around_offset' => [
         'positions' => ['inside', 'outside'],
     ],
-    'no_spaces_inside_parenthesis' => true,
     'no_superfluous_phpdoc_tags' => [
         'allow_mixed' => true,
         'allow_unused_params' => true,
@@ -187,6 +186,7 @@ return ConfigurationFactory::preset([
     'single_quote' => true,
     'single_space_around_construct' => true,
     'space_after_semicolon' => true,
+    'spaces_inside_parentheses' => true,
     'standardize_not_equals' => true,
     'statement_indentation' => true,
     'switch_case_semicolon_to_colon' => true,
