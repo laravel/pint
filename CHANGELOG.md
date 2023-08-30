@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.11.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.12.0...main)
+
+## [v1.12.0](https://github.com/laravel/pint/compare/v1.11.0...v1.12.0) - 2023-08-30
+
+- Orders interfaces and traits by [@nunomaduro](https://github.com/nunomaduro) in https://github.com/laravel/pint/pull/206
+- Fix: Keep fixers sorted by name by [@localheinz](https://github.com/localheinz) in https://github.com/laravel/pint/pull/207
 
 ## [v1.11.0](https://github.com/laravel/pint/compare/v1.10.6...v1.11.0) - 2023-08-15
 
