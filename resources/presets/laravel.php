@@ -112,6 +112,7 @@ return ConfigurationFactory::preset([
     'no_spaces_around_offset' => [
         'positions' => ['inside', 'outside'],
     ],
+    'no_superfluous_elseif' => true,
     'no_superfluous_phpdoc_tags' => [
         'allow_mixed' => true,
         'allow_unused_params' => true,
