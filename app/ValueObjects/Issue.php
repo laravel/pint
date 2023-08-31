@@ -108,7 +108,8 @@ class Issue
                 ->map(function ($line) {
                     if (Str::startsWith($line, '+')) {
                         return '//+<fg=green>'.$line.'</>';
-                    } elseif (Str::startsWith($line, '-')) {
+                    }
+                    if (Str::startsWith($line, '-')) {
                         return '//-<fg=red>'.$line.'</>';
                     }
 
