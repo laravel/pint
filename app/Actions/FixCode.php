@@ -41,7 +41,7 @@ class FixCode
             return [$exception->getCode(), []];
         }
 
-        if (is_null($this->input->getOption('format'))) {
+        if ($this->input->getOption('format') === null) {
             $this->progress->subscribe();
         }
 
