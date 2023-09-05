@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.12.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.13.0...main)
+
+## [v1.13.0](https://github.com/laravel/pint/compare/v1.12.0...v1.13.0) - 2023-09-05
+
+- Add rule: `yoda_style` to Laravel by [@lucasmichot](https://github.com/lucasmichot) in https://github.com/laravel/pint/pull/210
 
 ## [v1.12.0](https://github.com/laravel/pint/compare/v1.11.0...v1.12.0) - 2023-08-30
 
