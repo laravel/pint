@@ -40,7 +40,7 @@ class ElaborateSummary
             $totalFiles,
             0,
             0,
-            OutputInterface::VERBOSITY_VERBOSE <= $this->output->getVerbosity(),
+            $this->output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE,
             $this->input->getOption('test'),
             $this->output->isDecorated()
         );
