@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.13.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.13.1...main)
+
+## [v1.13.1](https://github.com/laravel/pint/compare/v1.13.0...v1.13.1) - 2023-09-06
+
+- Fixes non `yoda_style` rule moving variables by [@nunomaduro](https://github.com/nunomaduro) in https://github.com/laravel/pint/pull/213
 
 ## [v1.13.0](https://github.com/laravel/pint/compare/v1.12.0...v1.13.0) - 2023-09-05
 
