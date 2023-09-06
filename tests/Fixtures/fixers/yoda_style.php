@@ -16,7 +16,7 @@ if (array_values($array) !== $array) {
     //
 }
 
-if ($this->guard === $guard && (int) $this->user_id === $userId) {
+if ($object->int === $int && (int) $object->int === $int) {
     //
 }
 
