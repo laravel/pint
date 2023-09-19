@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.13.1...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.13.2...main)
+
+## [v1.13.2](https://github.com/laravel/pint/compare/v1.13.1...v1.13.2) - 2023-09-19
+
+- Increases dependencies by [@nunomaduro](https://github.com/nunomaduro) in https://github.com/laravel/pint/pull/216
 
 ## [v1.13.1](https://github.com/laravel/pint/compare/v1.13.0...v1.13.1) - 2023-09-06
 
