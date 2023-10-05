@@ -27,10 +27,6 @@ return ConfigurationFactory::preset([
         'allow_single_line_empty_anonymous_classes' => false,
         'allow_single_line_anonymous_functions' => false,
     ],
-    'control_structure_braces' => true,
-    'control_structure_continuation_position' => [
-        'position' => 'same_line',
-    ],
     'cast_spaces' => true,
     'class_attributes_separation' => [
         'elements' => [
@@ -51,6 +47,10 @@ return ConfigurationFactory::preset([
         'spacing' => 'none',
     ],
     'constant_case' => ['case' => 'lower'],
+    'control_structure_braces' => true,
+    'control_structure_continuation_position' => [
+        'position' => 'same_line',
+    ],
     'declare_equal_normalize' => true,
     'declare_parentheses' => true,
     'elseif' => true,
