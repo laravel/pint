@@ -10,6 +10,17 @@ it('uses the laravel preset by default', function () {
         ->toContain('── Laravel');
 });
 
+it('may use the None preset', function () {
+    [$statusCode, $output] = run('default', [
+        'path' => base_path('tests/Fixtures/without-issues'),
+        '--preset' => 'none',
+    ]);
+
+    expect($statusCode)->toBe(0)
+        ->and($output)
+        ->toContain('── None');
+});
+
 it('may use the PSR 12 preset', function () {
     [$statusCode, $output] = run('default', [
         'path' => base_path('tests/Fixtures/without-issues'),

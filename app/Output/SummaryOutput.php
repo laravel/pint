@@ -20,9 +20,10 @@ class SummaryOutput
      * @var array<string, string>
      */
     protected $presets = [
+        'laravel' => 'Laravel',
+        'none' => 'None',
         'per' => 'PER',
         'psr12' => 'PSR 12',
-        'laravel' => 'Laravel',
         'symfony' => 'Symfony',
     ];
 
