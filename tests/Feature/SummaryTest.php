@@ -12,7 +12,7 @@ it('may fail with style issues', function () {
         ->toContain('1 file, 1 style issue')
         ->toContain(sprintf('⨯ %s', implode(DIRECTORY_SEPARATOR, [
             'tests', 'Fixtures', 'with-fixable-issues', 'file.php',
-        ])))->toContain('new_with_braces');
+        ])))->toContain('new_with_parentheses');
 });
 
 it('may fail with errors', function () {
