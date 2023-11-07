@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.13.5...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.13.6...main)
+
+## [v1.13.6](https://github.com/laravel/pint/compare/v1.13.5...v1.13.6) - 2023-11-07
+
+- Uses `"friendsofphp/php-cs-fixer": "^3.38.0"` by [@nunomaduro](https://github.com/nunomaduro) in https://github.com/laravel/pint/pull/229
 
 ## [v1.13.5](https://github.com/laravel/pint/compare/v1.13.4...v1.13.5) - 2023-10-26
 
