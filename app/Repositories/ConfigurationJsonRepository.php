@@ -40,6 +40,26 @@ class ConfigurationJsonRepository
     }
 
     /**
+     * Get the indent option.
+     *
+     * @return string
+     */
+    public function indent()
+    {
+        return $this->get()['indent'] ?? '    ';
+    }
+
+    /**
+     * Get the line ending option.
+     *
+     * @return string
+     */
+    public function lineEnding()
+    {
+        return $this->get()['line-ending'] ?? "\n";
+    }
+
+    /**
      * Get the rules options.
      *
      * @return array<int, string>
