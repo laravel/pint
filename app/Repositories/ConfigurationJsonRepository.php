@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use PhpCsFixer\Config;
+
 class ConfigurationJsonRepository
 {
     /**
@@ -46,7 +48,7 @@ class ConfigurationJsonRepository
      */
     public function indent()
     {
-        return $this->get()['indent'] ?? '    ';
+        return $this->get()['indent'] ?? (new Config)->getIndent();
     }
 
     /**
@@ -56,7 +58,7 @@ class ConfigurationJsonRepository
      */
     public function lineEnding()
     {
-        return $this->get()['line-ending'] ?? "\n";
+        return $this->get()['line-ending'] ?? (new Config)->getLineEnding();
     }
 
     /**
