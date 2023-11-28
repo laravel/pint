@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\Actions\GitCommitter;
 use LaravelZero\Framework\Commands\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -40,6 +41,7 @@ class DefaultCommand extends Command
                     new InputOption('test', '', InputOption::VALUE_NONE, 'Test for code style errors without fixing them'),
                     new InputOption('dirty', '', InputOption::VALUE_NONE, 'Only fix files that have uncommitted changes'),
                     new InputOption('format', '', InputOption::VALUE_REQUIRED, 'The output format that should be used'),
+                    new InputOption('commit', '', InputOption::VALUE_NONE, 'Automatically commit fixed files'),
                 ]
             );
     }
@@ -55,6 +57,13 @@ class DefaultCommand extends Command
     {
         [$totalFiles, $changes] = $fixCode->execute();
 
-        return $elaborateSummary->execute($totalFiles, $changes);
+        $exitCode = $elaborateSummary->execute($totalFiles, $changes);
+
+        if ($exitCode === \Illuminate\Console\Command::SUCCESS && $this->input->getOption('commit')) {
+            $commitCode = resolve(GitCommitter::class)->execute($changes);
+            $exitCode = max($exitCode, $commitCode);
+        }
+
+        return $exitCode;
     }
 }

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Actions\ElaborateSummary;
 use App\Actions\FixCode;
+use App\Actions\GitCommitter;
 use App\Output\ProgressOutput;
 use App\Output\SummaryOutput;
 use App\Repositories\ConfigurationJsonRepository;
@@ -57,6 +58,13 @@ class ActionsServiceProvider extends ServiceProvider
                     resolve(InputInterface::class),
                     resolve(OutputInterface::class),
                 )
+            );
+        });
+
+        $this->app->singleton(GitCommitter::class, function () {
+            return new GitCommitter(
+                resolve(InputInterface::class),
+                resolve(OutputInterface::class),
             );
         });
     }
