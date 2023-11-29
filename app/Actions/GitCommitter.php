@@ -36,7 +36,7 @@ class GitCommitter
         if (empty($files)) {
             render(<<<'HTML'
                 <div class="mx-2">
-                    <span class="text-green-500">No changes to commit!</span>
+                    <span class="text-green-500">Nothing to commit, working tree clean.</span>
                 </div>
                 HTML
             );
@@ -44,16 +44,16 @@ class GitCommitter
             return Command::SUCCESS;
         }
 
-        return $this->makeCommit($files);
+        return $this->commit($files);
     }
 
     /**
      * Make the Git commit.
      *
-     * @param  array<string>  $files
+     * @param  array<int, string>  $files
      * @return int
      */
-    protected function makeCommit(array $files)
+    protected function commit(array $files)
     {
         $process = Process::run(sprintf('git commit -m "Apply style fixes from Laravel Pint" %s', implode(' ', $files)));
 
