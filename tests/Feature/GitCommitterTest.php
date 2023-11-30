@@ -20,7 +20,7 @@ it('handles clean working tree', function () {
 
     expect($statusCode)->toBe(0)
         ->and($output)
-        ->toContain('Nothing to commit, working tree clean.');
+        ->toContain('    INFO:   Nothing to commit, working tree clean.');
 });
 
 it('prints process error', function () {
@@ -118,5 +118,5 @@ it('commits the changes', function () {
 
     expect($statusCode)->toBe(0)
         ->and($renderer->fetch())
-        ->toBe('  1 file changed, 1 insertion(+), 1 deletion(-)  '.PHP_EOL);
+        ->toBe('    SUCCESS:   1 file changed, 1 insertion(+), 1 deletion(-)  '.PHP_EOL);
 });

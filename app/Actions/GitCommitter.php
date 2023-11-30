@@ -37,7 +37,8 @@ class GitCommitter
         if (empty($files)) {
             render(<<<'HTML'
                 <div class="mx-2">
-                    <span class="text-green-500">Nothing to commit, working tree clean.</span>
+                    <span class="px-2 bg-green text-gray uppercase font-bold mr-1">Info:</span>
+                    <span>Nothing to commit, working tree clean.</span>
                 </div>
                 HTML
             );
@@ -72,7 +73,8 @@ class GitCommitter
 
         render(sprintf(<<<'HTML'
             <div class="mx-2">
-                <span class="text-green-500">%s</span>
+                <span class="px-2 bg-green text-gray uppercase font-bold mr-1">Success:</span>
+                <span>%s</span>
             </div>
             HTML, trim(Arr::last(explode("\n", trim($process->output())))))
         );
