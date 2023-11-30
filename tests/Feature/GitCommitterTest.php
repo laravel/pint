@@ -101,7 +101,15 @@ it('commits the changes', function () {
     Process::shouldReceive('run')
         ->once()
         ->with('git commit -m "Apply style fixes from Laravel Pint" '.base_path('tests/Fixtures/with-fixable-issues/file.php'))
-        ->andReturn(new FakeProcessResult());
+        ->andReturn(tap(Mockery::mock(FakeProcessResult::class), fn ($process) => $process
+            ->shouldReceive('failed')
+            ->once()
+            ->andReturn(false)
+            ->shouldReceive('output')
+            ->once()
+            ->andReturn('[main 123fff] Apply style fixes from Laravel Pint'."\n".
+                '1 file changed, 1 insertion(+), 1 deletion(-)')
+        ));
 
     [$statusCode, $output] = run('default', [
         '--commit' => true,
@@ -110,5 +118,5 @@ it('commits the changes', function () {
 
     expect($statusCode)->toBe(0)
         ->and($renderer->fetch())
-        ->toBe('  Changes committed successfully!  '.PHP_EOL);
+        ->toBe('  1 file changed, 1 insertion(+), 1 deletion(-)  '.PHP_EOL);
 });

@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Process;
 
 use function Termwind\render;
@@ -69,11 +70,11 @@ class GitCommitter
             return Command::FAILURE;
         }
 
-        render(<<<'HTML'
+        render(sprintf(<<<'HTML'
             <div class="mx-2">
-                <span class="text-green-500">Changes committed successfully!</span>
+                <span class="text-green-500">%s</span>
             </div>
-            HTML
+            HTML, trim(Arr::last(explode("\n", trim($process->output())))))
         );
 
         return Command::SUCCESS;
