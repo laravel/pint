@@ -1,7 +1,7 @@
-<p align="center"><img src="https://github.com/laravel/pint/raw/HEAD/art/logo.svg" width="50%" alt="Logo Laravel Pint"></p>
+<p align="center"><img src="/art/logo.svg" width="50%" alt="Logo Laravel Pint"></p>
 
 <p align="center">
-    <img src="https://github.com/laravel/pint/raw/HEAD/art/overview.png" alt="Overview Laravel Pint" style="width:70%;">
+    <img src="/art/overview.png" alt="Overview Laravel Pint" style="width:70%;">
 </p>
 
 <p align="center">
