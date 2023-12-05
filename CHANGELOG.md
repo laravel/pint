@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.13.6...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.13.7...main)
+
+## [v1.13.7](https://github.com/laravel/pint/compare/v1.13.6...v1.13.7) - 2023-12-05
+
+* Change default for nullable_type_declaration_for_default_null_value by [@otsch](https://github.com/otsch) in https://github.com/laravel/pint/pull/236
 
 ## [v1.13.6](https://github.com/laravel/pint/compare/v1.13.5...v1.13.6) - 2023-11-07
 
