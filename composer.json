@@ -25,9 +25,9 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.38.0",
         "illuminate/view": "^10.30.1",
+        "larastan/larastan": "^2.7.0",
         "laravel-zero/framework": "^10.3.0",
         "mockery/mockery": "^1.6.6",
-        "nunomaduro/larastan": "^2.6.4",
         "nunomaduro/termwind": "^1.15.1",
         "pestphp/pest": "^2.24.2"
     },
