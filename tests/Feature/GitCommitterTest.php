@@ -20,7 +20,7 @@ it('handles clean working tree', function () {
 
     expect($statusCode)->toBe(0)
         ->and($output)
-        ->toContain('    INFO:   Nothing to commit, working tree clean.');
+        ->toContain('    INFO   Nothing to commit.');
 });
 
 it('prints process error', function () {
@@ -68,7 +68,7 @@ it('prints process error', function () {
 
     expect($statusCode)->toBe(1)
         ->and($renderer->fetch())
-        ->toBe('    ERROR:   Example Git error  '.PHP_EOL)
+        ->toBe('    ERROR   Example Git error  '.PHP_EOL.PHP_EOL)
         ->and($output)
         ->not()->toContain('Apply style fixes from Laravel Pint');
 });
@@ -104,11 +104,7 @@ it('commits the changes', function () {
         ->andReturn(tap(Mockery::mock(FakeProcessResult::class), fn ($process) => $process
             ->shouldReceive('failed')
             ->once()
-            ->andReturn(false)
-            ->shouldReceive('output')
-            ->once()
-            ->andReturn('[main 123fff] Apply style fixes from Laravel Pint'."\n".
-                '1 file changed, 1 insertion(+), 1 deletion(-)')
+            ->andReturn(false),
         ));
 
     [$statusCode, $output] = run('default', [
@@ -118,5 +114,5 @@ it('commits the changes', function () {
 
     expect($statusCode)->toBe(0)
         ->and($renderer->fetch())
-        ->toBe('    SUCCESS:   1 file changed, 1 insertion(+), 1 deletion(-)  '.PHP_EOL);
+        ->toBe('    INFO   Changes committed.  '.PHP_EOL.PHP_EOL);
 });

@@ -59,7 +59,7 @@ class GitCommitter
         render(<<<'HTML'
             <div class="mx-2 mb-1">
                 <span class="px-2 bg-blue text-white uppercase font-bold mr-1">Info</span>
-                <span>Changes committed to Git.</span>
+                <span>Changes committed.</span>
             </div>
             HTML
         );
