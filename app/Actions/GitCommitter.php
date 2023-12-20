@@ -3,27 +3,12 @@
 namespace App\Actions;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Process;
 
 use function Termwind\render;
 
 class GitCommitter
 {
-    /**
-     * Creates a new Git Committer instance.
-     *
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
-     * @return void
-     */
-    public function __construct(
-        protected $input,
-        protected $output,
-    ) {
-        //
-    }
-
     /**
      * Commit the changes to Git.
      *
@@ -36,9 +21,9 @@ class GitCommitter
 
         if (empty($files)) {
             render(<<<'HTML'
-                <div class="mx-2">
-                    <span class="px-2 bg-green text-gray uppercase font-bold mr-1">Info:</span>
-                    <span>Nothing to commit, working tree clean.</span>
+                <div class="mx-2 mb-1">
+                <span class="px-2 bg-blue text-white uppercase font-bold mr-1">Info</span>
+                    <span>Nothing to commit.</span>
                 </div>
                 HTML
             );
@@ -61,8 +46,8 @@ class GitCommitter
 
         if ($process->failed()) {
             render(<<<HTML
-                <div class="mx-2">
-                    <span class="px-2 bg-red text-white uppercase font-bold mr-1">Error:</span>
+                <div class="mx-2 mb-1">
+                    <span class="px-2 bg-red text-white uppercase font-bold mr-1">Error</span>
                     <span>{$process->errorOutput()}</span>
                 </div>
                 HTML
@@ -71,12 +56,12 @@ class GitCommitter
             return Command::FAILURE;
         }
 
-        render(sprintf(<<<'HTML'
-            <div class="mx-2">
-                <span class="px-2 bg-green text-gray uppercase font-bold mr-1">Success:</span>
-                <span>%s</span>
+        render(<<<'HTML'
+            <div class="mx-2 mb-1">
+                <span class="px-2 bg-blue text-white uppercase font-bold mr-1">Info</span>
+                <span>Changes committed to Git.</span>
             </div>
-            HTML, trim(Arr::last(explode("\n", trim($process->output())))))
+            HTML
         );
 
         return Command::SUCCESS;
