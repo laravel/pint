@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Fixtures\Fixers;
+namespace Tests\Fixtures\fixers;
 
 use PhpCsFixer\Fixer\FixerInterface;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
