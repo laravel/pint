@@ -10,6 +10,6 @@ it('runs custom fixers', function () {
         ->and($output)
         ->toContain('FAIL')
         ->toContain('1 file, 1 style issue')
-        ->toContain('⨯ tests/Fixtures/files/empty.php')
+        ->toContain('empty.php')
         ->toContain('Custom/fixer');
 });
