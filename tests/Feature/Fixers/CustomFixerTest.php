@@ -3,7 +3,7 @@
 it('runs custom fixers', function () {
     [$statusCode, $output] = run('default', [
         'path' => base_path('tests/Fixtures/files/empty.php'),
-        '--config' => base_path('tests/Fixtures/fixers/pint.json')
+        '--config' => base_path('tests/Fixtures/fixers/pint.json'),
     ]);
 
     expect($statusCode)->toBe(1)

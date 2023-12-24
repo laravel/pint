@@ -2,10 +2,10 @@
 
 namespace App\Factories;
 
+use App\Project;
 use App\Repositories\ConfigurationJsonRepository;
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
-use App\Project;
 
 class ConfigurationFactory
 {
@@ -86,20 +86,19 @@ class ConfigurationFactory
     {
         $localConfiguration = resolve(ConfigurationJsonRepository::class);
 
-        if(empty($localConfiguration->fixers())) {
+        if (empty($localConfiguration->fixers())) {
             return [];
-        };
+        }
 
-        if(! file_exists(Project::path()."/vendor/autoload.php")) {
+        if (! file_exists(Project::path().'/vendor/autoload.php')) {
             abort(1, sprintf('Composer autoload file not found'));
         }
 
-        require Project::path()."/vendor/autoload.php";
+        require Project::path().'/vendor/autoload.php';
 
         $fixers = [];
 
-        foreach( $localConfiguration->fixers() as $class )
-        {
+        foreach ($localConfiguration->fixers() as $class) {
             $fixers[] = new $class();
         }
 

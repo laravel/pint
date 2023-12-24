@@ -49,7 +49,6 @@ class ConfigurationJsonRepository
         return $this->get()['fixers'] ?? [];
     }
 
-
     /**
      * Get the rules options.
      *
