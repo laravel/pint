@@ -2,7 +2,7 @@
 
 it('fixes the code', function () {
     [$statusCode, $output] = run('default', [
-        'path' => base_path('tests/Fixtures/fixers/yoda_style.php'),
+        'path' => base_path('tests/Fixtures/files/yoda_style.php'),
         '--preset' => 'laravel',
     ]);
 

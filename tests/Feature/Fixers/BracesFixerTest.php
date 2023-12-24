@@ -2,7 +2,7 @@
 
 it('fixes the code', function () {
     [$statusCode, $output] = run('default', [
-        'path' => base_path('tests/Fixtures/fixers/braces.php'),
+        'path' => base_path('tests/Fixtures/files/braces.php'),
         '--preset' => 'laravel',
     ]);
 

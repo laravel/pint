@@ -40,6 +40,17 @@ class ConfigurationJsonRepository
     }
 
     /**
+     * Get the fixers options.
+     *
+     * @return array<int, string>
+     */
+    public function fixers()
+    {
+        return $this->get()['fixers'] ?? [];
+    }
+
+
+    /**
      * Get the rules options.
      *
      * @return array<int, string>

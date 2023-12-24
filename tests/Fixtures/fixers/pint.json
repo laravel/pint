@@ -1,0 +1,8 @@
+{
+    "fixers": [
+        "Tests\\Fixtures\\Fixers\\TestCustomFixer"
+    ],
+    "rules": {
+        "Laravel/test_custom_fixer": true
+    }
+}

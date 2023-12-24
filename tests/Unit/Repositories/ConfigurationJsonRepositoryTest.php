@@ -25,6 +25,14 @@ it('may have rules options', function () {
     ]);
 });
 
+it('may have fixers options', function () {
+    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/fixers/pint.json', 'psr12');
+
+    expect($repository->fixers())->toBe([
+        "Tests\\Fixtures\\Fixers\\TestCustomFixer"
+    ]);
+});
+
 it('may have finder options', function () {
     $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/finder/pint.json', null);
 

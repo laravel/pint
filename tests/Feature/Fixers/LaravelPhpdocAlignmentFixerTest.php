@@ -2,7 +2,7 @@
 
 it('fixes the code', function () {
     [$statusCode, $output] = run('default', [
-        'path' => base_path('tests/Fixtures/fixers/laravel_phpdoc_alignment.php'),
+        'path' => base_path('tests/Fixtures/files/laravel_phpdoc_alignment.php'),
         '--preset' => 'laravel',
     ]);
 

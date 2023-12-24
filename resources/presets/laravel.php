@@ -1,8 +1,9 @@
 <?php
 
 use App\Factories\ConfigurationFactory;
+use App\Fixers\LaravelPhpdocAlignmentFixer;
 
-return ConfigurationFactory::preset([
+return ConfigurationFactory::preset([ new LaravelPhpdocAlignmentFixer() ],[
     'array_indentation' => true,
     'array_syntax' => ['syntax' => 'short'],
     'binary_operator_spaces' => [
