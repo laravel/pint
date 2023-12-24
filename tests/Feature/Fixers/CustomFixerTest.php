@@ -11,5 +11,5 @@ it('runs custom fixers', function () {
         ->toContain('FAIL')
         ->toContain('1 file, 1 style issue')
         ->toContain('⨯ tests/Fixtures/files/empty.php')
-        ->toContain('Laravel/test_custom_fixer');
+        ->toContain('Custom/fixer');
 });

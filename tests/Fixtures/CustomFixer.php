@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Fixtures\fixers;
+namespace Tests\Fixtures;
 
 use PhpCsFixer\Fixer\FixerInterface;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
@@ -8,7 +8,7 @@ use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Tokenizer\Tokens;
 use SplFileInfo;
 
-class TestCustomFixer implements FixerInterface
+class CustomFixer implements FixerInterface
 {
     public function isCandidate(Tokens $tokens): bool
     {
@@ -35,7 +35,7 @@ class TestCustomFixer implements FixerInterface
 
     public function getName(): string
     {
-        return "Laravel/test_custom_fixer";
+        return "Custom/fixer";
     }
 
     public function getPriority(): int
