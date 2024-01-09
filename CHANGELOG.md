@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.13.7...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.13.8...main)
+
+## [v1.13.8](https://github.com/laravel/pint/compare/v1.13.7...v1.13.8) - 2024-01-09
+
+* [1.x] Bump Dependencies and run Tests on skeleton by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/pint/pull/240
 
 ## [v1.13.7](https://github.com/laravel/pint/compare/v1.13.6...v1.13.7) - 2023-12-05
 
