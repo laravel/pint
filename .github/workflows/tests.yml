@@ -30,6 +30,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Checkout skeleton code
+        uses: actions/checkout@v4
+        with:
+          path: 'skeleton'
+          repository: 'laravel/laravel'
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
