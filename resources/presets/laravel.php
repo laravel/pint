@@ -56,7 +56,7 @@ return ConfigurationFactory::preset([
     'elseif' => true,
     'encoding' => true,
     'full_opening_tag' => true,
-    'fully_qualified_strict_types' => true,
+    'fully_qualified_strict_types' => false,
     'function_declaration' => true,
     'general_phpdoc_tag_rename' => true,
     'heredoc_to_nowdoc' => true,
