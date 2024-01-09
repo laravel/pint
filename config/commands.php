@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => App\Commands\DefaultCommand::class,
+    'default' => \App\Commands\DefaultCommand::class,
 
     /*
     |--------------------------------------------------------------------------
