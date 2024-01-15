@@ -137,6 +137,12 @@ return ConfigurationFactory::preset([
     'ordered_imports' => ['sort_algorithm' => 'alpha', 'imports_order' => ['const', 'class', 'function']],
     'ordered_interfaces' => true,
     'ordered_traits' => true,
+    'phpdoc_align' => [
+        'align' => 'left',
+        'spacing' => [
+            'param' => 2,
+        ],
+    ],
     'phpdoc_indent' => true,
     'phpdoc_inline_tag_normalizer' => true,
     'phpdoc_no_access' => true,
@@ -205,7 +211,4 @@ return ConfigurationFactory::preset([
         'identical' => false,
         'less_and_greater' => false,
     ],
-
-    // Laravel
-    'Laravel/laravel_phpdoc_alignment' => true,
 ]);
