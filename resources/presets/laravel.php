@@ -138,7 +138,7 @@ return ConfigurationFactory::preset([
     'ordered_interfaces' => true,
     'ordered_traits' => true,
     'phpdoc_align' => [
-        'aligh' => 'left',
+        'align' => 'left',
         'spacing' => [
             'param' => 2,
         ],

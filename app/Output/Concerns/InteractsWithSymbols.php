@@ -6,8 +6,8 @@ use PhpCsFixer\Error\Error;
 use PhpCsFixer\FixerFileProcessedEvent;
 
 /**
- * @property \Symfony\Component\Console\Input\InputInterface  $input
- * @property \Symfony\Component\Console\Output\OutputInterface  $output
+ * @property \Symfony\Component\Console\Input\InputInterface $input
+ * @property \Symfony\Component\Console\Output\OutputInterface $output
  */
 trait InteractsWithSymbols
 {

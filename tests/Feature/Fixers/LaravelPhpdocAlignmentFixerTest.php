@@ -14,7 +14,9 @@ it('fixes the code', function () {
    /**
     * @param  string  $foo
   - * @param string  $bar
+  - * @param  string $x
   + * @param  string  $bar
+  + * @param  string  $x
     * @return string
     */
 EOF,
