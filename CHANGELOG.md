@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.13.8...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.13.9...main)
+
+## [v1.13.9](https://github.com/laravel/pint/compare/v1.13.8...v1.13.9) - 2024-01-16
+
+* [1.x] Replace custom phpdoc_align rule with php-cs-fixer option by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/pint/pull/242
 
 ## [v1.13.8](https://github.com/laravel/pint/compare/v1.13.7...v1.13.8) - 2024-01-09
 
