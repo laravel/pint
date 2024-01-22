@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.13.9...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.13.10...main)
+
+## [v1.13.10](https://github.com/laravel/pint/compare/v1.13.9...v1.13.10) - 2024-01-22
+
+* Bump Dependencies and fix spacing issue by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/pint/pull/244
 
 ## [v1.13.9](https://github.com/laravel/pint/compare/v1.13.8...v1.13.9) - 2024-01-16
 
