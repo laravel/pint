@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.13.10...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.13.11...main)
+
+## [v1.13.11](https://github.com/laravel/pint/compare/v1.13.10...v1.13.11) - 2024-02-13
+
+* [1.x] Bumps dependencies by [@nunomaduro](https://github.com/nunomaduro) in https://github.com/laravel/pint/pull/249
 
 ## [v1.13.10](https://github.com/laravel/pint/compare/v1.13.9...v1.13.10) - 2024-01-22
 
