@@ -36,6 +36,7 @@ class DefaultCommand extends Command
                 [
                     new InputArgument('path', InputArgument::IS_ARRAY, 'The path to fix', [(string) getcwd()]),
                     new InputOption('config', '', InputOption::VALUE_REQUIRED, 'The configuration that should be used'),
+                    new InputOption('no-config', '', InputOption::VALUE_NONE, 'Disable loading any configuration file'),
                     new InputOption('preset', '', InputOption::VALUE_REQUIRED, 'The preset that should be used'),
                     new InputOption('test', '', InputOption::VALUE_NONE, 'Test for code style errors without fixing them'),
                     new InputOption('dirty', '', InputOption::VALUE_NONE, 'Only fix files that have uncommitted changes'),
