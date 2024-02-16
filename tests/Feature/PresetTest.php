@@ -53,3 +53,19 @@ it('may use the Symfony preset', function () {
         ->and($output)
         ->toContain('── Symfony');
 });
+
+it('ignores config when using no config option', function () {
+    $cwd = getcwd();
+    chdir(base_path('tests/Fixtures/no-config'));
+
+    [$statusCode, $output] = run('default', [
+        '--preset' => 'psr12',
+        '--no-config' => true,
+    ]);
+
+    chdir($cwd);
+
+    expect($statusCode)->toBe(0)
+        ->and($output)
+        ->toContain('── PSR 12');
+});
