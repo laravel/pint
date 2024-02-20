@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.13.11...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.14.0...main)
+
+## [v1.14.0](https://github.com/laravel/pint/compare/v1.13.11...v1.14.0) - 2024-02-20
+
+* Add `--no-config` option by [@jasonmccreary](https://github.com/jasonmccreary) in https://github.com/laravel/pint/pull/250
 
 ## [v1.13.11](https://github.com/laravel/pint/compare/v1.13.10...v1.13.11) - 2024-02-13
 
