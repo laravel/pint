@@ -2,6 +2,7 @@
 
 namespace App\Fixers;
 
+use App\Exceptions\PrettierException;
 use App\Prettier;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\ConfigurableFixerInterface;
@@ -67,6 +68,10 @@ class LaravelBladeFixer extends AbstractFixer implements ConfigurableFixerInterf
         /** @var \Illuminate\Process\ProcessResult $result */
         $result = app(Prettier::class)->run([$path, ...$this->mapConfigurationToCliOptions()]);
 
+        if ($result->failed()) {
+            throw new PrettierException($result->errorOutput());
+        }
+
         $tokens->setCode($result->output());
     }
 
@@ -96,9 +101,12 @@ class LaravelBladeFixer extends AbstractFixer implements ConfigurableFixerInterf
     {
         $configuration = $this->configuration;
 
-        return [
-            '--sort-tailwindcss-classes' => $configuration['sortTailwindcssClasses'] ? 'true' : 'false',
-            '--sort-html-attributes' => $configuration['sortHtmlAttributes'],
-        ];
+        return array_values(array_filter([
+            $configuration['sortTailwindcssClasses']
+            ? '--sort-tailwindcss-classes=true'
+            : '--sort-tailwindcss-classes=false',
+            '--sort-html-attributes',
+            $configuration['sortHtmlAttributes'],
+        ]));
     }
 }
