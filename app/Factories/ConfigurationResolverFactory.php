@@ -57,7 +57,7 @@ class ConfigurationResolverFactory
                 'dry-run' => $input->getOption('test'),
                 'path' => $path,
                 'path-mode' => ConfigurationResolver::PATH_MODE_OVERRIDE,
-                'cache-file' => $localConfiguration->cacheFile() ?? implode(DIRECTORY_SEPARATOR, [
+                'cache-file' => $input->getOption('cache-file') ?? $localConfiguration->cacheFile() ?? implode(DIRECTORY_SEPARATOR, [
                     realpath(sys_get_temp_dir()),
                     md5(
                         app()->isProduction()
