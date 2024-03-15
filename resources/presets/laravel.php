@@ -211,4 +211,8 @@ return ConfigurationFactory::preset([
         'identical' => false,
         'less_and_greater' => false,
     ],
+
+    // Pint Specific Rules
+
+    'Pint/laravel_blade' => true,
 ]);

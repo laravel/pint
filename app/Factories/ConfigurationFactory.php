@@ -2,6 +2,7 @@
 
 namespace App\Factories;
 
+use App\Fixers\LaravelBladeFixer;
 use App\Repositories\ConfigurationJsonRepository;
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
@@ -18,7 +19,6 @@ class ConfigurationFactory
         '_ide_helper_models.php',
         '_ide_helper.php',
         '.phpstorm.meta.php',
-        '*.blade.php',
     ];
 
     /**
@@ -45,7 +45,10 @@ class ConfigurationFactory
             ->setFinder(self::finder())
             ->setRules(array_merge($rules, resolve(ConfigurationJsonRepository::class)->rules()))
             ->setRiskyAllowed(true)
-            ->setUsingCache(true);
+            ->setUsingCache(true)
+            ->registerCustomFixers([
+                new LaravelBladeFixer(),
+            ]);
     }
 
     /**

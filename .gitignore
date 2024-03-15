@@ -2,3 +2,5 @@
 /vendor
 composer.lock
 .phpunit.result.cache
+/node_sandbox/package-lock.json
+/node_sandbox/node_modules

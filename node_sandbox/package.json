@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "@shufo/prettier-plugin-blade": "^1.14.1",
+    "prettier": "^3.2.5"
+  }
+}
