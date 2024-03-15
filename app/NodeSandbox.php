@@ -54,6 +54,9 @@ class NodeSandbox
             File::deleteDirectory($this->path.'/node_modules');
             File::delete($this->path.'/package-lock.json');
 
+            $this->ensureNodeIsInstalled();
+            $this->ensureNpmIsInstalled();
+
             $this->installNodeDependencies();
 
             File::put($this->path.'/version', static::VERSION);
@@ -84,6 +87,30 @@ class NodeSandbox
             ->path($this->path);
 
         return $process->run();
+    }
+
+    /**
+     * Ensure node is installed.
+     *
+     * @return void
+     */
+    private function ensureNodeIsInstalled()
+    {
+        if (Process::run('node -v')->failed()) {
+            abort(1, 'Pint requires node to be installed on your machine.');
+        }
+    }
+
+    /**
+     * Ensure NPM is installed.
+     *
+     * @return void
+     */
+    private function ensureNpmIsInstalled()
+    {
+        if (Process::run('npm -v')->failed()) {
+            abort(1, 'Pint requires npm to be installed on your machine.');
+        }
     }
 
     /**
