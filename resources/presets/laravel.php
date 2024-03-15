@@ -214,5 +214,5 @@ return ConfigurationFactory::preset([
 
     // Pint Specific Rules
 
-    'Pint/laravel_blade' => true,
+    'Laravel/blade' => true,
 ]);
