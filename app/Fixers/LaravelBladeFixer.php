@@ -21,7 +21,7 @@ class LaravelBladeFixer extends AbstractFixer implements ConfigurableFixerInterf
      */
     public function getName(): string
     {
-        return 'Pint/laravel_blade';
+        return 'Laravel/blade';
     }
 
     /**
