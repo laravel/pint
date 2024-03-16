@@ -65,7 +65,13 @@ class LaravelBladeFixer extends AbstractFixer
         $result = app(Prettier::class)->run([$path]);
 
         if ($result->failed()) {
-            throw new PrettierException($result->errorOutput());
+            $error = $result->errorOutput();
+
+            if (str($error)->startsWith('[error]') && str($error)->contains('SyntaxError:')) {
+                $error = str($error)->after('SyntaxError: ')->before("\n")->value();
+            }
+
+            throw new PrettierException($error);
         }
 
         $tokens->setCode($result->output());
