@@ -1,8 +1,6 @@
 <div class="mx-2 mt-2">
     <div class="flex space-x-1">
-        <span class="content-repeat-[─] text-gray flex-1">
-
-        </span>
+        <span class="content-repeat-[─] text-gray flex-1"></span>
 
         <span class="text-gray">
             {{ $preset }}
@@ -12,7 +10,6 @@
     <div>
         <span>
             <div class="flex space-x-1">
-
                 @php
                     $fixableErrors = $issues->filter->fixable();
                     $nonFixableErrors = $issues->reject->fixable();
@@ -22,7 +19,7 @@
                     <span class="bg-green text-gray px-2 font-bold uppercase">
                         PASS
                     </span>
-                @elseif($nonFixableErrors->count() == 0 && !$testing)
+                @elseif ($nonFixableErrors->count() == 0 && ! $testing)
                     <span class="bg-green text-gray px-2 font-bold uppercase">
                         FIXED
                     </span>
@@ -35,21 +32,26 @@
                 <span class="content-repeat-[.] text-gray flex-1"></span>
                 <span>
                     <span>
-                        {{ $totalFiles }} {{ str('file')->plural($totalFiles) }}
+                        {{ $totalFiles }}
+                        {{ str('file')->plural($totalFiles) }}
                     </span>
 
                     @if ($nonFixableErrors->isNotEmpty())
                         <span>
-                            , {{ $nonFixableErrors->count() }} {{ str('error')->plural($nonFixableErrors) }}
+                            , {{ $nonFixableErrors->count() }}
+                            {{ str('error')->plural($nonFixableErrors) }}
                         </span>
                     @endif
 
                     @if ($fixableErrors->isNotEmpty())
                         <span>
                             @if ($testing)
-                                , {{ $fixableErrors->count() }} style {{ str('issue')->plural($fixableErrors) }}
+                                , {{ $fixableErrors->count() }} style
+                                {{ str('issue')->plural($fixableErrors) }}
                             @else
-                                , {{ $fixableErrors->count() }} style {{ str('issue')->plural($fixableErrors) }} fixed
+                                , {{ $fixableErrors->count() }} style
+                                {{ str('issue')->plural($fixableErrors) }}
+                                fixed
                             @endif
                         </span>
                     @endif
