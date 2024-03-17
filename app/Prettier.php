@@ -26,7 +26,7 @@ class Prettier
      * Run the prettier command.
      *
      * @param  array<int, string>  $params
-     * @return \Illuminate\Process\ProcessResult
+     * @return \Illuminate\Contracts\Process\ProcessResult
      */
     public function run($params = [])
     {
