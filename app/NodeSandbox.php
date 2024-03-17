@@ -31,7 +31,7 @@ class NodeSandbox
     /**
      * Creates a new node sandbox instance.
      *
-     * @param  string
+     * @param  string  $path
      * @return void
      */
     public function __construct($path)
@@ -76,7 +76,7 @@ class NodeSandbox
     /**
      * Run the given commands.
      *
-     * @param  array<int, string>
+     * @param  array<int, string>  $commands
      * @return \Illuminate\Process\ProcessResult
      */
     public function run($commands)

@@ -14,7 +14,7 @@ class Prettier
     /**
      * The node sandbox instance.
      *
-     * @param  \App\NodeSandbox
+     * @param  \App\NodeSandbox  $sandbox
      * @return void
      */
     public function __construct($sandbox)
@@ -25,7 +25,7 @@ class Prettier
     /**
      * Run the prettier command.
      *
-     * @param  array<int, string>
+     * @param  array<int, string>  $params
      * @return \Illuminate\Process\ProcessResult
      */
     public function run($params = [])
