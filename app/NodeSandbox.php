@@ -77,7 +77,7 @@ class NodeSandbox
      * Run the given commands.
      *
      * @param  array<int, string>  $commands
-     * @return \Illuminate\Process\ProcessResult
+     * @return \Illuminate\Contracts\Process\ProcessResult
      */
     public function run($commands)
     {
