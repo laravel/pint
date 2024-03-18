@@ -98,14 +98,17 @@ class Prettier
     }
 
     /**
-     * Terminates the process.
+     * Ensures the process is terminated.
      *
      * @return void
      */
-    public function terminate()
+    public function ensureTerminated()
     {
         if ($this->process) {
             $this->process->stop();
+
+            $this->inputStream = null;
+            $this->process = null;
         }
     }
 }

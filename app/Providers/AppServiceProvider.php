@@ -49,7 +49,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->terminating(function () {
-            $this->app->make(Prettier::class)->terminate();
+            $this->app->make(Prettier::class)->ensureTerminated();
         });
     }
 }
