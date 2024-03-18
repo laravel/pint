@@ -4,6 +4,7 @@
         {
             "files": ["*.blade.php"],
             "options": {
+                "printWidth": 120,
                 "singleQuote": true,
                 "parser": "blade",
                 "tabWidth": 4
