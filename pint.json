@@ -1,8 +1,5 @@
 {
     "exclude": [
         "tests/Fixtures"
-    ],
-    "rules": {
-        "Laravel/blade": false
-    }
+    ]
 }

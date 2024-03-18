@@ -2,6 +2,10 @@
 
 namespace App;
 
+use App\Exceptions\PrettierException;
+use Symfony\Component\Process\InputStream;
+use Symfony\Component\Process\Process;
+
 class Prettier
 {
     /**
@@ -10,6 +14,20 @@ class Prettier
      * @var \App\NodeSandbox
      */
     protected $sandbox;
+
+    /**
+     * The process instance, if any.
+     *
+     * @var Process|null
+     */
+    protected $process;
+
+    /**
+     * The input stream instance, if any.
+     *
+     * @var \Symfony\Component\Process\InputStream|null
+     */
+    protected $inputStream;
 
     /**
      * The node sandbox instance.
@@ -23,18 +41,71 @@ class Prettier
     }
 
     /**
-     * Run the prettier command.
+     * Formats the given file.
      *
-     * @param  array<int, string>  $params
-     * @return \Illuminate\Contracts\Process\ProcessResult
+     * @param  string  $file
      */
-    public function run($params = [])
+    public function format($file): string
     {
-        return $this->sandbox->run([
-            './node_modules/.bin/prettier',
-            '--config',
-            $this->sandbox->path().'/'.'.prettierrc',
-            ...$params,
-        ]);
+        $this->sandbox->ensureInitialized();
+
+        $this->ensureStarted();
+
+        $this->inputStream->write($file);
+
+        while (true) {
+            $formatted = $this->process->getOutput();
+            $error = $this->process->getErrorOutput();
+
+            if ($formatted || $error) {
+                break;
+            }
+        }
+
+        $this->process->clearOutput();
+        $this->process->clearErrorOutput();
+
+        if ($error) {
+            throw new PrettierException($error);
+        }
+
+        return $formatted;
+    }
+
+    /**
+     * Ensures the process is started.
+     *
+     * @return void
+     */
+    public function ensureStarted()
+    {
+        if ($this->process) {
+            return;
+        }
+
+        $this->process = new Process(
+            ['node', $this->sandbox->path().'/prettier-worker.js'],
+            $this->sandbox->path(),
+        );
+
+        $this->process->setTty(false);
+
+        $this->process->setInput(
+            $this->inputStream = new InputStream(),
+        );
+
+        $this->process->start();
+    }
+
+    /**
+     * Terminates the process.
+     *
+     * @return void
+     */
+    public function terminate()
+    {
+        if ($this->process) {
+            $this->process->stop();
+        }
     }
 }

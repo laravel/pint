@@ -2,7 +2,6 @@
 
 namespace App\Fixers;
 
-use App\Exceptions\PrettierException;
 use App\Prettier;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
@@ -61,19 +60,8 @@ class LaravelBladeFixer extends AbstractFixer
             return;
         }
 
-        /** @var \Illuminate\Process\ProcessResult $result */
-        $result = app(Prettier::class)->run([$path]);
-
-        if ($result->failed()) {
-            $error = $result->errorOutput();
-
-            if (str($error)->startsWith('[error]') && str($error)->contains('SyntaxError:')) {
-                $error = str($error)->after('SyntaxError: ')->before("\n")->value();
-            }
-
-            throw new PrettierException($error);
-        }
-
-        $tokens->setCode($result->output());
+        $tokens->setCode(
+            app(Prettier::class)->format($path),
+        );
     }
 }

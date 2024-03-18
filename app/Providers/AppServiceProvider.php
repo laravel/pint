@@ -47,5 +47,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(Prettier::class, function ($app) {
             return new Prettier($app->make(NodeSandbox::class));
         });
+
+        $this->app->terminating(function () {
+            $this->app->make(Prettier::class)->terminate();
+        });
     }
 }

@@ -83,8 +83,8 @@ class NodeSandbox
     {
         $this->ensureInitialized();
 
-        $process = Process::command(implode(' ', $commands))
-            ->path($this->path);
+        /** @var \Symfony\Component\Process\Process $process */
+        $this->input->write();
 
         return $process->run();
     }
