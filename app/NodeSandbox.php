@@ -74,22 +74,6 @@ class NodeSandbox
     }
 
     /**
-     * Run the given commands.
-     *
-     * @param  array<int, string>  $commands
-     * @return \Illuminate\Contracts\Process\ProcessResult
-     */
-    public function run($commands)
-    {
-        $this->ensureInitialized();
-
-        /** @var \Symfony\Component\Process\Process $process */
-        $this->input->write();
-
-        return $process->run();
-    }
-
-    /**
      * Ensure node is installed.
      *
      * @return void

@@ -9,7 +9,9 @@ process.stdin.on('data', async function (path) {
 
         const formatted = await prettier.format(content, { ...options, filepath: path.trim() });
 
-        process.stdout.write(formatted);
+        process.stdout.write(
+            `[PINT_BLADE_PRETTIER_WORKER_START]${formatted}[PINT_BLADE_PRETTIER_WORKER_END]`
+        );
     } catch (error) {
         process.stderr.write(`${error.message}`);
     }

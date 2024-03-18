@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Exceptions\PrettierException;
+use Illuminate\Support\Str;
 use Symfony\Component\Process\InputStream;
 use Symfony\Component\Process\Process;
 
@@ -44,8 +45,11 @@ class Prettier
      * Formats the given file.
      *
      * @param  string  $file
+     * @return string
+     *
+     * @throws \App\Exceptions\PrettierException
      */
-    public function format($file): string
+    public function format($file)
     {
         $this->sandbox->ensureInitialized();
 
@@ -53,11 +57,20 @@ class Prettier
 
         $this->inputStream->write($file);
 
-        while (true) {
-            $formatted = $this->process->getOutput();
-            $error = $this->process->getErrorOutput();
+        $this->process->clearOutput();
+        $this->process->clearErrorOutput();
 
-            if ($formatted || $error) {
+        $formatted = '';
+        $error = '';
+
+        while (true) {
+            $formatted = $this->process->getIncrementalOutput();
+
+            if (Str::endsWith($formatted, '[PINT_BLADE_PRETTIER_WORKER_END]')) {
+                break;
+            }
+
+            if ($error = $this->process->getIncrementalErrorOutput()) {
                 break;
             }
         }
@@ -65,11 +78,23 @@ class Prettier
         $this->process->clearOutput();
         $this->process->clearErrorOutput();
 
-        if ($error) {
+        if ($error !== '') {
             throw new PrettierException($error);
         }
 
-        return $formatted;
+        foreach ([
+            '[PINT_BLADE_PRETTIER_WORKER_START]',
+            '[PINT_BLADE_PRETTIER_WORKER_END]',
+        ] as $delimiter) {
+            if (! Str::contains($formatted, $delimiter)) {
+                throw new PrettierException('Laravel Pint\'s Prettier worker did not return a valid response.');
+            }
+        }
+
+        return Str::of($formatted)
+            ->after('[PINT_BLADE_PRETTIER_WORKER_START]')
+            ->before('[PINT_BLADE_PRETTIER_WORKER_END]')
+            ->value();
     }
 
     /**
