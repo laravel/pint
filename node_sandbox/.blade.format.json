@@ -1,5 +1,4 @@
 {
     "useLaravelPint": true,
-    "pintCommand": "../builds/pint {file}",
-    "pintCacheEnabled": false
+    "pintCommand": "../builds/pint {file}"
 }
