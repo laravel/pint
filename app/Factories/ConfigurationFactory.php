@@ -47,7 +47,7 @@ class ConfigurationFactory
             ->setRiskyAllowed(true)
             ->setUsingCache(true)
             ->registerCustomFixers([
-                new LaravelBladeFixer(),
+                resolve(LaravelBladeFixer::class),
             ]);
     }
 

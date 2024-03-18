@@ -12,6 +12,21 @@ use SplFileInfo;
 class LaravelBladeFixer extends AbstractFixer
 {
     /**
+     * The Prettier instance.
+     *
+     * @var \App\Prettier
+     */
+    protected $prettier;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(Prettier $prettier)
+    {
+        $this->prettier = $prettier;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getName(): string
@@ -45,6 +60,8 @@ class LaravelBladeFixer extends AbstractFixer
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \App\Exceptions\PrettierException
      */
     protected function applyFix(SplFileInfo $file, Tokens $tokens): void
     {
@@ -61,7 +78,7 @@ class LaravelBladeFixer extends AbstractFixer
         }
 
         $tokens->setCode(
-            app(Prettier::class)->format($path),
+            $this->prettier->format($path),
         );
     }
 }
