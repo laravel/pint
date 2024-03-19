@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Fixers;
+namespace App\Fixers\LaravelBlade;
 
 use App\Prettier;
 use PhpCsFixer\AbstractFixer;
@@ -9,8 +9,18 @@ use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Tokenizer\Tokens;
 use SplFileInfo;
 
-class LaravelBladeFixer extends AbstractFixer
+class Fixer extends AbstractFixer
 {
+    /**
+     * The list of ignorables.
+     *
+     * @var array<int, string>
+     */
+    protected static $ignorables = [
+        Ignorables\Envoy::class,
+        Ignorables\MarkdownMail::class,
+    ];
+
     /**
      * The Prettier instance.
      *
@@ -73,8 +83,13 @@ class LaravelBladeFixer extends AbstractFixer
 
         $content = $tokens->generateCode();
 
-        if (str_contains($content, '<x-mail::') || str_contains($content, '@component(\'mail::')) {
-            return;
+        foreach (static::$ignorables as $ignorable) {
+            if (app()->call($ignorable, [
+                'path' => $path,
+                'content' => $content,
+            ])) {
+                return;
+            }
         }
 
         $tokens->setCode(
