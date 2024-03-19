@@ -16,17 +16,11 @@
                 @endphp
 
                 @if ($issues->count() == 0)
-                    <span class="bg-green text-gray px-2 font-bold uppercase">
-                        PASS
-                    </span>
+                    <span class="bg-green text-gray px-2 font-bold uppercase">PASS</span>
                 @elseif ($nonFixableErrors->count() == 0 && ! $testing)
-                    <span class="bg-green text-gray px-2 font-bold uppercase">
-                        FIXED
-                    </span>
+                    <span class="bg-green text-gray px-2 font-bold uppercase">FIXED</span>
                 @else
-                    <span class="bg-red px-2 font-bold uppercase text-white">
-                        FAIL
-                    </span>
+                    <span class="bg-red px-2 font-bold uppercase text-white">FAIL</span>
                 @endif
 
                 <span class="content-repeat-[.] text-gray flex-1"></span>
