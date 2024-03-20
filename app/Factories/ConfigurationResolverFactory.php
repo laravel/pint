@@ -54,7 +54,7 @@ class ConfigurationResolverFactory
                     sprintf('%s.php', $preset),
                 ]),
                 'diff' => $output->isVerbose(),
-                'dry-run' => $input->getOption('test'),
+                'dry-run' => $input->getOption('test') || $input->getOption('bail'),
                 'path' => $path,
                 'path-mode' => ConfigurationResolver::PATH_MODE_OVERRIDE,
                 'cache-file' => $input->getOption('cache-file') ?? $localConfiguration->cacheFile() ?? implode(DIRECTORY_SEPARATOR, [
@@ -65,7 +65,7 @@ class ConfigurationResolverFactory
                         : (string) microtime()
                     ),
                 ]),
-                'stop-on-violation' => false,
+                'stop-on-violation' => $input->getOption('bail'),
                 'verbosity' => $output->getVerbosity(),
                 'show-progress' => 'true',
             ],
