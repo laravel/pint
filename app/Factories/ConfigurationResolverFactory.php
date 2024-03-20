@@ -43,6 +43,10 @@ class ConfigurationResolverFactory
             abort(1, 'Preset not found.');
         }
 
+        if ($input->getOption('blade') && $preset !== 'laravel') {
+            abort(1, 'The blade option is only available for the laravel preset.');
+        }
+
         $resolver = new ConfigurationResolver(
             new Config('default'),
             [

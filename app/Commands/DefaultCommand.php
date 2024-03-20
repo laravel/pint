@@ -35,6 +35,7 @@ class DefaultCommand extends Command
             ->setDefinition(
                 [
                     new InputArgument('path', InputArgument::IS_ARRAY, 'The path to fix', [(string) getcwd()]),
+                    new InputOption('blade', '', InputOption::VALUE_NONE, 'Fixes blade files (experimental)'),
                     new InputOption('config', '', InputOption::VALUE_REQUIRED, 'The configuration that should be used'),
                     new InputOption('no-config', '', InputOption::VALUE_NONE, 'Disable loading any configuration file'),
                     new InputOption('preset', '', InputOption::VALUE_REQUIRED, 'The preset that should be used'),

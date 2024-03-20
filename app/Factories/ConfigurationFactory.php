@@ -6,6 +6,7 @@ use App\Fixers;
 use App\Repositories\ConfigurationJsonRepository;
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
+use Symfony\Component\Console\Input\InputInterface;
 
 class ConfigurationFactory
 {
@@ -59,6 +60,10 @@ class ConfigurationFactory
     public static function finder()
     {
         $localConfiguration = resolve(ConfigurationJsonRepository::class);
+
+        if (resolve(InputInterface::class)->getOption('blade') === false) {
+            $notName = array_merge(static::$notName, ['*.blade.php']);
+        }
 
         $finder = Finder::create()
             ->notName(static::$notName)
