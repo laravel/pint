@@ -1,23 +1,23 @@
 {
-   "semi":false,
-   "singleQuote":true,
-   "singleAttributePerLine":true,
-   "htmlWhitespaceSensitivity":"css",
-   "printWidth":210,
-   "plugins":[
-      "prettier-plugin-blade-debug",
-      "prettier-plugin-tailwindcss"
-   ],
-   "overrides":[
-      {
-         "files":[
-            "*.blade.php"
-         ],
-         "options":{
-            "singleQuote":true,
-            "parser":"blade",
-            "tabWidth":4
-         }
-      }
-   ]
+    "semi": false,
+    "singleQuote": true,
+    "singleAttributePerLine": false,
+    "htmlWhitespaceSensitivity": "css",
+    "printWidth": 210,
+    "plugins": [
+        "prettier-plugin-blade-debug",
+        "prettier-plugin-tailwindcss"
+    ],
+    "overrides": [
+        {
+            "files": [
+                "*.blade.php"
+            ],
+            "options": {
+                "singleQuote": true,
+                "parser": "blade",
+                "tabWidth": 4
+            }
+        }
+    ]
 }
