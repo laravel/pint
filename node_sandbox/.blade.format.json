@@ -2,7 +2,7 @@
     "useLaravelPint": true,
     "pintCommand": "../builds/pint {file}",
     "forceMultilineAttributesToNewLine": true,
-    "minAttributeWrapping": 2,
+    "minAttributeWrapping": 1,
     "indentRootHtml": false,
     "respectHtmlWhitespaceSensitivity": true
 }
