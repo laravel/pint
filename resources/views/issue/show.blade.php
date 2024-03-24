@@ -1,4 +1,4 @@
-<div class="flex space-x-1 mx-2">
+<div class="mx-2 flex space-x-1">
     <span>
         <span class="text-red font-bold">
             {{ $issue->symbol() }}
@@ -7,7 +7,7 @@
             {{ $issue->file() }}
         </span>
     </span>
-    <span class="flex-1 text-gray text-right {{ $isVerbose ? '' : 'truncate' }}">
+    <span class="text-gray {{ $isVerbose ? '' : 'truncate' }} flex-1 text-right">
         {{ $issue->description($testing) }}
     </span>
 </div>
