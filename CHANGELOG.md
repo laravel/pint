@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.14.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.15.0...main)
+
+## [v1.15.0](https://github.com/laravel/pint/compare/v1.14.0...v1.15.0) - 2024-03-26
+
+* Add the possibility to override the cache file path in command line by [@jimmyklein-actual](https://github.com/jimmyklein-actual) in https://github.com/laravel/pint/pull/255
+* [1.x] Adds `--bail` flag by [@nunomaduro](https://github.com/nunomaduro) in https://github.com/laravel/pint/pull/261
 
 ## [v1.14.0](https://github.com/laravel/pint/compare/v1.13.11...v1.14.0) - 2024-02-20
 
