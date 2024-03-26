@@ -22,6 +22,24 @@ class Fixer extends AbstractFixer
     ];
 
     /**
+     * The list of pre-processors.
+     *
+     * @var array<int, string>
+     */
+    protected static $preProcessors = [
+        //
+    ];
+
+    /**
+     * The list of post-processors.
+     *
+     * @var array<int, string>
+     */
+    protected static $postProcessors = [
+        PostProcessors\OneLinerSvgPostProcessor::class,
+    ];
+
+    /**
      * The Prettier instance.
      *
      * @var \App\Prettier
@@ -92,8 +110,12 @@ class Fixer extends AbstractFixer
             }
         }
 
-        $tokens->setCode(
-            $this->prettier->format($path),
-        );
+        $content = $this->prettier->format($path);
+
+        foreach (static::$postProcessors as $postProcessor) {
+            $content = resolve($postProcessor)->postProcess($content);
+        }
+
+        $tokens->setCode($content);
     }
 }
