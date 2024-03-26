@@ -36,7 +36,7 @@ class Fixer extends AbstractFixer
      * @var array<int, string>
      */
     protected static $postProcessors = [
-        PostProcessors\OneLinerSvgPostProcessor::class,
+        PostProcessors\OneLinerSvg::class,
     ];
 
     /**

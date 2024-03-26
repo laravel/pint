@@ -1,9 +1,9 @@
 <?php
 
-use App\Fixers\LaravelBlade\PostProcessors\OneLinerSvgPostProcessor;
+use App\Fixers\LaravelBlade\PostProcessors\OneLinerSvg;
 
 it('keeps the entire svg content in one line', function ($before, $after) {
-    $processor = new OneLinerSvgPostProcessor();
+    $processor = new OneLinerSvg();
 
     expect($processor->postProcess($before))->toBe($after);
 })->with([
@@ -137,5 +137,5 @@ it('keeps the entire svg content in one line', function ($before, $after) {
                                     </svg>
                                 </div>
             SVG,
-    ]
+    ],
 ]);
