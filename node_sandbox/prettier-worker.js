@@ -3,9 +3,9 @@ const fs = require("fs").promises;
 const options = require(__dirname + '/prettierrc.json');
 process.stdin.setEncoding('utf-8');
 
-process.stdin.on('data', async function (path) {
+process.stdin.on('data', async function (input) {
     try {
-        const content = await fs.readFile(path.trim(), "utf8");
+        const { path, content } = JSON.parse(input);
 
         const formatted = await prettier.format(content, { ...options, filepath: path.trim() });
 

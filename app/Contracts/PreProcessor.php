@@ -6,6 +6,9 @@ interface PreProcessor
 {
     /**
      * Process the content before the fixer runs.
+     *
+     * @param  string  $content
+     * @return string
      */
-    public function preProcess(string $content): string;
+    public function preProcess($content);
 }

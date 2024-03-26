@@ -44,23 +44,26 @@ class Prettier
     /**
      * Formats the given file.
      *
-     * @param  string  $file
+     * @param  string  $path
+     * @param  string  $content
      * @return string
      *
      * @throws \App\Exceptions\PrettierException
      */
-    public function format($file)
+    public function format($path, $content)
     {
         $this->sandbox->ensureInitialized();
 
         $this->ensureStarted();
 
-        $this->inputStream->write($file);
+        $this->inputStream->write(json_encode([
+            'path' => $path,
+            'content' => $content,
+        ]));
 
         $this->process->clearOutput();
         $this->process->clearErrorOutput();
 
-        $formatted = '';
         $error = '';
 
         while (true) {

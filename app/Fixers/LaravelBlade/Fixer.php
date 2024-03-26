@@ -2,6 +2,8 @@
 
 namespace App\Fixers\LaravelBlade;
 
+use App\Contracts\PostProcessor;
+use App\Contracts\PreProcessor;
 use App\Prettier;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
@@ -26,17 +28,9 @@ class Fixer extends AbstractFixer
      *
      * @var array<int, string>
      */
-    protected static $preProcessors = [
-        //
-    ];
-
-    /**
-     * The list of post-processors.
-     *
-     * @var array<int, string>
-     */
-    protected static $postProcessors = [
-        PostProcessors\OneLinerSvg::class,
+    protected static $processors = [
+        Processors\OneLinerSvg::class,
+        Processors\IgnoreCode::class,
     ];
 
     /**
@@ -110,10 +104,20 @@ class Fixer extends AbstractFixer
             }
         }
 
-        $content = $this->prettier->format($path);
+        $processors = collect(static::$processors)->map(fn ($processor) => resolve($processor));
 
-        foreach (static::$postProcessors as $postProcessor) {
-            $content = resolve($postProcessor)->postProcess($content);
+        foreach ($processors as $processor) {
+            if ($processor instanceof PreProcessor) {
+                $content = $processor->preProcess($content);
+            }
+        }
+
+        $content = $this->prettier->format($path, $content);
+
+        foreach ($processors as $processor) {
+            if ($processor instanceof PostProcessor) {
+                $content = $processor->postProcess($content);
+            }
         }
 
         $tokens->setCode($content);
