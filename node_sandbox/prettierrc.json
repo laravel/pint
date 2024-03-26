@@ -3,7 +3,7 @@
     "singleQuote": true,
     "singleAttributePerLine": true,
     "htmlWhitespaceSensitivity": "css",
-    "printWidth": 120,
+    "printWidth": 150,
     "plugins": [
         "prettier-plugin-blade-debug",
         "prettier-plugin-tailwindcss"
