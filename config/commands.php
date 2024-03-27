@@ -40,7 +40,7 @@ return [
     */
 
     'add' => [
-        // ..
+        Symfony\Component\Console\Command\HelpCommand::class,
     ],
 
     /*
@@ -87,7 +87,6 @@ return [
 
         // Symfony...
         Symfony\Component\Console\Command\DumpCompletionCommand::class,
-        Symfony\Component\Console\Command\HelpCommand::class,
     ],
 
 ];
