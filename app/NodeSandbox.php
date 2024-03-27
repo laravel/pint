@@ -12,7 +12,7 @@ class NodeSandbox
      *
      * @var string
      */
-    const VERSION = '7';
+    const VERSION = '8';
 
     /**
      * The path to the sandbox.

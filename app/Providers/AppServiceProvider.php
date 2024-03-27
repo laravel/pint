@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\BladeFormatter;
+use App\Fixers\LaravelBlade\Processors\IgnoreCode;
+use App\Fixers\LaravelBlade\Processors\OneLinerSvg;
 use App\NodeSandbox;
 use App\Prettier;
 use Illuminate\Support\ServiceProvider;
@@ -50,6 +53,16 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->terminating(function () {
             $this->app->make(Prettier::class)->ensureTerminated();
+        });
+
+        $this->app->bind(BladeFormatter::class, function ($app) {
+            return new BladeFormatter(
+                $app->make(Prettier::class),
+                collect([
+                    OneLinerSvg::class,
+                    IgnoreCode::class,
+                ])->map(fn ($processor) => $app->make($processor))->all(),
+            );
         });
     }
 }

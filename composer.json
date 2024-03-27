@@ -17,10 +17,10 @@
     ],
     "require": {
         "php": "^8.1.0",
+        "ext-dom": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
-        "ext-tokenizer": "*",
-        "ext-xml": "*"
+        "ext-tokenizer": "*"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.51.0",

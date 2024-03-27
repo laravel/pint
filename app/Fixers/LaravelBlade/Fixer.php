@@ -2,6 +2,7 @@
 
 namespace App\Fixers\LaravelBlade;
 
+use App\BladeFormatter;
 use App\Contracts\PostProcessor;
 use App\Contracts\PreProcessor;
 use App\Prettier;
@@ -24,28 +25,10 @@ class Fixer extends AbstractFixer
     ];
 
     /**
-     * The list of pre-processors.
-     *
-     * @var array<int, string>
-     */
-    protected static $processors = [
-        Processors\OneLinerSvg::class,
-        Processors\IgnoreCode::class,
-    ];
-
-    /**
-     * The Prettier instance.
-     *
-     * @var \App\Prettier
-     */
-    protected $prettier;
-
-    /**
      * {@inheritdoc}
      */
-    public function __construct(Prettier $prettier)
+    public function __construct(protected $formatter)
     {
-        $this->prettier = $prettier;
     }
 
     /**
@@ -104,21 +87,7 @@ class Fixer extends AbstractFixer
             }
         }
 
-        $processors = collect(static::$processors)->map(fn ($processor) => resolve($processor));
-
-        foreach ($processors as $processor) {
-            if ($processor instanceof PreProcessor) {
-                $content = $processor->preProcess($content);
-            }
-        }
-
-        $content = $this->prettier->format($path, $content);
-
-        foreach ($processors as $processor) {
-            if ($processor instanceof PostProcessor) {
-                $content = $processor->postProcess($content);
-            }
-        }
+        $content = $this->formatter->format($path, $content);
 
         $tokens->setCode($content);
     }

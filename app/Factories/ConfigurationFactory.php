@@ -2,7 +2,9 @@
 
 namespace App\Factories;
 
+use App\BladeFormatter;
 use App\Fixers;
+use App\Fixers\LaravelBlade\Fixer;
 use App\Repositories\ConfigurationJsonRepository;
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
@@ -48,7 +50,7 @@ class ConfigurationFactory
             ->setRiskyAllowed(true)
             ->setUsingCache(true)
             ->registerCustomFixers([
-                resolve(Fixers\LaravelBlade\Fixer::class),
+                new Fixer(resolve(BladeFormatter::class)),
             ]);
     }
 
