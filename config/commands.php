@@ -40,7 +40,7 @@ return [
     */
 
     'add' => [
-        Symfony\Component\Console\Command\HelpCommand::class,
+        //
     ],
 
     /*
