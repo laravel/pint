@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.15.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.15.1...main)
+
+## [v1.15.1](https://github.com/laravel/pint/compare/v1.15.0...v1.15.1) - 2024-04-02
+
+* Enable --help flag for pint by [@penyaskito](https://github.com/penyaskito) in https://github.com/laravel/pint/pull/264
 
 ## [v1.15.0](https://github.com/laravel/pint/compare/v1.14.0...v1.15.0) - 2024-03-26
 
