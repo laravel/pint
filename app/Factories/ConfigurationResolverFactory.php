@@ -2,6 +2,7 @@
 
 namespace App\Factories;
 
+use App\NodeSandbox;
 use App\Project;
 use App\Repositories\ConfigurationJsonRepository;
 use ArrayIterator;
