@@ -41,7 +41,7 @@ class ElaborateSummary
             0,
             0,
             $this->output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE,
-            $this->input->getOption('test'),
+            $this->input->getOption('test') || $this->input->getOption('bail'),
             $this->output->isDecorated()
         );
 

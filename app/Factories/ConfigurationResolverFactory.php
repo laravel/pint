@@ -58,12 +58,18 @@ class ConfigurationResolverFactory
                     sprintf('%s.php', $preset),
                 ]),
                 'diff' => $output->isVerbose(),
-                'dry-run' => $input->getOption('test'),
+                'dry-run' => $input->getOption('test') || $input->getOption('bail'),
                 'path' => $path,
                 'path-mode' => ConfigurationResolver::PATH_MODE_OVERRIDE,
-                'using-cache' => 'no',
-                'cache-file' => null,
-                'stop-on-violation' => false,
+                'cache-file' => $input->getOption('cache-file') ?? $localConfiguration->cacheFile() ?? implode(DIRECTORY_SEPARATOR, [
+                    realpath(sys_get_temp_dir()),
+                    md5(
+                        app()->isProduction()
+                        ? (implode('|', $path) . '||' . NodeSandbox::VERSION)
+                        : (string) microtime()
+                    ),
+                ]),
+                'stop-on-violation' => $input->getOption('bail'),
                 'verbosity' => $output->getVerbosity(),
                 'show-progress' => 'true',
             ],

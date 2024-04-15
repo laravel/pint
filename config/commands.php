@@ -87,7 +87,6 @@ return [
 
         // Symfony...
         Symfony\Component\Console\Command\DumpCompletionCommand::class,
-        Symfony\Component\Console\Command\HelpCommand::class,
     ],
 
 ];
