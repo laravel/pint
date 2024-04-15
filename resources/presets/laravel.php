@@ -1,6 +1,7 @@
 <?php
 
 use App\Factories\ConfigurationFactory;
+use Symfony\Component\Console\Input\InputInterface;
 
 return ConfigurationFactory::preset([
     'array_indentation' => true,
@@ -211,4 +212,8 @@ return ConfigurationFactory::preset([
         'identical' => false,
         'less_and_greater' => false,
     ],
+
+    // Pint Specific Rules
+
+    'Laravel/blade' => resolve(InputInterface::class)->getOption('blade'),
 ]);

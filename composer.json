@@ -17,19 +17,19 @@
     ],
     "require": {
         "php": "^8.1.0",
+        "ext-dom": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
-        "ext-tokenizer": "*",
-        "ext-xml": "*"
+        "ext-tokenizer": "*"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.52.1",
-        "illuminate/view": "^10.48.4",
-        "larastan/larastan": "^2.9.2",
+        "friendsofphp/php-cs-fixer": "^3.53.0",
+        "illuminate/view": "^10.48.7",
+        "larastan/larastan": "^2.9.4",
         "laravel-zero/framework": "^10.3.0",
         "mockery/mockery": "^1.6.11",
         "nunomaduro/termwind": "^1.15.1",
-        "pestphp/pest": "^2.34.5"
+        "pestphp/pest": "^2.34.7"
     },
     "autoload": {
         "psr-4": {

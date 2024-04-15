@@ -1,0 +1,23 @@
+{
+    "semi": false,
+    "singleQuote": true,
+    "singleAttributePerLine": true,
+    "htmlWhitespaceSensitivity": "css",
+    "printWidth": 150,
+    "plugins": [
+        "prettier-plugin-blade-debug",
+        "prettier-plugin-tailwindcss"
+    ],
+    "overrides": [
+        {
+            "files": [
+                "*.blade.php"
+            ],
+            "options": {
+                "singleQuote": true,
+                "parser": "blade",
+                "tabWidth": 4
+            }
+        }
+    ]
+}

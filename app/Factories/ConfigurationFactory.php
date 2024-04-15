@@ -2,9 +2,12 @@
 
 namespace App\Factories;
 
+use App\BladeFormatter;
+use App\Fixers\LaravelBlade\Fixer;
 use App\Repositories\ConfigurationJsonRepository;
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
+use Symfony\Component\Console\Input\InputInterface;
 
 class ConfigurationFactory
 {
@@ -18,7 +21,6 @@ class ConfigurationFactory
         '_ide_helper_models.php',
         '_ide_helper.php',
         '.phpstorm.meta.php',
-        '*.blade.php',
     ];
 
     /**
@@ -45,7 +47,10 @@ class ConfigurationFactory
             ->setFinder(self::finder())
             ->setRules(array_merge($rules, resolve(ConfigurationJsonRepository::class)->rules()))
             ->setRiskyAllowed(true)
-            ->setUsingCache(true);
+            ->setUsingCache(true)
+            ->registerCustomFixers([
+                new Fixer(resolve(BladeFormatter::class)),
+            ]);
     }
 
     /**
@@ -56,6 +61,10 @@ class ConfigurationFactory
     public static function finder()
     {
         $localConfiguration = resolve(ConfigurationJsonRepository::class);
+
+        if (resolve(InputInterface::class)->getOption('blade') === false) {
+            $notName = array_merge(static::$notName, ['*.blade.php']);
+        }
 
         $finder = Finder::create()
             ->notName(static::$notName)

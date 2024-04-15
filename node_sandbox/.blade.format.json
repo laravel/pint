@@ -1,0 +1,9 @@
+{
+    "useLaravelPint": true,
+    "inlineParagraphTags": true,
+    "pintCommand": "../builds/pint {file}",
+    "forceMultilineAttributesToNewLine": true,
+    "minAttributeWrapping": 1,
+    "indentRootHtml": false,
+    "respectHtmlWhitespaceSensitivity": true
+}

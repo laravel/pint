@@ -2,6 +2,7 @@
 
 namespace App\Factories;
 
+use App\NodeSandbox;
 use App\Project;
 use App\Repositories\ConfigurationJsonRepository;
 use ArrayIterator;
@@ -43,6 +44,10 @@ class ConfigurationResolverFactory
             abort(1, 'Preset not found.');
         }
 
+        if ($input->getOption('blade') && $preset !== 'laravel') {
+            abort(1, 'The blade option is only available for the laravel preset.');
+        }
+
         $resolver = new ConfigurationResolver(
             new Config('default'),
             [
@@ -61,7 +66,7 @@ class ConfigurationResolverFactory
                     realpath(sys_get_temp_dir()),
                     md5(
                         app()->isProduction()
-                        ? implode('|', $path)
+                        ? (implode('|', $path) . '||' . NodeSandbox::VERSION)
                         : (string) microtime()
                     ),
                 ]),
