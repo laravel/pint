@@ -28,7 +28,7 @@ class BladeFormatter
      * @param  string  $content
      * @return string
      */
-    public function format(string $path, string $content): string
+    public function format($path, $content)
     {
         foreach ($this->processors as $processor) {
             if ($processor instanceof PreProcessor) {

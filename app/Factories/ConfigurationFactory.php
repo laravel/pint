@@ -3,7 +3,6 @@
 namespace App\Factories;
 
 use App\BladeFormatter;
-use App\Fixers;
 use App\Fixers\LaravelBlade\Fixer;
 use App\Repositories\ConfigurationJsonRepository;
 use PhpCsFixer\Config;

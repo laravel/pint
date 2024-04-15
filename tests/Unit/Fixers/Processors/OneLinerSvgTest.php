@@ -4,7 +4,7 @@ use App\BladeFormatter;
 
 it('post process', function ($before, $after) {
     $formatted = resolve(BladeFormatter::class)->format(
-        __DIR__ . '../../../Fixtures/fake.blade.php',
+        __DIR__.'../../../Fixtures/fake.blade.php',
         $before,
     );
 

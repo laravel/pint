@@ -2,10 +2,6 @@
 
 namespace App\Fixers\LaravelBlade;
 
-use App\BladeFormatter;
-use App\Contracts\PostProcessor;
-use App\Contracts\PreProcessor;
-use App\Prettier;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;

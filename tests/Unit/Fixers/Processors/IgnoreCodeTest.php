@@ -1,11 +1,10 @@
 <?php
 
 use App\BladeFormatter;
-use App\Fixers\LaravelBlade\Processors\IgnoreCode;
 
 test('minified css', function ($before, $after) {
     $formatted = resolve(BladeFormatter::class)->format(
-        __DIR__ . '../../../Fixtures/fake.blade.php',
+        __DIR__.'../../../Fixtures/fake.blade.php',
         $before,
     );
 
@@ -114,9 +113,8 @@ test('text', function ($before, $after) {
         return;
     }
 
-
     $formatted = resolve(BladeFormatter::class)->format(
-        __DIR__ . '../../../Fixtures/fake.blade.php',
+        __DIR__.'../../../Fixtures/fake.blade.php',
         $before,
     );
 
@@ -567,5 +565,5 @@ test('text', function ($before, $after) {
         </html>
 
         HTML,
-    ]
+    ],
 ])->only();
