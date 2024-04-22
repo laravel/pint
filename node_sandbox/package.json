@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "prettier": "^3.2.5",
-    "prettier-plugin-blade-debug": "^2.1.13",
+    "prettier-plugin-blade-debug": "^2.1.14",
     "prettier-plugin-tailwindcss": "^0.5.13"
   }
 }
