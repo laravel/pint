@@ -43,7 +43,7 @@ class DefaultCommand extends Command
                     new InputOption('dirty', '', InputOption::VALUE_NONE, 'Only fix files that have uncommitted changes'),
                     new InputOption('format', '', InputOption::VALUE_REQUIRED, 'The output format that should be used'),
                     new InputOption('cache-file', '', InputArgument::OPTIONAL, 'The path to the cache file'),
-                    new InputOption('with-exit-status', '', InputOption::VALUE_NONE, 'Only fix files that have uncommitted changes'),
+                    new InputOption('with-exit-status', '', InputOption::VALUE_NONE, 'Exit with status 1 if there were any changes made, 0 otherwise'),
                 ]
             );
     }
