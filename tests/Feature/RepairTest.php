@@ -12,7 +12,7 @@ it('exits with status 1 with fixes', function () {
     [$statusCode, $output] = run('default', [
         'path' => base_path('tests/Fixtures/with-fixable-issues'),
         '--preset' => 'psr12',
-        '--with-exit-status' => true,
+        '--repair' => true,
         '--test' => false,
     ]);
 
@@ -24,7 +24,7 @@ it('exits with status 1 with fixes', function () {
 it('exits with status 0 without fixes', function () {
     [$statusCode, $output] = run('default', [
         'path' => base_path('tests/Fixtures/without-issues'),
-        '--with-exit-status' => true,
+        '--repair' => true,
         '--test' => false,
     ]);
 
