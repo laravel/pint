@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.15.2...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.15.3...main)
+
+## [v1.15.3](https://github.com/laravel/pint/compare/v1.15.2...v1.15.3) - 2024-04-30
+
+* feat: Add a --with-exit-status flag by [@dshafik](https://github.com/dshafik) in https://github.com/laravel/pint/pull/270
 
 ## [v1.15.2](https://github.com/laravel/pint/compare/v1.15.1...v1.15.2) - 2024-04-23
 
