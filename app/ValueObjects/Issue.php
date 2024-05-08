@@ -32,7 +32,7 @@ class Issue
      */
     public function file()
     {
-        return str_replace($this->path.DIRECTORY_SEPARATOR, '', $this->file);
+        return str_replace($this->path . DIRECTORY_SEPARATOR, '', $this->file);
     }
 
     /**
@@ -107,16 +107,16 @@ class Issue
                 ->explode("\n")
                 ->map(function ($line) {
                     if (Str::startsWith($line, '+')) {
-                        return '//+<fg=green>'.$line.'</>';
+                        return '//+<fg=green>' . $line . '</>';
                     } elseif (Str::startsWith($line, '-')) {
-                        return '//-<fg=red>'.$line.'</>';
+                        return '//-<fg=red>' . $line . '</>';
                     }
 
                     return $line;
                 })->implode("\n");
 
             $method = tap($reflector->getMethod('getHighlightedLines'))->setAccessible(true);
-            $tokenLines = $method->invoke($highlighter, "<?php\n".$diff);
+            $tokenLines = $method->invoke($highlighter, "<?php\n" . $diff);
             $tokenLines = array_slice($tokenLines, 3);
 
             $method = tap($reflector->getMethod('colorLines'))->setAccessible(true);
@@ -147,7 +147,7 @@ class Issue
                 return $line;
             });
 
-            return '  '.$lines->implode("\n  ");
+            return '  ' . $lines->implode("\n  ");
         }
     }
 }

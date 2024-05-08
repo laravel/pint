@@ -30,7 +30,7 @@ class RepositoriesServiceProvider extends ServiceProvider
     {
         $this->app->singleton(ConfigurationJsonRepository::class, function () {
             $input = resolve(InputInterface::class);
-            $config = $input->getOption('config') ?: Project::path().'/pint.json';
+            $config = $input->getOption('config') ?: Project::path() . '/pint.json';
 
             return new ConfigurationJsonRepository(
                 $input->getOption('no-config') ? null : $config,

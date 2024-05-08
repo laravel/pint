@@ -46,7 +46,7 @@ class GitPathsRepository implements PathsRepository
                     $file = str_replace('/', DIRECTORY_SEPARATOR, $file);
                 }
 
-                return $this->path.DIRECTORY_SEPARATOR.$file;
+                return $this->path . DIRECTORY_SEPARATOR . $file;
             })
             ->values()
             ->all();
