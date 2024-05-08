@@ -44,7 +44,7 @@ return ConfigurationFactory::preset([
     'clean_namespace' => true,
     'compact_nullable_type_declaration' => true,
     'concat_space' => [
-        'spacing' => 'none',
+        'spacing' => 'one',
     ],
     'constant_case' => ['case' => 'lower'],
     'control_structure_braces' => true,
