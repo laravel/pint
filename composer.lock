@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d43340df7d2edcf6d3192b2f216746aa",
+    "content-hash": "9d84ee7129b061341a99227907291425",
     "packages": [],
     "packages-dev": [
         {
@@ -888,16 +888,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v3.57.0",
+            "version": "v3.57.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "0d4fcaea3e1d1304f75b9ff58474f60484e43498"
+                "reference": "3f7efe667a8c9818aacceee478add7c0fc24cb21"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/0d4fcaea3e1d1304f75b9ff58474f60484e43498",
-                "reference": "0d4fcaea3e1d1304f75b9ff58474f60484e43498",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/3f7efe667a8c9818aacceee478add7c0fc24cb21",
+                "reference": "3f7efe667a8c9818aacceee478add7c0fc24cb21",
                 "shasum": ""
             },
             "require": {
@@ -976,7 +976,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues",
-                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.57.0"
+                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.57.1"
             },
             "funding": [
                 {
@@ -984,7 +984,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-05-15T14:45:33+00:00"
+            "time": "2024-05-15T22:01:07+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -3016,16 +3016,16 @@
         },
         {
             "name": "mockery/mockery",
-            "version": "1.6.11",
+            "version": "1.6.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mockery/mockery.git",
-                "reference": "81a161d0b135df89951abd52296adf97deb0723d"
+                "reference": "1f4efdd7d3beafe9807b08156dfcb176d18f1699"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mockery/mockery/zipball/81a161d0b135df89951abd52296adf97deb0723d",
-                "reference": "81a161d0b135df89951abd52296adf97deb0723d",
+                "url": "https://api.github.com/repos/mockery/mockery/zipball/1f4efdd7d3beafe9807b08156dfcb176d18f1699",
+                "reference": "1f4efdd7d3beafe9807b08156dfcb176d18f1699",
                 "shasum": ""
             },
             "require": {
@@ -3095,7 +3095,7 @@
                 "security": "https://github.com/mockery/mockery/security/advisories",
                 "source": "https://github.com/mockery/mockery"
             },
-            "time": "2024-03-21T18:34:15+00:00"
+            "time": "2024-05-16T03:13:13+00:00"
         },
         {
             "name": "myclabs/deep-copy",
