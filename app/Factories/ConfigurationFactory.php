@@ -5,6 +5,7 @@ namespace App\Factories;
 use App\Repositories\ConfigurationJsonRepository;
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
+use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 
 class ConfigurationFactory
 {
@@ -42,6 +43,7 @@ class ConfigurationFactory
     public static function preset($rules)
     {
         return (new Config())
+            ->setParallelConfig(ParallelConfigFactory::detect())
             ->setFinder(self::finder())
             ->setRules(array_merge($rules, resolve(ConfigurationJsonRepository::class)->rules()))
             ->setRiskyAllowed(true)
