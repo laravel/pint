@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.15.3...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.16.0...main)
+
+## [v1.16.0](https://github.com/laravel/pint/compare/v1.15.3...v1.16.0) - 2024-05-21
+
+* [1.x] Enable Parallel Execution by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/pint/pull/272
 
 ## [v1.15.3](https://github.com/laravel/pint/compare/v1.15.2...v1.15.3) - 2024-04-30
 
