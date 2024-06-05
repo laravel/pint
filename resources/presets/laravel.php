@@ -187,6 +187,7 @@ return ConfigurationFactory::preset([
     'single_line_comment_style' => [
         'comment_types' => ['hash'],
     ],
+    'single_line_empty_body' => true,
     'single_quote' => true,
     'single_space_around_construct' => true,
     'space_after_semicolon' => true,
