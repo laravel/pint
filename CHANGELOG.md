@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.16.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.16.1...main)
+
+## [v1.16.1](https://github.com/laravel/pint/compare/v1.16.0...v1.16.1) - 2024-06-18
+
+* [1.x] Enable single_line_empty_body fixer by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/pint/pull/277
+* [1.x] Bump dependencies by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/pint/pull/279
 
 ## [v1.16.0](https://github.com/laravel/pint/compare/v1.15.3...v1.16.0) - 2024-05-21
 
