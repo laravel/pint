@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.16.1...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.16.2...main)
+
+## [v1.16.2](https://github.com/laravel/pint/compare/v1.16.1...v1.16.2) - 2024-07-09
+
+* Create empty preset by [@imanghafoori1](https://github.com/imanghafoori1) in https://github.com/laravel/pint/pull/282
 
 ## [v1.16.1](https://github.com/laravel/pint/compare/v1.16.0...v1.16.1) - 2024-06-18
 
