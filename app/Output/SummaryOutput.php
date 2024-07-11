@@ -24,6 +24,7 @@ class SummaryOutput
         'psr12' => 'PSR 12',
         'laravel' => 'Laravel',
         'symfony' => 'Symfony',
+        'empty' => 'Empty',
     ];
 
     /**
