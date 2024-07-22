@@ -82,6 +82,10 @@ return ConfigurationFactory::preset([
     ],
     'native_function_casing' => true,
     'native_type_declaration_casing' => true,
+    'new_with_parentheses' => [
+        'named_class' => false,
+        'anonymous_class' => false,
+    ],
     'no_alias_functions' => true,
     'no_alias_language_construct_call' => true,
     'no_alternative_syntax' => true,
