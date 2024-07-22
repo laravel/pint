@@ -2,7 +2,7 @@
 
 it('uses the laravel preset by default', function () {
     [$statusCode, $output] = run('default', [
-        'path' => base_path('tests/Fixtures/without-issues'),
+        'path' => base_path('tests/Fixtures/without-issues-laravel'),
     ]);
 
     expect($statusCode)->toBe(0)
@@ -34,7 +34,7 @@ it('may use the PER preset', function () {
 
 it('may use the Laravel preset', function () {
     [$statusCode, $output] = run('default', [
-        'path' => base_path('tests/Fixtures/without-issues'),
+        'path' => base_path('tests/Fixtures/without-issues-laravel'),
         '--preset' => 'laravel',
     ]);
 

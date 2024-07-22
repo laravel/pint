@@ -69,12 +69,12 @@ class ElaborateSummary
     protected function displayUsingFormatter($summary, $totalFiles)
     {
         $reporter = match ($format = $this->input->getOption('format')) {
-            'checkstyle' => new FixReport\CheckstyleReporter(),
-            'gitlab' => new FixReport\GitlabReporter(),
-            'json' => new FixReport\JsonReporter(),
-            'junit' => new FixReport\JunitReporter(),
-            'txt' => new FixReport\TextReporter(),
-            'xml' => new FixReport\XmlReporter(),
+            'checkstyle' => new FixReport\CheckstyleReporter,
+            'gitlab' => new FixReport\GitlabReporter,
+            'json' => new FixReport\JsonReporter,
+            'junit' => new FixReport\JunitReporter,
+            'txt' => new FixReport\TextReporter,
+            'xml' => new FixReport\XmlReporter,
             default => abort(1, sprintf('Format [%s] is not supported.', $format)),
         };
 

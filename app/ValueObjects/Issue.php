@@ -74,7 +74,7 @@ class Issue
 
             $exception = $this->payload['source']->getPrevious() ?: $this->payload['source'];
 
-            return (new Highlighter())->highlight($content, $exception->getLine());
+            return (new Highlighter)->highlight($content, $exception->getLine());
         }
 
         return $this->diff();
@@ -98,7 +98,7 @@ class Issue
     protected function diff()
     {
         if ($this->payload['diff']) {
-            $highlighter = new Highlighter();
+            $highlighter = new Highlighter;
             $reflector = new ReflectionClass($highlighter);
 
             $diff = $this->payload['diff'];
