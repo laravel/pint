@@ -23,7 +23,7 @@ it('exits with status 1 with fixes', function () {
 
 it('exits with status 0 without fixes', function () {
     [$statusCode, $output] = run('default', [
-        'path' => base_path('tests/Fixtures/without-issues'),
+        'path' => base_path('tests/Fixtures/without-issues-laravel'),
         '--repair' => true,
         '--test' => false,
     ]);
