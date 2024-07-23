@@ -23,6 +23,7 @@
         "ext-xml": "*"
     },
     "require-dev": {
+        "erickskrauch/php-cs-fixer-custom-fixers": "^1.3",
         "friendsofphp/php-cs-fixer": "^3.59.3",
         "illuminate/view": "^10.48.12",
         "larastan/larastan": "^2.9.7",
