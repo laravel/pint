@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.16.2...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.17.0...main)
+
+## [v1.17.0](https://github.com/laravel/pint/compare/v1.16.2...v1.17.0) - 2024-07-23
+
+* Add empty preset to the list by [@imanghafoori1](https://github.com/imanghafoori1) in https://github.com/laravel/pint/pull/283
+* Laravel preset class parentheses by [@brdv](https://github.com/brdv) in https://github.com/laravel/pint/pull/285
 
 ## [v1.16.2](https://github.com/laravel/pint/compare/v1.16.1...v1.16.2) - 2024-07-09
 
