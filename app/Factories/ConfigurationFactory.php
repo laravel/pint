@@ -43,6 +43,7 @@ class ConfigurationFactory
     public static function preset($rules)
     {
         return (new Config)
+            ->registerCustomFixers(new \ErickSkrauch\PhpCsFixer\Fixers())
             ->setParallelConfig(ParallelConfigFactory::detect())
             ->setFinder(self::finder())
             ->setRules(array_merge($rules, resolve(ConfigurationJsonRepository::class)->rules()))
