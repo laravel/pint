@@ -7,4 +7,3 @@ parameters:
     - config
     - resources
   level: 6
-  checkGenericClassInNonGenericObjectType: false
