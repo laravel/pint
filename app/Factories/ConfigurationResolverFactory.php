@@ -21,6 +21,7 @@ class ConfigurationResolverFactory
         'per',
         'psr12',
         'symfony',
+        'empty',
     ];
 
     /**
