@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.17.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.17.1...main)
+
+## [v1.17.1](https://github.com/laravel/pint/compare/v1.17.0...v1.17.1) - 2024-08-01
+
+* Rules are not applied when "empty" is specified for the preset by [@takeshiemoto](https://github.com/takeshiemoto) in https://github.com/laravel/pint/pull/289
 
 ## [v1.17.0](https://github.com/laravel/pint/compare/v1.16.2...v1.17.0) - 2024-07-23
 
