@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.17.2...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.17.3...main)
+
+## [v1.17.3](https://github.com/laravel/pint/compare/v1.17.2...v1.17.3) - 2024-09-03
+
+* [1.x] Bump dependencies by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/pint/pull/294
 
 ## [v1.17.2](https://github.com/laravel/pint/compare/v1.17.1...v1.17.2) - 2024-08-06
 
