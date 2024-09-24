@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.18.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.18.1...main)
+
+## [v1.18.1](https://github.com/laravel/pint/compare/v1.18.0...v1.18.1) - 2024-09-24
+
+* [1.x] Fixed corrupted binary
 
 ## [v1.18.0](https://github.com/laravel/pint/compare/v1.17.3...v1.18.0) - 2024-09-24
 
