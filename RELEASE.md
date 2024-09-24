@@ -1,8 +1,9 @@
 # Release Instructions
 
 1. Pull down the latest changes on the `main` branch
-2. Update the version in [`config/app.php`](./config/app.php)
-3. Compile the binary with
+2. Run `composer install`
+3. Update the version in [`config/app.php`](./config/app.php)
+4. Compile the binary with
 
 ```zsh
 ./pint app:build
