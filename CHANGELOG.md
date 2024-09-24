@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.17.3...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.18.0...main)
+
+## [v1.18.0](https://github.com/laravel/pint/compare/v1.17.3...v1.18.0) - 2024-09-24
+
+* [1.x] Rename rule set `[@PER](https://github.com/PER)` to `[@PER-CS](https://github.com/PER-CS)` by [@dinhquochan](https://github.com/dinhquochan) in https://github.com/laravel/pint/pull/295
 
 ## [v1.17.3](https://github.com/laravel/pint/compare/v1.17.2...v1.17.3) - 2024-09-03
 
