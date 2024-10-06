@@ -44,6 +44,8 @@ class DefaultCommand extends Command
                     new InputOption('dirty', '', InputOption::VALUE_NONE, 'Only fix files that have uncommitted changes'),
                     new InputOption('format', '', InputOption::VALUE_REQUIRED, 'The output format that should be used'),
                     new InputOption('cache-file', '', InputArgument::OPTIONAL, 'The path to the cache file'),
+                    new InputOption('generate-config', '', InputOption::VALUE_NONE, 'Generate a .pint.json configuration file interactively'),
+
                 ]
             );
     }
@@ -57,6 +59,10 @@ class DefaultCommand extends Command
      */
     public function handle($fixCode, $elaborateSummary)
     {
+        if ($this->option('generate-config')) {
+            return $this->call('config');
+        }
+
         [$totalFiles, $changes] = $fixCode->execute();
 
         return $elaborateSummary->execute($totalFiles, $changes);
