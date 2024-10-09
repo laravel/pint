@@ -176,6 +176,7 @@ return ConfigurationFactory::preset([
     'phpdoc_trim' => true,
     'phpdoc_types' => true,
     'phpdoc_var_without_name' => true,
+    'php_unit_method_casing' => ['case' => 'snake_case'],
     'psr_autoloading' => false,
     'return_type_declaration' => ['space_before' => 'none'],
     'self_accessor' => false,
