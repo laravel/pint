@@ -141,6 +141,7 @@ return ConfigurationFactory::preset([
     'ordered_imports' => ['sort_algorithm' => 'alpha', 'imports_order' => ['const', 'class', 'function']],
     'ordered_interfaces' => true,
     'ordered_traits' => true,
+    'php_unit_method_casing' => ['case' => 'snake_case'],
     'phpdoc_align' => [
         'align' => 'left',
         'spacing' => [
@@ -176,7 +177,6 @@ return ConfigurationFactory::preset([
     'phpdoc_trim' => true,
     'phpdoc_types' => true,
     'phpdoc_var_without_name' => true,
-    'php_unit_method_casing' => ['case' => 'snake_case'],
     'psr_autoloading' => false,
     'return_type_declaration' => ['space_before' => 'none'],
     'self_accessor' => false,
