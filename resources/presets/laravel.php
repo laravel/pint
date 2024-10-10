@@ -141,6 +141,7 @@ return ConfigurationFactory::preset([
     'ordered_imports' => ['sort_algorithm' => 'alpha', 'imports_order' => ['const', 'class', 'function']],
     'ordered_interfaces' => true,
     'ordered_traits' => true,
+    'php_unit_method_casing' => ['case' => 'snake_case'],
     'phpdoc_align' => [
         'align' => 'left',
         'spacing' => [
