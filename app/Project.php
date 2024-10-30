@@ -19,7 +19,7 @@ class Project
         }
 
         if ($input->getOption('staged')) {
-           return static::resolveStagedPaths();
+            return static::resolveStagedPaths();
         }
 
         return $input->getArgument('path');

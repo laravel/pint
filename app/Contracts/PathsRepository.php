@@ -11,7 +11,6 @@ interface PathsRepository
      */
     public function dirty();
 
-
     /**
      * Determine the "staged" files.
      *

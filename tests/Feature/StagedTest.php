@@ -9,7 +9,7 @@ it('determines staged files', function () {
         ->shouldReceive('staged')
         ->once()
         ->andReturn([
-           base_path('tests/Fixtures/without-issues-laravel/file.php'),
+            base_path('tests/Fixtures/without-issues-laravel/file.php'),
         ]);
 
     $this->swap(PathsRepository::class, $paths);
