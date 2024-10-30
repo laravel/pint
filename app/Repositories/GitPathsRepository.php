@@ -60,4 +60,36 @@ class GitPathsRepository implements PathsRepository
 
         return array_values(array_intersect($files, $dirtyFiles));
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function staged()
+    {
+        $process = tap(new Process(['git', 'diff', '--cached', '--name-only', '--diff-filter=ACM', '--', '**.php']))->run();
+
+       if (! $process->isSuccessful()) {
+            abort(1, 'The [--staged] option is only available when using Git.');
+       }
+
+       $stagedFiles = collect(preg_split('/\R+/', $process->getOutput(), flags: PREG_SPLIT_NO_EMPTY))
+            ->map(function ($file) {
+                if (PHP_OS_FAMILY === 'Windows') {
+                    $file = str_replace('/', DIRECTORY_SEPARATOR, $file);
+                }
+
+                return $this->path . DIRECTORY_SEPARATOR . $file;
+            })
+            ->values()
+            ->all();
+
+       $files = array_values(array_map(function ($splFile) {
+            return $splFile->getPathname();
+        }, iterator_to_array(ConfigurationFactory::finder()
+            ->in($this->path)
+            ->files()
+        )));
+
+        return array_values(array_intersect($files, $stagedFiles));
+    }
 }

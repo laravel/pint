@@ -10,4 +10,12 @@ interface PathsRepository
      * @return array<int, string>
      */
     public function dirty();
+
+
+    /**
+     * Determine the "staged" files.
+     *
+     * @return array<int, string>
+     */
+    public function staged();
 }

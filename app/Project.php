@@ -18,6 +18,10 @@ class Project
             return static::resolveDirtyPaths();
         }
 
+        if ($input->getOption('staged')) {
+           return static::resolveStagedPaths();
+        }
+
         return $input->getArgument('path');
     }
 
@@ -42,6 +46,22 @@ class Project
 
         if (empty($files)) {
             abort(0, 'No dirty files found.');
+        }
+
+        return $files;
+    }
+
+    /**
+     * Resolves the staged paths, if any.
+     *
+     * @return array<int, string>
+     */
+    public static function resolveStagedPaths()
+    {
+        $files = app(PathsRepository::class)->staged();
+
+        if (empty($files)) {
+            abort(0, 'No staged files found.');
         }
 
         return $files;
