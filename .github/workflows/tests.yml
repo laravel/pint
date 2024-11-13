@@ -57,4 +57,4 @@ jobs:
         if: matrix.php == '8.1'
 
       - name: Execute unit/feature tests
-        run: vendor/bin/pest
+        run: vendor/bin/pest --display-deprecations --fail-on-deprecation
