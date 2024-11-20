@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.18.1...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.18.2...main)
+
+## [v1.18.2](https://github.com/laravel/pint/compare/v1.18.1...v1.18.2) - 2024-11-20
+
+* Enforces `snake_case` in PHPUnit test methods. https://github.com/laravel/pint/pull/300
+* Enforces visibility for PHPUnit `setUp` and `tearDown` methods. https://github.com/laravel/pint/pull/301
 
 ## [v1.18.1](https://github.com/laravel/pint/compare/v1.18.0...v1.18.1) - 2024-09-24
 
