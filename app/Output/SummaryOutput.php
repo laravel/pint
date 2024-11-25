@@ -5,7 +5,7 @@ namespace App\Output;
 use App\Output\Concerns\InteractsWithSymbols;
 use App\Project;
 use App\ValueObjects\Issue;
-use PhpCsFixer\FixerFileProcessedEvent;
+use PhpCsFixer\Runner\Event\FileProcessed;
 
 use function Termwind\render;
 use function Termwind\renderUsing;
@@ -97,7 +97,7 @@ class SummaryOutput
             ->map(fn ($information, $file) => new Issue(
                 $path,
                 $file,
-                $this->getSymbol(FixerFileProcessedEvent::STATUS_FIXED),
+                $this->getSymbol(FileProcessed::STATUS_FIXED),
                 $information,
             ));
 
