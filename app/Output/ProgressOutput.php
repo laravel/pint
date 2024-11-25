@@ -3,7 +3,7 @@
 namespace App\Output;
 
 use App\Output\Concerns\InteractsWithSymbols;
-use PhpCsFixer\FixerFileProcessedEvent;
+use PhpCsFixer\Runner\Event\FileProcessed;
 use Symfony\Component\Console\Terminal;
 
 class ProgressOutput
@@ -47,7 +47,7 @@ class ProgressOutput
      */
     public function subscribe()
     {
-        $this->dispatcher->addListener(FixerFileProcessedEvent::NAME, [$this, 'handle']);
+        $this->dispatcher->addListener(FileProcessed::NAME, [$this, 'handle']);
     }
 
     /**
@@ -57,13 +57,13 @@ class ProgressOutput
      */
     public function unsubscribe()
     {
-        $this->dispatcher->removeListener(FixerFileProcessedEvent::NAME, [$this, 'handle']);
+        $this->dispatcher->removeListener(FileProcessed::NAME, [$this, 'handle']);
     }
 
     /**
      * Handle the given processed file event.
      *
-     * @param  \PhpCsFixer\FixerFileProcessedEvent  $event
+     * @param  \PhpCsFixer\Runner\Event\FileProcessed  $event
      * @return void
      */
     public function handle($event)
