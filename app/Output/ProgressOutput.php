@@ -63,7 +63,7 @@ class ProgressOutput
     /**
      * Handle the given processed file event.
      *
-     * @param  \PhpCsFixer\FileProcessed  $event
+     * @param  \PhpCsFixer\Runner\Event\FileProcessed  $event
      * @return void
      */
     public function handle($event)

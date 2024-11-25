@@ -89,7 +89,7 @@ class SummaryOutput
      *
      * @param  string  $path
      * @param  \PhpCsFixer\Console\Report\FixReport\ReportSummary  $summary
-     * @return \Illuminate\Support\Collection<int, Issue>
+     * @return \Illuminate\Support\Collection<int, \App\ValueObjects\Issue>
      */
     public function getIssues($path, $summary)
     {
@@ -99,7 +99,8 @@ class SummaryOutput
                 $file,
                 $this->getSymbol(FileProcessed::STATUS_FIXED),
                 $information,
-            ));
+            ))
+            ->values();
 
         return $issues->merge(
             collect(
