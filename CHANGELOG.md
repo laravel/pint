@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.18.2...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.18.3...main)
+
+## [v1.18.3](https://github.com/laravel/pint/compare/v1.18.2...v1.18.3) - 2024-11-26
+
+* PHP-CS-Fixer v3.56.0. https://github.com/laravel/pint/pull/308
 
 ## [v1.18.2](https://github.com/laravel/pint/compare/v1.18.1...v1.18.2) - 2024-11-20
 
