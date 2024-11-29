@@ -50,6 +50,11 @@ jobs:
           composer install
 
       - name: Execute lint tests with Laravel preset
+        if: matrix.php == '8.4'
+        run: PINT_IGNORE_ENV=1 ./pint --test
+
+      - name: Execute lint tests with Laravel preset
+        if: matrix.php != '8.4'
         run: ./pint --test
 
       - name: Execute static analysis
