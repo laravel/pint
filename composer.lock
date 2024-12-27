@@ -2650,7 +2650,7 @@
         },
         {
             "name": "laravel-zero/framework",
-            "version": "v10.4.0",
+            "version": "v10.48.25",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel-zero/framework.git",
@@ -2753,6 +2753,16 @@
                 "issues": "https://github.com/laravel-zero/laravel-zero/issues",
                 "source": "https://github.com/laravel-zero/laravel-zero"
             },
+            "funding": [
+                {
+                    "url": "https://www.paypal.com/paypalme/enunomaduro",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/nunomaduro",
+                    "type": "github"
+                }
+            ],
             "time": "2024-04-18T13:12:28+00:00"
         },
         {
@@ -3146,16 +3156,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.72.5",
+            "version": "2.72.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "afd46589c216118ecd48ff2b95d77596af1e57ed"
+                "reference": "1e9d50601e7035a4c61441a208cb5bed73e108c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/afd46589c216118ecd48ff2b95d77596af1e57ed",
-                "reference": "afd46589c216118ecd48ff2b95d77596af1e57ed",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/1e9d50601e7035a4c61441a208cb5bed73e108c5",
+                "reference": "1e9d50601e7035a4c61441a208cb5bed73e108c5",
                 "shasum": ""
             },
             "require": {
@@ -3175,7 +3185,7 @@
                 "doctrine/orm": "^2.7 || ^3.0",
                 "friendsofphp/php-cs-fixer": "^3.0",
                 "kylekatarnls/multi-tester": "^2.0",
-                "ondrejmirtes/better-reflection": "*",
+                "ondrejmirtes/better-reflection": "<6",
                 "phpmd/phpmd": "^2.9",
                 "phpstan/extension-installer": "^1.0",
                 "phpstan/phpstan": "^0.12.99 || ^1.7.14",
@@ -3249,7 +3259,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-06-03T19:18:41+00:00"
+            "time": "2024-12-27T09:28:11+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -6908,12 +6918,12 @@
             },
             "type": "library",
             "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/contracts",
+                    "name": "symfony/contracts"
+                },
                 "branch-alias": {
                     "dev-main": "3.5-dev"
-                },
-                "thanks": {
-                    "name": "symfony/contracts",
-                    "url": "https://github.com/symfony/contracts"
                 }
             },
             "autoload": {
@@ -7131,12 +7141,12 @@
             },
             "type": "library",
             "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/contracts",
+                    "name": "symfony/contracts"
+                },
                 "branch-alias": {
                     "dev-main": "3.5-dev"
-                },
-                "thanks": {
-                    "name": "symfony/contracts",
-                    "url": "https://github.com/symfony/contracts"
                 }
             },
             "autoload": {
@@ -8378,12 +8388,12 @@
             },
             "type": "library",
             "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/contracts",
+                    "name": "symfony/contracts"
+                },
                 "branch-alias": {
                     "dev-main": "3.5-dev"
-                },
-                "thanks": {
-                    "name": "symfony/contracts",
-                    "url": "https://github.com/symfony/contracts"
                 }
             },
             "autoload": {
@@ -8699,12 +8709,12 @@
             },
             "type": "library",
             "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/contracts",
+                    "name": "symfony/contracts"
+                },
                 "branch-alias": {
                     "dev-main": "3.5-dev"
-                },
-                "thanks": {
-                    "name": "symfony/contracts",
-                    "url": "https://github.com/symfony/contracts"
                 }
             },
             "autoload": {
