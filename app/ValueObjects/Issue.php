@@ -20,7 +20,7 @@ class Issue
         protected $path,
         protected $file,
         protected $symbol,
-        protected $payload
+        protected $payload,
     ) {
         // ..
     }
