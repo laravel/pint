@@ -204,7 +204,9 @@ return ConfigurationFactory::preset([
     'switch_case_semicolon_to_colon' => true,
     'switch_case_space' => true,
     'ternary_operator_spaces' => true,
-    'trailing_comma_in_multiline' => ['elements' => ['arrays']],
+    'trailing_comma_in_multiline' => [
+        'elements' => ['arrays', 'parameters'],
+    ],
     'trim_array_spaces' => true,
     'type_declaration_spaces' => true,
     'types_spaces' => true,
