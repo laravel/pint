@@ -57,14 +57,6 @@ class DefaultCommand extends Command
      */
     public function handle($fixCode, $elaborateSummary)
     {
-        if (! ($_ENV['PINT_IGNORE_ENV'] ?? false) && version_compare(PHP_VERSION, '8.4.0', '>=')) {
-            $this->warn('PHP 8.4 is not currently supported by PHP CS Fixer and you may encounter unexpected behavior.');
-            $this->warn('You can still force Pint to run by setting the environment variable:');
-            $this->warn('PINT_IGNORE_ENV=1 vendor/bin/pint');
-
-            return 1;
-        }
-
         [$totalFiles, $changes] = $fixCode->execute();
 
         return $elaborateSummary->execute($totalFiles, $changes);
