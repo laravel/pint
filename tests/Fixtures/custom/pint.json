@@ -1,0 +1,5 @@
+{
+    "custom-fixers": [
+        "tests/Fixtures/custom/CustomFixer.php"
+    ]
+}
