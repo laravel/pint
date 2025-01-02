@@ -23,6 +23,7 @@
         "ext-xml": "*"
     },
     "require-dev": {
+        "composer/xdebug-handler": "^3.0.5",
         "friendsofphp/php-cs-fixer": "^3.66.0",
         "illuminate/view": "^10.48.25",
         "larastan/larastan": "^2.9.12",

@@ -2,6 +2,19 @@
 
 /*
 |--------------------------------------------------------------------------
+| Restart If Xdebug Is Loaded
+|--------------------------------------------------------------------------
+|
+| If the Xdebug extension is loaded, the application will automatically
+| restart unless the environment variable PINT_ALLOW_XDEBUG is set. This
+| ensures the application runs without the performance overhead of Xdebug.
+|
+*/
+
+(new Composer\XdebugHandler\XdebugHandler('PINT'))->check();
+
+/*
+|--------------------------------------------------------------------------
 | Create The Application
 |--------------------------------------------------------------------------
 |
