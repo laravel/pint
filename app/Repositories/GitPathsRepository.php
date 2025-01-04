@@ -42,7 +42,7 @@ class GitPathsRepository implements PathsRepository
             ->mapWithKeys(fn ($file) => [substr($file, 3) => trim(substr($file, 0, 3))])
             ->reject(fn ($status) => $status === 'D')
             ->map(fn ($status, $file) => $status === 'R' ? Str::after($file, ' -> ') : $file);
-        
+
         return $this->processFileNames($dirtyFiles);
     }
 
@@ -68,7 +68,7 @@ class GitPathsRepository implements PathsRepository
             ->flatten()
             ->filter()
             ->values();
-        
+
         return $this->processFileNames($files);
     }
 
