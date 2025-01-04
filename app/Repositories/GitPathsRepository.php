@@ -41,7 +41,8 @@ class GitPathsRepository implements PathsRepository
         $dirtyFiles = collect(preg_split('/\R+/', $process->getOutput(), flags: PREG_SPLIT_NO_EMPTY))
             ->mapWithKeys(fn ($file) => [substr($file, 3) => trim(substr($file, 0, 3))])
             ->reject(fn ($status) => $status === 'D')
-            ->map(fn ($status, $file) => $status === 'R' ? Str::after($file, ' -> ') : $file);
+            ->map(fn ($status, $file) => $status === 'R' ? Str::after($file, ' -> ') : $file)
+            ->values();
 
         return $this->processFileNames($dirtyFiles);
     }
@@ -69,7 +70,8 @@ class GitPathsRepository implements PathsRepository
             ->flatten()
             ->filter()
             ->unique()
-            ->values();
+            ->values()
+            ->map(fn ($s) => (string) $s);
 
         return $this->processFileNames($files);
     }
@@ -77,7 +79,7 @@ class GitPathsRepository implements PathsRepository
     /**
      * Process the files.
      *
-     * @param  \Illuminate\Support\Collection<int|string, string>  $fileNames
+     * @param  \Illuminate\Support\Collection<int, string>  $fileNames
      * @return array<int, string>
      */
     protected function processFileNames(Collection $fileNames)
@@ -90,7 +92,6 @@ class GitPathsRepository implements PathsRepository
 
                 return $this->path.DIRECTORY_SEPARATOR.$file;
             })
-            ->values()
             ->all();
 
         $files = array_values(array_map(function ($splFile) {
