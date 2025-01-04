@@ -47,6 +47,32 @@ class GitPathsRepository implements PathsRepository
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function diff($branch)
+    {
+        $files = [
+            'committed' => tap(new Process(['git', 'diff', '--name-only', '--diff-filter=AM', "{$branch}...HEAD", '--', '**.php']))->run(),
+            'staged' => tap(new Process(['git', 'diff', '--name-only', '--diff-filter=AM', '--cached', '--', '**.php']))->run(),
+            'unstaged' => tap(new Process(['git', 'diff', '--name-only', '--diff-filter=AM', '--', '**.php']))->run(),
+        ];
+
+        $files = collect($files)
+            ->each(fn ($process) => abort_if(
+                boolean: ! $process->isSuccessful(),
+                code: 1,
+                message: 'The [--diff] option is only available when using Git.',
+            ))
+            ->map(fn ($process) => $process->getOutput())
+            ->map(fn ($output) => explode(PHP_EOL, $output))
+            ->flatten()
+            ->filter()
+            ->values();
+        
+        return $this->processFileNames($files);
+    }
+
+    /**
      * Process the files.
      *
      * @param  \Illuminate\Support\Collection  $files
