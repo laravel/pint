@@ -77,12 +77,12 @@ class GitPathsRepository implements PathsRepository
     /**
      * Process the files.
      *
-     * @param  \Illuminate\Support\Collection  $files
-     * @return array
+     * @param  \Illuminate\Support\Collection<int|string, string>  $fileNames
+     * @return array<int, string>
      */
     protected function processFileNames(Collection $fileNames)
     {
-        return $fileNames
+        $processedFileNames = $fileNames
             ->map(function ($file) {
                 if (PHP_OS_FAMILY === 'Windows') {
                     $file = str_replace('/', DIRECTORY_SEPARATOR, $file);
@@ -100,6 +100,6 @@ class GitPathsRepository implements PathsRepository
             ->files()
         )));
 
-        return array_values(array_intersect($files, $dirtyFiles));
+        return array_values(array_intersect($files, $processedFileNames));
     }
 }
