@@ -67,6 +67,7 @@ class GitPathsRepository implements PathsRepository
             ->map(fn ($output) => explode(PHP_EOL, $output))
             ->flatten()
             ->filter()
+            ->unique()
             ->values();
 
         return $this->processFileNames($files);
