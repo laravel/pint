@@ -14,7 +14,7 @@ class Issue
      * @param  string  $path
      * @param  string  $file
      * @param  string  $symbol
-     * @param  array<string, array<int, string>|\Throwable>  $payload
+     * @param  array<string, list<string>|string|\Throwable>  $payload
      */
     public function __construct(
         protected $path,
@@ -93,7 +93,7 @@ class Issue
     /**
      * Returns the issue's diff, if any.
      *
-     * @return string|null
+     * @return string|void
      */
     protected function diff()
     {
