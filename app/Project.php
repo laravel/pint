@@ -18,6 +18,10 @@ class Project
             return static::resolveDirtyPaths();
         }
 
+        if ($diff = $input->getOption('diff')) {
+            return static::resolveDiffPaths($diff);
+        }
+
         return $input->getArgument('path');
     }
 
@@ -42,6 +46,23 @@ class Project
 
         if (empty($files)) {
             abort(0, 'No dirty files found.');
+        }
+
+        return $files;
+    }
+
+    /**
+     * Resolves the paths that have changed since branching off from the given branch, if any.
+     *
+     * @param  string  $branch
+     * @return array<int, string>
+     */
+    public static function resolveDiffPaths($branch)
+    {
+        $files = app(PathsRepository::class)->diff($branch);
+
+        if (empty($files)) {
+            abort(0, "No files have changed since branching off of {$branch}.");
         }
 
         return $files;

@@ -27,9 +27,9 @@ class ProgressOutput
     /**
      * Creates a new Progress Output instance.
      *
+     * @param  \Symfony\Component\EventDispatcher\EventDispatcherInterface  $dispatcher
      * @param  \Symfony\Component\Console\Input\InputInterface  $input
      * @param  \Symfony\Component\Console\Output\OutputInterface  $output
-     * @param  \Symfony\Component\EventDispatcher\EventDispatcherInterface  $dispatcher
      * @return void
      */
     public function __construct(
