@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.19.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.20.0...main)
+
+## [v1.20.0](https://github.com/laravel/pint/compare/v1.19.0...v1.20.0) - 2025-01-14
+
+* Adds `--diff` option. https://github.com/laravel/pint/pull/327
 
 ## [v1.19.0](https://github.com/laravel/pint/compare/v1.18.3...v1.19.0) - 2024-12-30
 
