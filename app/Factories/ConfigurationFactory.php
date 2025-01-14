@@ -37,7 +37,7 @@ class ConfigurationFactory
     /**
      * Creates a PHP CS Fixer Configuration with the given array of rules.
      *
-     * @param  array<string, array<string, array<int|string, string|null>|bool|string>|bool>  $rules
+     * @param  array<string, array<string, array<int|string, string|int|string[]>|bool|string>|bool>  $rules
      * @return \PhpCsFixer\ConfigInterface
      */
     public static function preset($rules)
