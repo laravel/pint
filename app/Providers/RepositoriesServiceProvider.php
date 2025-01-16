@@ -39,8 +39,11 @@ class RepositoriesServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(PathsRepository::class, function () {
+            $input = resolve(InputInterface::class);
+            $path = $input->getOption('git-path') ?: Project::path();
+            
             return new GitPathsRepository(
-                Project::path(),
+                $path,
             );
         });
     }

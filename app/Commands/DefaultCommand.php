@@ -43,6 +43,7 @@ class DefaultCommand extends Command
                     new InputOption('repair', '', InputOption::VALUE_NONE, 'Fix code style errors but exit with status 1 if there were any changes made'),
                     new InputOption('diff', '', InputOption::VALUE_REQUIRED, 'Only fix files that have changed since branching off from the given branch', null, ['main', 'master', 'origin/main', 'origin/master']),
                     new InputOption('dirty', '', InputOption::VALUE_NONE, 'Only fix files that have uncommitted changes'),
+                    new InputOption('git-path', '', InputOption::VALUE_REQUIRED, 'The path to the git working directory'),
                     new InputOption('format', '', InputOption::VALUE_REQUIRED, 'The output format that should be used'),
                     new InputOption('cache-file', '', InputArgument::OPTIONAL, 'The path to the cache file'),
                 ]

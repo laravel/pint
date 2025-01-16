@@ -32,7 +32,7 @@ class GitPathsRepository implements PathsRepository
      */
     public function dirty()
     {
-        $process = tap(new Process(['git', 'status', '--short', '--', '**.php']))->run();
+        $process = tap(new Process(['git', 'status', '--short', '--', '**.php'], $this->path))->run();
 
         if (! $process->isSuccessful()) {
             abort(1, 'The [--dirty] option is only available when using Git.');
@@ -53,10 +53,10 @@ class GitPathsRepository implements PathsRepository
     public function diff($branch)
     {
         $files = [
-            'committed' => tap(new Process(['git', 'diff', '--name-only', '--diff-filter=AM', "{$branch}...HEAD", '--', '**.php']))->run(),
-            'staged' => tap(new Process(['git', 'diff', '--name-only', '--diff-filter=AM', '--cached', '--', '**.php']))->run(),
-            'unstaged' => tap(new Process(['git', 'diff', '--name-only', '--diff-filter=AM', '--', '**.php']))->run(),
-            'untracked' => tap(new Process(['git', 'ls-files', '--others', '--exclude-standard', '--', '**.php']))->run(),
+            'committed' => tap(new Process(['git', 'diff', '--name-only', '--diff-filter=AM', "{$branch}...HEAD", '--', '**.php'], $this->path))->run(),
+            'staged' => tap(new Process(['git', 'diff', '--name-only', '--diff-filter=AM', '--cached', '--', '**.php'], $this->path))->run(),
+            'unstaged' => tap(new Process(['git', 'diff', '--name-only', '--diff-filter=AM', '--', '**.php'], $this->path))->run(),
+            'untracked' => tap(new Process(['git', 'ls-files', '--others', '--exclude-standard', '--', '**.php'], $this->path))->run(),
         ];
 
         $files = collect($files)
