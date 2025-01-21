@@ -59,6 +59,7 @@ class GitPathsRepository implements PathsRepository
             'untracked' => tap(new Process(['git', 'ls-files', '--others', '--exclude-standard', '--', '**.php']))->run(),
         ];
 
+        /** @var Collection<int, string> $files */
         $files = collect($files)
             ->each(fn ($process) => abort_if(
                 boolean: ! $process->isSuccessful(),
