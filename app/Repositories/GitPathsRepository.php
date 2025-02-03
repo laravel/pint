@@ -66,10 +66,8 @@ class GitPathsRepository implements PathsRepository
                 code: 1,
                 message: 'The [--diff] option is only available when using Git.',
             ))
-            ->map(fn ($process) => $process->getOutput())
-            ->map(fn ($output) => explode(PHP_EOL, $output))
+            ->map(fn ($process) => preg_split('/\R+/', $process->getOutput(), flags: PREG_SPLIT_NO_EMPTY))
             ->flatten()
-            ->filter()
             ->unique()
             ->values()
             ->map(fn ($s) => (string) $s);
