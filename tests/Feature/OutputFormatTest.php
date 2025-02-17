@@ -115,7 +115,7 @@ it('outputs gitlab format to file and pretty print in cli', function () use ($fi
         ])));
 });
 
-it('outputs json format file and xml format in cli', function() use ($file) {
+it('outputs json format file and xml format in cli', function () use ($file) {
 
     [$statusCode, $output] = run('default', [
         'path' => base_path('tests/Fixtures/with-fixable-issues'),
