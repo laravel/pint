@@ -1,6 +1,15 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.20.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.21.0...main)
+
+## [v1.21.0](https://github.com/laravel/pint/compare/v1.20.0...v1.21.0) - 2025-02-18
+
+* Add `no_unneeded_import_alias` rule by [@claudiodekker](https://github.com/claudiodekker) in https://github.com/laravel/pint/pull/334
+* PHP 8.4 support by [@markwalet](https://github.com/markwalet) in https://github.com/laravel/pint/pull/330
+* Bump dependencies by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/pint/pull/337
+* Bump dependencies (php-cs-fixer fixes) by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/pint/pull/338
+* Split files based on `/\R+/` regex for `--diff`, same as `--dirty` by [@erikn69](https://github.com/erikn69) in https://github.com/laravel/pint/pull/339
+* Bump dependencies by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/pint/pull/343
 
 ## [v1.20.0](https://github.com/laravel/pint/compare/v1.19.0...v1.20.0) - 2025-01-14
 
