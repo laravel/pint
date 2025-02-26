@@ -9,6 +9,9 @@ on:
         description: 'Tag release version'
         required: true
 
+permissions:
+  contents: write
+
 jobs:
   publish:
     runs-on: ubuntu-22.04
