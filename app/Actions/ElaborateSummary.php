@@ -45,10 +45,14 @@ class ElaborateSummary
             $this->output->isDecorated()
         );
 
-        if ($this->input->getOption('format')) {
-            $this->displayUsingFormatter($summary, $totalFiles);
+        if ($format = $this->input->getOption('format')) {
+            $this->displayUsingFormatter($summary, $format);
         } else {
             $this->summaryOutput->handle($summary, $totalFiles);
+        }
+
+        if (($file = $this->input->getOption('output-to-file')) && (($outputFormat = $this->input->getOption('output-format')) || $format)) {
+            $this->displayUsingFormatter($summary, $outputFormat ?: $format, $file);
         }
 
         $failure = (($summary->isDryRun() || $this->input->getOption('repair')) && count($changes) > 0)
@@ -63,12 +67,13 @@ class ElaborateSummary
      * Formats the given summary using the "selected" formatter.
      *
      * @param  \PhpCsFixer\Console\Report\FixReport\ReportSummary  $summary
-     * @param  int  $totalFiles
      * @return void
+     *
+     * @throws \JsonException
      */
-    protected function displayUsingFormatter($summary, $totalFiles)
+    protected function displayUsingFormatter($summary, ?string $format = null, ?string $outputPath = null)
     {
-        $reporter = match ($format = $this->input->getOption('format')) {
+        $reporter = match ($format) {
             'checkstyle' => new FixReport\CheckstyleReporter,
             'gitlab' => new FixReport\GitlabReporter,
             'json' => new FixReport\JsonReporter,
@@ -77,6 +82,12 @@ class ElaborateSummary
             'xml' => new FixReport\XmlReporter,
             default => abort(1, sprintf('Format [%s] is not supported.', $format)),
         };
+
+        if ($outputPath) {
+            file_put_contents($outputPath, $reporter->generate($summary));
+
+            return;
+        }
 
         $this->output->write($reporter->generate($summary));
     }
