@@ -2,3 +2,8 @@
 /vendor
 composer.lock
 .phpunit.result.cache
+
+# IDEs
+/.fleet
+/.idea
+/.vscode
