@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.21.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.21.1...main)
+
+## [v1.21.1](https://github.com/laravel/pint/compare/v1.21.0...v1.21.1) - 2025-03-11
+
+* Fix GitHub Action failing 'Publish the released PHAR' due to deprecated action 'actions/upload-artifact' by [@matthewnessworthy](https://github.com/matthewnessworthy) in https://github.com/laravel/pint/pull/347
+* Bump dependencies by [@crynobone](https://github.com/crynobone) in https://github.com/laravel/pint/pull/350
 
 ## [v1.21.0](https://github.com/laravel/pint/compare/v1.20.0...v1.21.0) - 2025-02-18
 
