@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.21.1...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.21.2...main)
+
+## [v1.21.2](https://github.com/laravel/pint/compare/v1.21.1...v1.21.2) - 2025-03-14
+
+- Bumps dependencies
 
 ## [v1.21.1](https://github.com/laravel/pint/compare/v1.21.0...v1.21.1) - 2025-03-11
 
