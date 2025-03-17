@@ -39,6 +39,8 @@ class DefaultCommand extends Command
                     new InputOption('no-config', '', InputOption::VALUE_NONE, 'Disable loading any configuration file'),
                     new InputOption('preset', '', InputOption::VALUE_REQUIRED, 'The preset that should be used'),
                     new InputOption('test', '', InputOption::VALUE_NONE, 'Test for code style errors without fixing them'),
+                    new InputOption('output-to-file', '', InputOption::VALUE_REQUIRED, 'Output results to file at this path. Requires either --format or --output-format'),
+                    new InputOption('output-format', '', InputOption::VALUE_REQUIRED, 'Output results to file in this output format. Falls back to format defined in --format'),
                     new InputOption('bail', '', InputOption::VALUE_NONE, 'Test for code style errors without fixing them and stop on first error'),
                     new InputOption('repair', '', InputOption::VALUE_NONE, 'Fix code style errors but exit with status 1 if there were any changes made'),
                     new InputOption('diff', '', InputOption::VALUE_REQUIRED, 'Only fix files that have changed since branching off from the given branch', null, ['main', 'master', 'origin/main', 'origin/master']),
