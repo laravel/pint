@@ -44,6 +44,8 @@ class DefaultCommand extends Command
                     new InputOption('diff', '', InputOption::VALUE_REQUIRED, 'Only fix files that have changed since branching off from the given branch', null, ['main', 'master', 'origin/main', 'origin/master']),
                     new InputOption('dirty', '', InputOption::VALUE_NONE, 'Only fix files that have uncommitted changes'),
                     new InputOption('format', '', InputOption::VALUE_REQUIRED, 'The output format that should be used'),
+                    new InputOption('output-to-file', '', InputOption::VALUE_REQUIRED, 'Output the test results to a file at this path'),
+                    new InputOption('output-format', '', InputOption::VALUE_REQUIRED, 'The format that should be used when outputting the test results to a file'),
                     new InputOption('cache-file', '', InputArgument::OPTIONAL, 'The path to the cache file'),
                 ]
             );
