@@ -23,9 +23,9 @@
         "ext-xml": "*"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.70.2",
-        "illuminate/view": "^11.44.1",
-        "larastan/larastan": "^3.1.0",
+        "friendsofphp/php-cs-fixer": "^3.75.0",
+        "illuminate/view": "^11.44.2",
+        "larastan/larastan": "^3.3.1",
         "laravel-zero/framework": "^11.36.1",
         "mockery/mockery": "^1.6.12",
         "nunomaduro/termwind": "^2.3",
