@@ -1,6 +1,21 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.21.2...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.22.0...main)
+
+## [v1.22.0](https://github.com/laravel/pint/compare/v1.21.2...v1.22.0) - 2025-04-08
+
+### What's Changed
+
+* Writing summaries to file via option by [@Onekone](https://github.com/Onekone) in https://github.com/laravel/pint/pull/344
+* Update logo by [@iamdavidhill](https://github.com/iamdavidhill) in https://github.com/laravel/pint/pull/362
+* Update dependencies by [@crynobone](https://github.com/crynobone) in https://github.com/laravel/pint/pull/364
+
+### New Contributors
+
+* [@Onekone](https://github.com/Onekone) made their first contribution in https://github.com/laravel/pint/pull/344
+* [@iamdavidhill](https://github.com/iamdavidhill) made their first contribution in https://github.com/laravel/pint/pull/362
+
+**Full Changelog**: https://github.com/laravel/pint/compare/v1.21.2...v1.22.0
 
 ## [v1.21.2](https://github.com/laravel/pint/compare/v1.21.1...v1.21.2) - 2025-03-14
 
