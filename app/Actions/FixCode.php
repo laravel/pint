@@ -35,6 +35,10 @@ class FixCode
      */
     public function execute()
     {
+        if ($this->input->getOption('configurator')) {
+            return (new MakeConfiguration)->execute();
+        }
+
         try {
             [$resolver, $totalFiles] = ConfigurationResolverFactory::fromIO($this->input, $this->output);
         } catch (ConsoleException $exception) {
