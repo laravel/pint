@@ -20,7 +20,8 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-tokenizer": "*",
-        "ext-xml": "*"
+        "ext-xml": "*",
+        "laravel/prompts": "^0.3.5"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.75.0",
