@@ -40,7 +40,7 @@ class MakeConfiguration
      */
     private function saveConfig(array $config): void
     {
-        $configJsonPath = base_path('pint1.json');
+        $configJsonPath = base_path('pint.json');
 
         File::put($configJsonPath, json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
     }
