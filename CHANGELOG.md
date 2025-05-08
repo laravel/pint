@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.22.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.22.1...main)
+
+## [v1.22.1](https://github.com/laravel/pint/compare/v1.22.0...v1.22.1) - 2025-05-08
+
+- Fixes ` Argument #1 ($node) must be of type DOMNode` issue.
 
 ## [v1.22.0](https://github.com/laravel/pint/compare/v1.21.2...v1.22.0) - 2025-04-08
 
