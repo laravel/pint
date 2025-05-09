@@ -46,3 +46,14 @@ it('may have a preset option', function () {
 
     expect($repository->preset())->toBe('laravel');
 });
+
+it('may have custom fixers options', function () {
+    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/custom/pint.json', null);
+
+    expect($repository->customFixers())
+        ->ToBeArray()
+        ->toContainOnlyInstancesOf(\PhpCsFixer\Fixer\FixerInterface::class)
+        ->toMatchArray([
+            new \Tests\Fixtures\custom\CustomFixer,
+        ]);
+});
