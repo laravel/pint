@@ -109,7 +109,7 @@ class ConfigurationJsonRepository
     /**
      * Resolve the file to extend.
      *
-     * @param array<string, array<int, string>|string> $baseConfig
+     * @param  array<string, array<int, string>|string>  $baseConfig
      * @return array<string, array<int, string>|string>
      */
     private function resolveExtend(array $baseConfig)
