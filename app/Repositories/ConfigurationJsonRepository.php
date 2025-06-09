@@ -106,7 +106,7 @@ class ConfigurationJsonRepository
         };
     }
     /**
-     * Resolve the file the extent.
+     * Resolve the file to extend.
      *
      * @return array
      */
