@@ -105,6 +105,7 @@ class ConfigurationJsonRepository
             default => file_exists($path)
         };
     }
+
     /**
      * Resolve the file to extend.
      *
@@ -112,7 +113,7 @@ class ConfigurationJsonRepository
      */
     private function resolveExtend(array $baseConfig)
     {
-        $extended = json_decode(file_get_contents(realpath(dirname($this->path) . DIRECTORY_SEPARATOR . $baseConfig['extend'])), true);
+        $extended = json_decode(file_get_contents(realpath(dirname($this->path).DIRECTORY_SEPARATOR.$baseConfig['extend'])), true);
 
         if (isset($extended['extend'])) {
             throw new \LogicException('Configuration cannot extend from more than 1 config');

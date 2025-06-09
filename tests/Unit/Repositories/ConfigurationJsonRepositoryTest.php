@@ -52,6 +52,6 @@ it('properly extend the base config file', function () {
 
     expect($repository->preset())->toBe('laravel')
         ->and($repository->finder()['exclude'])->toBe([
-            "my-dir"
+            'my-dir',
         ]);
 });
