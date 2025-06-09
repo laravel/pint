@@ -46,3 +46,12 @@ it('may have a preset option', function () {
 
     expect($repository->preset())->toBe('laravel');
 });
+
+it('properly extend the base config file', function () {
+    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/extend/pint.json', null);
+
+    expect($repository->preset())->toBe('laravel')
+        ->and($repository->finder()['exclude'])->toBe([
+            "my-dir"
+        ]);
+});

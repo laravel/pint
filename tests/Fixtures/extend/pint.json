@@ -1,0 +1,4 @@
+{
+    "extend": "./base.json",
+    "preset": "laravel"
+}

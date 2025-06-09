@@ -1,0 +1,6 @@
+{
+    "preset": "psr12",
+    "exclude": [
+        "my-dir"
+    ]
+}

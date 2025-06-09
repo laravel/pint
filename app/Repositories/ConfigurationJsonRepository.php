@@ -77,7 +77,13 @@ class ConfigurationJsonRepository
     protected function get()
     {
         if (! is_null($this->path) && $this->fileExists((string) $this->path)) {
-            return tap(json_decode(file_get_contents($this->path), true), function ($configuration) {
+            $baseConfig = json_decode(file_get_contents($this->path), true);
+
+            if (isset($baseConfig['extend'])) {
+                $baseConfig = $this->resolveExtend($baseConfig);
+            }
+
+            return tap($baseConfig, function ($configuration) {
                 if (! is_array($configuration)) {
                     abort(1, sprintf('The configuration file [%s] is not valid JSON.', $this->path));
                 }
@@ -98,5 +104,27 @@ class ConfigurationJsonRepository
             str_starts_with($path, 'http://') || str_starts_with($path, 'https://') => str_contains(get_headers($path)[0], '200 OK'),
             default => file_exists($path)
         };
+    }
+    /**
+     * Resolve the file the extent.
+     *
+     * @return array
+     */
+    private function resolveExtend(array $baseConfig)
+    {
+        $extended = json_decode(file_get_contents(realpath(dirname($this->path) . DIRECTORY_SEPARATOR . $baseConfig['extend'])), true);
+
+        if (isset($extended['extend'])) {
+            throw new \LogicException('Configuration cannot extend from more than 1 config');
+        }
+
+        $baseConfig = array_merge(
+            $extended,
+            $baseConfig,
+        );
+
+        unset($baseConfig['extend']);
+
+        return $baseConfig;
     }
 }
