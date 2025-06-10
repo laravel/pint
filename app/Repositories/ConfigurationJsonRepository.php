@@ -2,8 +2,6 @@
 
 namespace App\Repositories;
 
-use Illuminate\Support\Collection;
-
 class ConfigurationJsonRepository
 {
     /**
@@ -126,5 +124,4 @@ class ConfigurationJsonRepository
 
         return array_replace_recursive($extended, $configuration);
     }
-
 }
