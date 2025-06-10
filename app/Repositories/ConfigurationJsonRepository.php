@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use Illuminate\Support\Collection;
+
 class ConfigurationJsonRepository
 {
     /**
@@ -109,24 +111,20 @@ class ConfigurationJsonRepository
     /**
      * Resolve the file to extend.
      *
-     * @param  array<string, array<int, string>|string>  $baseConfig
+     * @param  array<string, array<int, string>|string>  $configuration
      * @return array<string, array<int, string>|string>
      */
-    private function resolveExtend(array $baseConfig)
+    private function resolveExtend(array $configuration)
     {
-        $extended = json_decode(file_get_contents(realpath(dirname($this->path).DIRECTORY_SEPARATOR.$baseConfig['extend'])), true);
+        $path = realpath(dirname($this->path).DIRECTORY_SEPARATOR.$configuration['extend']);
+
+        $extended = json_decode(file_get_contents($path), true);
 
         if (isset($extended['extend'])) {
             throw new \LogicException('Configuration cannot extend from more than 1 config');
         }
 
-        $baseConfig = array_merge(
-            $extended,
-            $baseConfig,
-        );
-
-        unset($baseConfig['extend']);
-
-        return $baseConfig;
+        return array_replace_recursive($extended, $configuration);
     }
+
 }
