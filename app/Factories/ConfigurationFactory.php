@@ -47,7 +47,8 @@ class ConfigurationFactory
             ->setFinder(self::finder())
             ->setRules(array_merge($rules, resolve(ConfigurationJsonRepository::class)->rules()))
             ->setRiskyAllowed(true)
-            ->setUsingCache(true);
+            ->setUsingCache(true)
+            ->setUnsupportedPhpVersionAllowed(true);
     }
 
     /**

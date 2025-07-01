@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Factories\ConfigurationResolverFactory;
 use LaravelZero\Framework\Exceptions\ConsoleException;
+use Phar;
 use PhpCsFixer\Console\ConfigurationResolver;
 use PhpCsFixer\Runner\Runner;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -49,15 +50,20 @@ class FixCode
             $this->progress->subscribe();
         }
 
-
         $method = $this->input->getOption('parallel') ? 'fixParallel' : 'fixSequential';
 
         if ($this->input->getOption('parallel')) {
-            putenv('PHP_CS_FIXER_IGNORE_ENV=1');
+            if (Phar::running() !== '') {
+                $_SERVER['argv'] = [
 
-            $_SERVER['argv'] = [
-                'phar://' . $_SERVER['argv'][0] . '/vendor/bin/php-cs-fixer',
-            ];
+                    'phar://'.$_SERVER['argv'][0].'/vendor/bin/php-cs-fixer',
+                ];
+            } else {
+                $_SERVER['argv'] = [
+                    dirname($_SERVER['argv'][0]).'/vendor/bin/php-cs-fixer',
+                ];
+            }
+
         }
 
         /** @var array<string, array{appliedFixers: array<int, string>, diff: string}> $changes */
