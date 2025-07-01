@@ -52,6 +52,9 @@ jobs:
       - name: Execute lint tests with Laravel preset
         run: ./pint --test
 
+      - name: Execute lint tests in parallel with Laravel preset
+        run: ./pint --parallel --test
+
       - name: Execute static analysis
         run: vendor/bin/phpstan
         if: matrix.php == '8.4'
