@@ -49,9 +49,16 @@ class FixCode
             $this->progress->subscribe();
         }
 
+
         $method = $this->input->getOption('parallel') ? 'fixParallel' : 'fixSequential';
 
-        putenv('PHP_CS_FIXER_IGNORE_ENV=1');
+        if ($this->input->getOption('parallel')) {
+            putenv('PHP_CS_FIXER_IGNORE_ENV=1');
+
+            $_SERVER['argv'] = [
+                'phar://' . $_SERVER['argv'][0] . '/vendor/bin/php-cs-fixer',
+            ];
+        }
 
         /** @var array<string, array{appliedFixers: array<int, string>, diff: string}> $changes */
         $changes = (fn () => $this->{$method}())->call(new Runner(
