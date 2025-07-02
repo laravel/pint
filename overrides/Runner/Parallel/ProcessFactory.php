@@ -42,6 +42,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Process\PhpExecutableFinder;
 
 /**
+ * This overrides the default "ProcessFactory" to allow for
+ * customization of the command-line arguments that better
+ * suit the needs of the laravel pint package.
+ *
  * @author Greg Korba <greg@codito.dev>
  *
  * @readonly
