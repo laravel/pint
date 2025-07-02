@@ -42,12 +42,13 @@ class ConfigurationFactory
      */
     public static function preset($rules)
     {
-        return (new Config)
+        return (new Config) // @phpstan-ignore-line
             ->setParallelConfig(ParallelConfigFactory::detect())
             ->setFinder(self::finder())
             ->setRules(array_merge($rules, resolve(ConfigurationJsonRepository::class)->rules()))
             ->setRiskyAllowed(true)
-            ->setUsingCache(true);
+            ->setUsingCache(true)
+            ->setUnsupportedPhpVersionAllowed(true);
     }
 
     /**

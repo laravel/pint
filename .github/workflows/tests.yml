@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ubuntu-22.04, windows-2019]
+        os: [ubuntu-22.04, windows-2022]
         php: [8.2, 8.3, 8.4]
 
     name: PHP ${{ matrix.php }} - ${{ matrix.os }}
@@ -51,6 +51,9 @@ jobs:
 
       - name: Execute lint tests with Laravel preset
         run: ./pint --test
+
+      - name: Execute lint tests in parallel with Laravel preset
+        run: ./pint --parallel --test
 
       - name: Execute static analysis
         run: vendor/bin/phpstan
