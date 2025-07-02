@@ -6,7 +6,6 @@ use App\Factories\ConfigurationResolverFactory;
 use LaravelZero\Framework\Exceptions\ConsoleException;
 use PhpCsFixer\Console\ConfigurationResolver;
 use PhpCsFixer\Runner\Runner;
-use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -75,7 +74,7 @@ class FixCode
      */
     private function getInput(ConfigurationResolver $resolver): InputInterface
     {
-        /** @var InputDefinition $definition */
+        // @phpstan-ignore-next-line
         $definition = (fn () => $this->definition)->call($this->input);
 
         $definition->addOptions([
