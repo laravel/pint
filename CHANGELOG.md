@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.22.1...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.23.0...main)
+
+## [v1.23.0](https://github.com/laravel/pint/compare/v1.22.1...v1.23.0) - 2025-07-03
+
+- Adds `--parallel` option.
+- Allows extending from a base configuration file.
 
 ## [v1.22.1](https://github.com/laravel/pint/compare/v1.22.0...v1.22.1) - 2025-05-08
 
