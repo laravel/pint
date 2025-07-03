@@ -15,6 +15,10 @@ define('LARAVEL_START', microtime(true));
 |
 */
 
+if (($argv[1] ?? null) === 'worker') {
+    return include __DIR__ . '/vendor/bin/php-cs-fixer';
+}
+
 $autoloader = require file_exists(__DIR__.'/vendor/autoload.php') ?  __DIR__.'/vendor/autoload.php' : __DIR__.'/../../autoload.php';
 
 $app = require_once __DIR__.'/bootstrap/app.php';
