@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.23.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.24.0...main)
+
+## [v1.24.0](https://github.com/laravel/pint/compare/v1.23.0...v1.24.0) - 2025-07-10
+
+- PHP 8.4 support
+- Adds `-p` as shortcut of `--parallel`
+- Fixes parallel on Windows
 
 ## [v1.23.0](https://github.com/laravel/pint/compare/v1.22.1...v1.23.0) - 2025-07-03
 
