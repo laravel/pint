@@ -36,6 +36,7 @@ namespace PhpCsFixer\Runner\Parallel;
  * THE SOFTWARE.
  */
 
+use Illuminate\Support\ProcessUtils;
 use PhpCsFixer\Runner\RunnerConfig;
 use React\EventLoop\LoopInterface;
 use Symfony\Component\Console\Input\InputInterface;
@@ -118,7 +119,7 @@ final class ProcessFactory
 
             if ($optionValue !== null) {
                 $commandArgs[] = "--{$option}";
-                $commandArgs[] = escapeshellarg($optionValue);
+                $commandArgs[] = ProcessUtils::escapeArgument($optionValue);
             }
         }
 
