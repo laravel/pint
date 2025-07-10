@@ -47,7 +47,7 @@ class DefaultCommand extends Command
                     new InputOption('output-to-file', '', InputOption::VALUE_REQUIRED, 'Output the test results to a file at this path'),
                     new InputOption('output-format', '', InputOption::VALUE_REQUIRED, 'The format that should be used when outputting the test results to a file'),
                     new InputOption('cache-file', '', InputArgument::OPTIONAL, 'The path to the cache file'),
-                    new InputOption('parallel', '', InputOption::VALUE_NONE, 'Runs the linter in parallel (Experimental)'),
+                    new InputOption('parallel', 'p', InputOption::VALUE_NONE, 'Runs the linter in parallel (Experimental)'),
                 ],
             );
     }
