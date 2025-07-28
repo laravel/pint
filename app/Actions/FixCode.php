@@ -5,6 +5,7 @@ namespace App\Actions;
 use App\Factories\ConfigurationResolverFactory;
 use LaravelZero\Framework\Exceptions\ConsoleException;
 use PhpCsFixer\Console\ConfigurationResolver;
+use PhpCsFixer\Differ\NullDiffer;
 use PhpCsFixer\Runner\Runner;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -88,6 +89,8 @@ class FixCode
         $this->input->setOption('allow-risky', $resolver->getRiskyAllowed() ? 'yes' : 'no');
         $this->input->setOption('rules', json_encode($resolver->getRules()));
         $this->input->setOption('using-cache', $resolver->getUsingCache() ? 'yes' : 'no');
+
+        $this->input->setOption('diff', ! $resolver->getDiffer() instanceof NullDiffer);
 
         return $this->input;
     }
