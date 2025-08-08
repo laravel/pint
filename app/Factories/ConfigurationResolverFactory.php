@@ -4,6 +4,7 @@ namespace App\Factories;
 
 use App\Project;
 use App\Repositories\ConfigurationJsonRepository;
+use App\Services\PresetManifest;
 use ArrayIterator;
 use PhpCsFixer\Config;
 use PhpCsFixer\Console\ConfigurationResolver;
@@ -11,19 +12,6 @@ use PhpCsFixer\ToolInfo;
 
 class ConfigurationResolverFactory
 {
-    /**
-     * The list of available presets.
-     *
-     * @var array<int, string>
-     */
-    public static $presets = [
-        'laravel',
-        'per',
-        'psr12',
-        'symfony',
-        'empty',
-    ];
-
     /**
      * Creates a new PHP CS Fixer Configuration Resolver instance
      * from the given input and output.
@@ -37,23 +25,20 @@ class ConfigurationResolverFactory
         $path = Project::paths($input);
 
         $localConfiguration = resolve(ConfigurationJsonRepository::class);
+        $presetManifest = resolve(PresetManifest::class);
 
         $preset = $localConfiguration->preset();
 
-        if (! in_array($preset, static::$presets)) {
-            abort(1, 'Preset not found.');
+        if (! $presetManifest->has($preset)) {
+            $availablePresets = implode(', ', $presetManifest->names());
+            abort(1, "Preset '{$preset}' not found. Available presets: {$availablePresets}");
         }
 
         $resolver = new ConfigurationResolver(
             new Config('default'),
             [
                 'allow-risky' => 'yes',
-                'config' => implode(DIRECTORY_SEPARATOR, [
-                    dirname(__DIR__, 2),
-                    'resources',
-                    'presets',
-                    sprintf('%s.php', $preset),
-                ]),
+                'config' => $presetManifest->path($preset),
                 'diff' => $output->isVerbose(),
                 'dry-run' => $input->getOption('test') || $input->getOption('bail'),
                 'path' => $path,
