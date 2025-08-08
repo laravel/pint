@@ -2,9 +2,11 @@
 
 namespace App\Commands;
 
+use App\Actions\FixCode;
 use LaravelZero\Framework\Commands\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
+use Throwable;
 
 class DefaultCommand extends Command
 {
@@ -61,8 +63,60 @@ class DefaultCommand extends Command
      */
     public function handle($fixCode, $elaborateSummary)
     {
+        if ($this->hasStdinInput()) {
+            return $this->handleStdin($fixCode);
+        }
+
         [$totalFiles, $changes] = $fixCode->execute();
 
         return $elaborateSummary->execute($totalFiles, $changes);
+    }
+
+    /**
+     * Check if there is input available on stdin.
+     */
+    protected function hasStdinInput(): bool
+    {
+        // If we are testing, bailing, or repairing, then there is no input available
+        if ($this->option('test') || $this->option('bail') || $this->option('repair')) {
+            return false;
+        }
+
+        // If stdin is a TTY, then there's no input available
+        if (! is_resource(STDIN) || stream_isatty(STDIN)) {
+            return false;
+        }
+
+        // If stdin is not a TTY, then check if there's data available
+        return ! stream_get_meta_data(STDIN)['eof'];
+    }
+
+    /**
+     * Handle stdin input and output to stdout.
+     */
+    protected function handleStdin(FixCode $fixCode): int
+    {
+        $paths = $this->argument('path');
+        $contextPath = ! empty($paths) ? $paths[0] : 'stdin.php';
+        $tempFile = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pint_stdin_'.uniqid().'.php';
+
+        $this->input->setArgument('path', [$tempFile]);
+        $this->input->setOption('format', 'json');
+
+        try {
+            file_put_contents($tempFile, stream_get_contents(STDIN));
+            $fixCode->execute();
+            fwrite(STDOUT, file_get_contents($tempFile));
+
+            return self::SUCCESS;
+        } catch (Throwable $e) {
+            fwrite(STDERR, "pint: error processing {$contextPath}: {$e->getMessage()}\n");
+
+            return self::FAILURE;
+        } finally {
+            if (file_exists($tempFile)) {
+                unlink($tempFile);
+            }
+        }
     }
 }
