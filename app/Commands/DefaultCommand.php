@@ -64,7 +64,7 @@ class DefaultCommand extends Command
     public function handle($fixCode, $elaborateSummary)
     {
         if ($this->hasStdinInput()) {
-            return $this->handleStdin($fixCode);
+            return $this->fixStdinInput($fixCode);
         }
 
         [$totalFiles, $changes] = $fixCode->execute();
@@ -73,30 +73,12 @@ class DefaultCommand extends Command
     }
 
     /**
-     * Check if there is input available on stdin.
+     * Fix the code sent to Pint on stdin and output to stdout.
      */
-    protected function hasStdinInput(): bool
-    {
-        // If we are testing, bailing, or repairing, then there is no input available
-        if ($this->option('test') || $this->option('bail') || $this->option('repair')) {
-            return false;
-        }
-
-        // If stdin is a TTY, then there's no input available
-        if (! is_resource(STDIN) || stream_isatty(STDIN)) {
-            return false;
-        }
-
-        // If stdin is not a TTY, then check if there's data available
-        return ! stream_get_meta_data(STDIN)['eof'];
-    }
-
-    /**
-     * Handle stdin input and output to stdout.
-     */
-    protected function handleStdin(FixCode $fixCode): int
+    protected function fixStdinInput(FixCode $fixCode): int
     {
         $paths = $this->argument('path');
+
         $contextPath = ! empty($paths) ? $paths[0] : 'stdin.php';
         $tempFile = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pint_stdin_'.uniqid().'.php';
 
@@ -115,8 +97,24 @@ class DefaultCommand extends Command
             return self::FAILURE;
         } finally {
             if (file_exists($tempFile)) {
-                unlink($tempFile);
+                @unlink($tempFile);
             }
         }
+    }
+
+    /**
+     * Determine if there is input available on stdin.
+     */
+    protected function hasStdinInput(): bool
+    {
+        if ($this->option('test') || $this->option('bail') || $this->option('repair')) {
+            return false;
+        }
+
+        if (! is_resource(STDIN) || stream_isatty(STDIN)) {
+            return false;
+        }
+
+        return ! stream_get_meta_data(STDIN)['eof'];
     }
 }
