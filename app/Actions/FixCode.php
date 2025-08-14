@@ -5,6 +5,7 @@ namespace App\Actions;
 use App\Factories\ConfigurationResolverFactory;
 use LaravelZero\Framework\Exceptions\ConsoleException;
 use PhpCsFixer\Console\ConfigurationResolver;
+use PhpCsFixer\Runner\Parallel\ParallelConfig;
 use PhpCsFixer\Runner\Runner;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -62,7 +63,7 @@ class FixCode
             $resolver->getCacheManager(),
             $resolver->getDirectory(),
             $resolver->shouldStopOnViolation(),
-            $resolver->getParallelConfig(),
+            $this->getParallelConfig($resolver),
             $this->getInput($resolver),
         ));
 
@@ -90,5 +91,31 @@ class FixCode
         $this->input->setOption('using-cache', $resolver->getUsingCache() ? 'yes' : 'no');
 
         return $this->input;
+    }
+
+    /**
+     * Get the ParallelConfig for the number of cores.
+     *
+     * @throws ConsoleException
+     */
+    private function getParallelConfig(ConfigurationResolver $resolver): ParallelConfig
+    {
+        $isParallel = $this->input->getOption('parallel');
+        if (! $isParallel) {
+            return $resolver->getParallelConfig();
+        }
+
+        $numberOfCores = intval($this->input->getOption('max-processes') ?? 0);
+        if ($numberOfCores < 2) {
+            throw new ConsoleException(1, 'You must specify a number of cores greater than 1.');
+        }
+
+        $parallelConfig = $resolver->getParallelConfig();
+
+        return new ParallelConfig(
+            $numberOfCores,
+            $parallelConfig->getFilesPerProcess(),
+            $parallelConfig->getProcessTimeout()
+        );
     }
 }
