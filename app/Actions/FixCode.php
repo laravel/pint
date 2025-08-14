@@ -95,25 +95,19 @@ class FixCode
 
     /**
      * Get the ParallelConfig for the number of cores.
-     *
-     * @throws ConsoleException
      */
     private function getParallelConfig(ConfigurationResolver $resolver): ParallelConfig
     {
-        $isParallel = $this->input->getOption('parallel');
-        if (! $isParallel) {
-            return $resolver->getParallelConfig();
-        }
+        $maxProcesses = intval($this->input->getOption('max-processes') ?? 0);
 
-        $numberOfCores = intval($this->input->getOption('max-processes') ?? 0);
-        if ($numberOfCores < 2) {
-            throw new ConsoleException(1, 'You must specify a number of cores greater than 1.');
+        if (! $this->input->getOption('parallel') || $maxProcesses < 1) {
+            return $resolver->getParallelConfig();
         }
 
         $parallelConfig = $resolver->getParallelConfig();
 
         return new ParallelConfig(
-            $numberOfCores,
+            $maxProcesses,
             $parallelConfig->getFilesPerProcess(),
             $parallelConfig->getProcessTimeout()
         );
