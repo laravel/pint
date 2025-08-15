@@ -71,7 +71,27 @@ class FixCode
     }
 
     /**
-     * Gets the input for the PHP CS Fixer Runner.
+     * Get the ParallelConfig for the number of cores.
+     */
+    private function getParallelConfig(ConfigurationResolver $resolver): ParallelConfig
+    {
+        $maxProcesses = intval($this->input->getOption('max-processes') ?? 0);
+
+        if (! $this->input->getOption('parallel') || $maxProcesses < 1) {
+            return $resolver->getParallelConfig();
+        }
+
+        $parallelConfig = $resolver->getParallelConfig();
+
+        return new ParallelConfig(
+            $maxProcesses,
+            $parallelConfig->getFilesPerProcess(),
+            $parallelConfig->getProcessTimeout()
+        );
+    }
+
+    /**
+     * Get the input for the PHP CS Fixer Runner.
      */
     private function getInput(ConfigurationResolver $resolver): InputInterface
     {
@@ -91,25 +111,5 @@ class FixCode
         $this->input->setOption('using-cache', $resolver->getUsingCache() ? 'yes' : 'no');
 
         return $this->input;
-    }
-
-    /**
-     * Get the ParallelConfig for the number of cores.
-     */
-    private function getParallelConfig(ConfigurationResolver $resolver): ParallelConfig
-    {
-        $maxProcesses = intval($this->input->getOption('max-processes') ?? 0);
-
-        if (! $this->input->getOption('parallel') || $maxProcesses < 1) {
-            return $resolver->getParallelConfig();
-        }
-
-        $parallelConfig = $resolver->getParallelConfig();
-
-        return new ParallelConfig(
-            $maxProcesses,
-            $parallelConfig->getFilesPerProcess(),
-            $parallelConfig->getProcessTimeout()
-        );
     }
 }
