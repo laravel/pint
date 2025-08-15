@@ -58,6 +58,17 @@
             "pestphp/pest-plugin": true
         }
     },
+    "extra": {
+        "laravel-pint": {
+            "presets": {
+                "laravel": "resources/presets/laravel.php",
+                "per": "resources/presets/per.php",
+                "psr12": "resources/presets/psr12.php",
+                "symfony": "resources/presets/symfony.php",
+                "empty": "resources/presets/empty.php"
+            }
+        }
+    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "bin": ["builds/pint"]
