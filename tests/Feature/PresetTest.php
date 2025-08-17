@@ -10,49 +10,16 @@ it('uses the laravel preset by default', function () {
         ->toContain('── Laravel');
 });
 
-it('may use the PSR 12 preset', function () {
+it('may use preset', function (string $presetName, string $presetTitle, string $fixture) {
     [$statusCode, $output] = run('default', [
-        'path' => base_path('tests/Fixtures/without-issues'),
-        '--preset' => 'psr12',
+        'path' => base_path("tests/Fixtures/{$fixture}"),
+        '--preset' => $presetName,
     ]);
 
     expect($statusCode)->toBe(0)
         ->and($output)
-        ->toContain('── PSR 12');
-});
-
-it('may use the PER preset', function () {
-    [$statusCode, $output] = run('default', [
-        'path' => base_path('tests/Fixtures/without-issues'),
-        '--preset' => 'per',
-    ]);
-
-    expect($statusCode)->toBe(0)
-        ->and($output)
-        ->toContain('── PER');
-});
-
-it('may use the Laravel preset', function () {
-    [$statusCode, $output] = run('default', [
-        'path' => base_path('tests/Fixtures/without-issues-laravel'),
-        '--preset' => 'laravel',
-    ]);
-
-    expect($statusCode)->toBe(0)
-        ->and($output)
-        ->toContain('── Laravel');
-});
-
-it('may use the Symfony preset', function () {
-    [$statusCode, $output] = run('default', [
-        'path' => base_path('tests/Fixtures/without-issues'),
-        '--preset' => 'symfony',
-    ]);
-
-    expect($statusCode)->toBe(0)
-        ->and($output)
-        ->toContain('── Symfony');
-});
+        ->toContain($presetTitle);
+})->with('pint_presets');
 
 it('ignores config when using no config option', function () {
     $cwd = getcwd();
@@ -69,3 +36,10 @@ it('ignores config when using no config option', function () {
         ->and($output)
         ->toContain('── PSR 12');
 });
+
+dataset('pint_presets', [
+    "Laravel" => ['laravel', '── Laravel', 'without-issues-laravel'],
+    "PSR12" => ['psr12', '── PSR 12', 'without-issues'],
+    "PER" => ['per', '── PER', 'without-issues'],
+    "Symfony" => ['symfony', '── Symfony', 'without-issues'],
+]);
