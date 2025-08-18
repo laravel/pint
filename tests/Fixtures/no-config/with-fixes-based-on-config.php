@@ -1,3 +1,3 @@
 <?php
 
-$a = 'This has a fix for the ' . 'laravel preset';
+$a = ['This has a fix for all presets'];

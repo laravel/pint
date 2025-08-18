@@ -1,7 +1,6 @@
 {
     "rules": {
-        "concat_space": {
-            "spacing": "none"
-        }
+        "array_syntax": false,
+        "single_quote": false
     }
 }

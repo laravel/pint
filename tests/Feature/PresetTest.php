@@ -21,12 +21,12 @@ it('may use preset', function (string $presetName, string $presetTitle, string $
         ->toContain($presetTitle);
 })->with('pint_presets');
 
-it('ignores config when using no config option', function () {
+it('ignores config when using no config option', function (string $presetName, string $presetTitle) {
     $cwd = getcwd();
     chdir(base_path('tests/Fixtures/no-config'));
 
     [$statusCode, $output] = run('default', [
-        '--preset' => 'psr12',
+        '--preset' => $presetName,
         '--no-config' => true,
     ]);
 
@@ -34,8 +34,8 @@ it('ignores config when using no config option', function () {
 
     expect($statusCode)->toBe(0)
         ->and($output)
-        ->toContain('── PSR 12');
-});
+        ->toContain($presetTitle);
+})->with('pint_presets');
 
 dataset('pint_presets', [
     "Laravel" => ['laravel', '── Laravel', 'without-issues-laravel'],
