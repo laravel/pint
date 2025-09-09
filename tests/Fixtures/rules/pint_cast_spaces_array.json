@@ -1,0 +1,7 @@
+{
+    "rules": {
+        "cast_spaces": {
+            "space": "single"
+        }
+    }
+}

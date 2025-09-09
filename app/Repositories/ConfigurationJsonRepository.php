@@ -83,6 +83,10 @@ class ConfigurationJsonRepository
                 $baseConfig = $this->resolveExtend($baseConfig);
             }
 
+            if (isset($baseConfig['rules']) && is_array($baseConfig['rules'])) {
+                $baseConfig['rules'] = $this->normalizeRules($baseConfig['rules']);
+            }
+
             return tap($baseConfig, function ($configuration) {
                 if (! is_array($configuration)) {
                     abort(1, sprintf('The configuration file [%s] is not valid JSON.', $this->path));
@@ -91,6 +95,25 @@ class ConfigurationJsonRepository
         }
 
         return [];
+    }
+
+    /**
+     * Normalize shorthand rule values into explicit fixer option shapes.
+     *
+     * @param  array<string, mixed>  $rules
+     * @return array<string, mixed>
+     */
+    private function normalizeRules(array $rules): array
+    {
+        if (array_key_exists('cast_spaces', $rules)) {
+            if ($rules['cast_spaces'] === false) {
+                $rules['cast_spaces'] = ['space' => 'none'];
+            } elseif ($rules['cast_spaces'] === true) {
+                $rules['cast_spaces'] = ['space' => 'single'];
+            }
+        }
+
+        return $rules;
     }
 
     /**
