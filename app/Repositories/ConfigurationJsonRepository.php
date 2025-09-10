@@ -83,8 +83,8 @@ class ConfigurationJsonRepository
                 $baseConfig = $this->resolveExtend($baseConfig);
             }
 
-            if (isset($baseConfig['rules']) && is_array($baseConfig['rules'])) {
-                $baseConfig['rules'] = $this->normalizeRules($baseConfig['rules']);
+            if (isset($baseConfig['rules'])) {
+                $baseConfig['rules'] = $this->normalizeRuleValues($baseConfig['rules']);
             }
 
             return tap($baseConfig, function ($configuration) {
@@ -98,19 +98,20 @@ class ConfigurationJsonRepository
     }
 
     /**
-     * Normalize shorthand rule values into explicit fixer option shapes.
-     *
+     * Normalize shorthand rule values into explicit configuration arrays
+     * as expected by PHP-CS-Fixer.     
+     * 
      * @param  array<string, mixed>  $rules
      * @return array<string, mixed>
      */
-    private function normalizeRules(array $rules): array
+    protected function normalizeRuleValues(array $rules): array
     {
         if (array_key_exists('cast_spaces', $rules)) {
-            if ($rules['cast_spaces'] === false) {
-                $rules['cast_spaces'] = ['space' => 'none'];
-            } elseif ($rules['cast_spaces'] === true) {
-                $rules['cast_spaces'] = ['space' => 'single'];
-            }
+            $rules['cast_spaces'] = match ($rules['cast_spaces']) {
+                false => ['space' => 'none'],
+                true  => ['space' => 'single'],
+                default => $rules['cast_spaces'],
+            };
         }
 
         return $rules;
