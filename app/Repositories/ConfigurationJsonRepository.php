@@ -99,7 +99,7 @@ class ConfigurationJsonRepository
 
     /**
      * Normalize shorthand rule values into explicit configuration arrays as expected by PHP-CS-Fixer.
-     * 
+     *
      * @param  array<string, mixed>  $rules
      * @return array<string, mixed>
      */
