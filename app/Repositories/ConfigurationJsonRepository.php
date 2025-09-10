@@ -108,7 +108,7 @@ class ConfigurationJsonRepository
         if (array_key_exists('cast_spaces', $rules)) {
             $rules['cast_spaces'] = match ($rules['cast_spaces']) {
                 false => ['space' => 'none'],
-                true  => ['space' => 'single'],
+                true => ['space' => 'single'],
                 default => $rules['cast_spaces'],
             };
         }
