@@ -36,10 +36,7 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        },
-        "files": [
-            "overrides/Runner/Parallel/ProcessFactory.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {
