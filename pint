@@ -21,6 +21,10 @@ if (($argv[1] ?? null) === 'worker') {
 
 $autoloader = require file_exists(__DIR__.'/vendor/autoload.php') ?  __DIR__.'/vendor/autoload.php' : __DIR__.'/../../autoload.php';
 
+$autoloader->addClassMap([
+    'PhpCsFixer\Runner\Parallel\ProcessFactory' => __DIR__.'/overrides/Runner/Parallel/ProcessFactory.php',
+]);
+
 $app = require_once __DIR__.'/bootstrap/app.php';
 
 /*
