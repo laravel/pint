@@ -1,6 +1,14 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.24.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.25.0...main)
+
+## [v1.25.0](https://github.com/laravel/pint/compare/v1.24.0...v1.25.0) - 2025-09-17
+
+* feat: add support for formatting code from stdin by [@calebdw](https://github.com/calebdw) in https://github.com/laravel/pint/pull/390
+* Allow setting the number of max processes for parallel mode by [@cosmastech](https://github.com/cosmastech) in https://github.com/laravel/pint/pull/392
+* Update dependencies by [@crynobone](https://github.com/crynobone) in https://github.com/laravel/pint/pull/394
+* feat: support boolean shorthand for 'cast_spaces' and add tests by [@artengin](https://github.com/artengin) in https://github.com/laravel/pint/pull/398
+* Fixes compatibility with php-cs-fixer v3.87.0 by [@crynobone](https://github.com/crynobone) in https://github.com/laravel/pint/pull/400
 
 ## [v1.24.0](https://github.com/laravel/pint/compare/v1.23.0...v1.24.0) - 2025-07-10
 
