@@ -51,6 +51,7 @@ class DefaultCommand extends Command
                     new InputOption('cache-file', '', InputArgument::OPTIONAL, 'The path to the cache file'),
                     new InputOption('parallel', 'p', InputOption::VALUE_NONE, 'Runs the linter in parallel (Experimental)'),
                     new InputOption('max-processes', null, InputOption::VALUE_REQUIRED, 'The number of processes to spawn when using parallel execution'),
+                    new InputOption('stdin', null, InputOption::VALUE_NONE, 'Read and format code from standard input'),
                 ],
             );
     }
@@ -108,14 +109,6 @@ class DefaultCommand extends Command
      */
     protected function hasStdinInput(): bool
     {
-        if ($this->option('test') || $this->option('bail') || $this->option('repair')) {
-            return false;
-        }
-
-        if (! is_resource(STDIN) || stream_isatty(STDIN)) {
-            return false;
-        }
-
-        return ! stream_get_meta_data(STDIN)['eof'];
+        return $this->option('stdin');
     }
 }

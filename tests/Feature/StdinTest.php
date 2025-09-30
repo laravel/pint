@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Process;
 
 it('formats code from stdin', function (string $input, ?string $expected) {
-    $result = Process::input($input)->run('php pint app/Test.php')->throw();
+    $result = Process::input($input)->run('php pint app/Test.php --stdin')->throw();
 
     expect($result)
         ->output()->toBe($expected ?? $input)
