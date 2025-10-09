@@ -51,7 +51,7 @@ class DefaultCommand extends Command
                     new InputOption('cache-file', '', InputArgument::OPTIONAL, 'The path to the cache file'),
                     new InputOption('parallel', 'p', InputOption::VALUE_NONE, 'Runs the linter in parallel (Experimental)'),
                     new InputOption('max-processes', null, InputOption::VALUE_REQUIRED, 'The number of processes to spawn when using parallel execution'),
-                    new InputOption('stdin', null, InputOption::VALUE_NONE, 'Read and format code from standard input'),
+                    new InputOption('stdin-filename', null, InputOption::VALUE_REQUIRED, 'Provide file path context for stdin input'),
                 ],
             );
     }
@@ -76,12 +76,13 @@ class DefaultCommand extends Command
 
     /**
      * Fix the code sent to Pint on stdin and output to stdout.
+     *
+     * The stdin-filename option provides file path context for error messages.
+     * Falls back to 'stdin.php' if not provided.
      */
     protected function fixStdinInput(FixCode $fixCode): int
     {
-        $paths = $this->argument('path');
-
-        $contextPath = ! empty($paths) ? $paths[0] : 'stdin.php';
+        $contextPath = $this->option('stdin-filename') ?: 'stdin.php';
         $tempFile = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pint_stdin_'.uniqid().'.php';
 
         $this->input->setArgument('path', [$tempFile]);
@@ -106,9 +107,18 @@ class DefaultCommand extends Command
 
     /**
      * Determine if there is input available on stdin.
+     *
+     * Stdin mode is triggered by either:
+     * - Passing '-' as the path argument (Unix convention like Black, cat)
+     * - Providing the --stdin-filename option (editor-friendly like Prettier)
      */
     protected function hasStdinInput(): bool
     {
-        return $this->option('stdin');
+        $paths = $this->argument('path');
+
+        $hasStdinPlaceholder = ! empty($paths) && $paths[0] === '__STDIN_PLACEHOLDER__';
+        $hasStdinFilename = ! empty($this->option('stdin-filename'));
+
+        return $hasStdinPlaceholder || $hasStdinFilename;
     }
 }

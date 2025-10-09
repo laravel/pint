@@ -3,65 +3,132 @@
 use Illuminate\Support\Facades\Process;
 
 it('formats code from stdin', function (string $input, ?string $expected) {
-    $result = Process::input($input)->run('php pint app/Test.php --stdin')->throw();
+    $result = Process::input($input)
+        ->run('php pint - --stdin-filename=app/Test.php')
+        ->throw();
 
     expect($result)
-        ->output()->toBe($expected ?? $input)
-        ->errorOutput()->toBe('');
+        ->output()
+        ->toBe($expected ?? $input)
+        ->errorOutput()
+        ->toBe('');
 })->with([
     'basic array and conditional' => [
         <<<'PHP'
-            <?php
-            $array = array("a","b");
-            if($condition==true){
-                echo "test";
-            }
-            PHP,
+        <?php
+        $array = array("a","b");
+        if($condition==true){
+            echo "test";
+        }
+        PHP
+        ,
         <<<'PHP'
-            <?php
+        <?php
 
-            $array = ['a', 'b'];
-            if ($condition == true) {
-                echo 'test';
-            }
+        $array = ['a', 'b'];
+        if ($condition == true) {
+            echo 'test';
+        }
 
-            PHP,
+        PHP
+        ,
     ],
     'class with method' => [
         <<<'PHP'
-            <?php
-            class Test{
-            public function method(){
-            return array("key"=>"value");
-            }
-            }
-            PHP,
+        <?php
+        class Test{
+        public function method(){
+        return array("key"=>"value");
+        }
+        }
+        PHP
+        ,
         <<<'PHP'
-            <?php
+        <?php
 
-            class Test
+        class Test
+        {
+            public function method()
             {
-                public function method()
-                {
-                    return ['key' => 'value'];
-                }
+                return ['key' => 'value'];
             }
+        }
 
-            PHP,
+        PHP
+        ,
     ],
     'already formatted code' => [
         <<<'PHP'
-            <?php
+        <?php
 
-            class AlreadyFormatted
+        class AlreadyFormatted
+        {
+            public function method()
             {
-                public function method()
-                {
-                    return ['key' => 'value'];
-                }
+                return ['key' => 'value'];
             }
+        }
 
-            PHP,
+        PHP
+        ,
         null,
     ],
 ]);
+
+it('formats code from stdin without filename', function () {
+    $input = <<<'PHP'
+    <?php
+    $array = array("a","b");
+    PHP;
+
+    $expected = <<<'PHP'
+    <?php
+
+    $array = ['a', 'b'];
+
+    PHP;
+
+    $result = Process::input($input)->run('php pint -')->throw();
+
+    expect($result)->output()->toBe($expected)->errorOutput()->toBe('');
+});
+
+it('uses stdin-filename for context', function () {
+    $input = <<<'PHP'
+    <?php
+    $array = array("test");
+    PHP;
+
+    $expected = <<<'PHP'
+    <?php
+
+    $array = ['test'];
+
+    PHP;
+
+    $result = Process::input($input)
+        ->run('php pint - --stdin-filename=app/Models/User.php')
+        ->throw();
+
+    expect($result)->output()->toBe($expected)->errorOutput()->toBe('');
+});
+
+it('formats code from stdin using only stdin-filename option', function () {
+    $input = <<<'PHP'
+    <?php
+    $array = array("foo","bar");
+    PHP;
+
+    $expected = <<<'PHP'
+    <?php
+
+    $array = ['foo', 'bar'];
+
+    PHP;
+
+    $result = Process::input($input)
+        ->run('php pint --stdin-filename=app/Models/Example.php')
+        ->throw();
+
+    expect($result)->output()->toBe($expected)->errorOutput()->toBe('');
+});
