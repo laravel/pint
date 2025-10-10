@@ -2,9 +2,12 @@
 
 namespace App\Commands;
 
+use App\Actions\FixCode;
+use App\Factories\ConfigurationFactory;
 use LaravelZero\Framework\Commands\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
+use Throwable;
 
 class DefaultCommand extends Command
 {
@@ -46,6 +49,7 @@ class DefaultCommand extends Command
                     new InputOption('format', '', InputOption::VALUE_REQUIRED, 'The output format that should be used'),
                     new InputOption('output-to-file', '', InputOption::VALUE_REQUIRED, 'Output the test results to a file at this path'),
                     new InputOption('output-format', '', InputOption::VALUE_REQUIRED, 'The format that should be used when outputting the test results to a file'),
+                    new InputOption('stdin-filename', null, InputOption::VALUE_REQUIRED, 'File path context for stdin input'),
                     new InputOption('cache-file', '', InputArgument::OPTIONAL, 'The path to the cache file'),
                     new InputOption('parallel', 'p', InputOption::VALUE_NONE, 'Runs the linter in parallel (Experimental)'),
                     new InputOption('max-processes', null, InputOption::VALUE_REQUIRED, 'The number of processes to spawn when using parallel execution'),
@@ -62,8 +66,68 @@ class DefaultCommand extends Command
      */
     public function handle($fixCode, $elaborateSummary)
     {
+        if ($this->hasStdinInput()) {
+            return $this->fixStdinInput($fixCode);
+        }
+
         [$totalFiles, $changes] = $fixCode->execute();
 
         return $elaborateSummary->execute($totalFiles, $changes);
+    }
+
+    /**
+     * Fix the code sent to Pint on stdin and output to stdout.
+     *
+     * The stdin-filename option provides file path context. If the path matches
+     * exclusion rules, the original code is returned unchanged. Falls back to
+     * 'stdin.php' if not provided.
+     */
+    protected function fixStdinInput(FixCode $fixCode): int
+    {
+        $contextPath = $this->option('stdin-filename') ?: 'stdin.php';
+
+        if ($this->option('stdin-filename') && ConfigurationFactory::isPathExcluded($contextPath)) {
+            fwrite(STDOUT, stream_get_contents(STDIN));
+
+            return self::SUCCESS;
+        }
+
+        $tempFile = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pint_stdin_'.uniqid().'.php';
+
+        $this->input->setArgument('path', [$tempFile]);
+        $this->input->setOption('format', 'json');
+
+        try {
+            file_put_contents($tempFile, stream_get_contents(STDIN));
+            $fixCode->execute();
+            fwrite(STDOUT, file_get_contents($tempFile));
+
+            return self::SUCCESS;
+        } catch (Throwable $e) {
+            fwrite(STDERR, "pint: error processing {$contextPath}: {$e->getMessage()}\n");
+
+            return self::FAILURE;
+        } finally {
+            if (file_exists($tempFile)) {
+                @unlink($tempFile);
+            }
+        }
+    }
+
+    /**
+     * Determine if there is input available on stdin.
+     *
+     * Stdin mode is triggered by either:
+     * - Passing '-' as path (transformed to '__STDIN_PLACEHOLDER__' in pint:56-61)
+     * - Providing the --stdin-filename option
+     */
+    protected function hasStdinInput(): bool
+    {
+        $paths = $this->argument('path');
+
+        $hasStdinPlaceholder = ! empty($paths) && $paths[0] === '__STDIN_PLACEHOLDER__';
+        $hasStdinFilename = ! empty($this->option('stdin-filename'));
+
+        return $hasStdinPlaceholder || $hasStdinFilename;
     }
 }

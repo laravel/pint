@@ -40,6 +40,27 @@ $app = require_once __DIR__.'/bootstrap/app.php';
 
 $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
 
+/*
+|--------------------------------------------------------------------------
+| Handle Stdin Mode
+|--------------------------------------------------------------------------
+|
+| When using '-' to indicate stdin input (following Unix convention like
+| Black, cat, etc.), Symfony Console's ArgvInput parser fails because it
+| treats '-' as a malformed option. We work around this by replacing '-'
+| with a placeholder before the input is parsed. The DefaultCommand then
+| detects this placeholder to enable stdin mode.
+|
+*/
+
+if (isset($_SERVER['argv'])) {
+    $stdinIndex = array_search('-', $_SERVER['argv'], true);
+
+    if ($stdinIndex !== false) {
+        $_SERVER['argv'][$stdinIndex] = '__STDIN_PLACEHOLDER__';
+    }
+}
+
 $status = $kernel->handle(
     $input = new Symfony\Component\Console\Input\ArgvInput,
     new Symfony\Component\Console\Output\ConsoleOutput
