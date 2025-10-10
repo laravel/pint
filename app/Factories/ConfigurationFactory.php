@@ -76,4 +76,62 @@ class ConfigurationFactory
 
         return $finder;
     }
+
+    /**
+     * Check if a file path should be excluded based on finder rules.
+     */
+    public static function isPathExcluded(string $filePath): bool
+    {
+        $localConfiguration = resolve(ConfigurationJsonRepository::class);
+        $basePath = getcwd();
+
+        $relativePath = str_starts_with($filePath, $basePath)
+            ? substr($filePath, strlen($basePath) + 1)
+            : $filePath;
+
+        $relativePath = str_replace('\\', '/', $relativePath);
+        $fileName = basename($filePath);
+
+        foreach (static::$notName as $pattern) {
+            if (fnmatch($pattern, $fileName)) {
+                return true;
+            }
+        }
+
+        foreach (static::$exclude as $excludedFolder) {
+            $excludedFolder = str_replace('\\', '/', $excludedFolder);
+            if (str_starts_with($relativePath, $excludedFolder.'/') || $relativePath === $excludedFolder) {
+                return true;
+            }
+        }
+
+        $finderConfig = $localConfiguration->finder();
+
+        if (isset($finderConfig['notName'])) {
+            foreach ((array) $finderConfig['notName'] as $pattern) {
+                if (fnmatch($pattern, $fileName)) {
+                    return true;
+                }
+            }
+        }
+
+        if (isset($finderConfig['exclude'])) {
+            foreach ((array) $finderConfig['exclude'] as $excludedFolder) {
+                $excludedFolder = str_replace('\\', '/', $excludedFolder);
+                if (str_starts_with($relativePath, $excludedFolder.'/') || $relativePath === $excludedFolder) {
+                    return true;
+                }
+            }
+        }
+
+        if (isset($finderConfig['notPath'])) {
+            foreach ((array) $finderConfig['notPath'] as $pattern) {
+                if (fnmatch($pattern, $relativePath)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }

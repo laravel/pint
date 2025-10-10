@@ -132,3 +132,47 @@ it('formats code from stdin using only stdin-filename option', function () {
 
     expect($result)->output()->toBe($expected)->errorOutput()->toBe('');
 });
+
+it('skips formatting for excluded paths', function (string $filename) {
+    $input = <<<'PHP'
+    <?php
+    $array = array("foo","bar");
+    PHP;
+
+    $result = Process::input($input)
+        ->run("php pint --stdin-filename={$filename}")
+        ->throw();
+
+    expect($result)->output()->toBe($input)->errorOutput()->toBe('');
+})->with([
+    'blade files' => ['resources/views/welcome.blade.php'],
+    'storage folder' => ['storage/framework/views/compiled.php'],
+    'node_modules' => ['node_modules/package/index.php'],
+]);
+
+it('respects pint.json exclusion rules', function (string $filename, bool $shouldFormat) {
+    $input = <<<'PHP'
+    <?php
+    $array = array("foo","bar");
+    PHP;
+
+    $expected = $shouldFormat ? <<<'PHP'
+    <?php
+
+    $array = ['foo', 'bar'];
+
+    PHP
+        : $input;
+
+    $result = Process::input($input)
+        ->path(base_path('tests/Fixtures/finder'))
+        ->run('php '.base_path('pint')." --stdin-filename={$filename}")
+        ->throw();
+
+    expect($result)->output()->toBe($expected)->errorOutput()->toBe('');
+})->with([
+    'excluded folder' => ['my-dir/SomeFile.php', false],
+    'excluded notName pattern' => ['src/test-my-file.php', false],
+    'excluded notPath pattern' => ['path/to/excluded-file.php', false],
+    'not excluded' => ['src/MyClass.php', true],
+]);

@@ -3,6 +3,7 @@
 namespace App\Commands;
 
 use App\Actions\FixCode;
+use App\Factories\ConfigurationFactory;
 use LaravelZero\Framework\Commands\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -77,12 +78,20 @@ class DefaultCommand extends Command
     /**
      * Fix the code sent to Pint on stdin and output to stdout.
      *
-     * The stdin-filename option provides file path context for error messages.
-     * Falls back to 'stdin.php' if not provided.
+     * The stdin-filename option provides file path context. If the path matches
+     * exclusion rules, the original code is returned unchanged. Falls back to
+     * 'stdin.php' if not provided.
      */
     protected function fixStdinInput(FixCode $fixCode): int
     {
         $contextPath = $this->option('stdin-filename') ?: 'stdin.php';
+
+        if ($this->option('stdin-filename') && ConfigurationFactory::isPathExcluded($contextPath)) {
+            fwrite(STDOUT, stream_get_contents(STDIN));
+
+            return self::SUCCESS;
+        }
+
         $tempFile = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pint_stdin_'.uniqid().'.php';
 
         $this->input->setArgument('path', [$tempFile]);
@@ -109,8 +118,8 @@ class DefaultCommand extends Command
      * Determine if there is input available on stdin.
      *
      * Stdin mode is triggered by either:
-     * - Passing '-' as the path argument (Unix convention like Black, cat)
-     * - Providing the --stdin-filename option (editor-friendly like Prettier)
+     * - Passing '-' as path (transformed to '__STDIN_PLACEHOLDER__' in pint:56-61)
+     * - Providing the --stdin-filename option
      */
     protected function hasStdinInput(): bool
     {
