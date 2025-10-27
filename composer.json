@@ -1,7 +1,7 @@
 {
     "name": "laravel/pint",
     "description": "An opinionated code formatter for PHP.",
-    "keywords": ["php", "format", "formatter", "lint", "linter"],
+    "keywords": ["php", "format", "formatter", "lint", "linter", "dev"],
     "homepage": "https://laravel.com",
     "type": "project",
     "license": "MIT",
