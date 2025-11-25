@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.25.1...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.26.0...main)
+
+## [v1.26.0](https://github.com/laravel/pint/compare/v1.25.1...v1.26.0) - 2025-11-25
+
+* Adds partial support to php 8.5 by [@nunomaduro](https://github.com/nunomaduro) in https://github.com/laravel/pint/pull/411
+* Adds`stdin` support with explicit opt-in flag by [@A909M](https://github.com/A909M) in https://github.com/laravel/pint/pull/403
+* Fixes composer allowing to install `pint` as non "dev" dependency by [@SamAsEnd](https://github.com/SamAsEnd) in https://github.com/laravel/pint/pull/407
 
 ## [v1.25.1](https://github.com/laravel/pint/compare/v1.25.0...v1.25.1) - 2025-09-19
 
