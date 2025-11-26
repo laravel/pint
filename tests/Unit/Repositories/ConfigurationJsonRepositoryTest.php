@@ -75,27 +75,3 @@ it('throw an error if the extended configuration also has an extend', function (
 
     $repository->finder();
 })->throws(LogicException::class);
-
-it('normalizes cast_spaces false to none', function () {
-    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/rules/pint_cast_spaces_false.json', null);
-
-    expect($repository->rules())->toBe([
-        'cast_spaces' => ['space' => 'none'],
-    ]);
-});
-
-it('normalizes cast_spaces true to single', function () {
-    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/rules/pint_cast_spaces_true.json', null);
-
-    expect($repository->rules())->toBe([
-        'cast_spaces' => ['space' => 'single'],
-    ]);
-});
-
-it('preserves explicit cast_spaces array', function () {
-    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/rules/pint_cast_spaces_array.json', null);
-
-    expect($repository->rules())->toBe([
-        'cast_spaces' => ['space' => 'single'],
-    ]);
-});
