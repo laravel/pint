@@ -80,4 +80,12 @@ class ConfigurationResolverFactory
 
         return [$resolver, $totalFiles];
     }
+
+    /**
+     * Determine if Pint is being run by an AI agent.
+     */
+    public static function runningInAgent(): bool
+    {
+        return (bool) getenv('OPENCODE') || (bool) getenv('CLAUDECODE');
+    }
 }
