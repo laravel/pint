@@ -45,7 +45,7 @@ class FixCode
             return [$exception->getCode(), []];
         }
 
-        if (is_null($this->input->getOption('format'))) {
+        if (is_null($this->input->getOption('format')) && ! ConfigurationResolverFactory::runningInAgent()) {
             $this->progress->subscribe();
         }
 

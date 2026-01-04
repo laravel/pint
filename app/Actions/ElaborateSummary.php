@@ -2,6 +2,8 @@
 
 namespace App\Actions;
 
+use App\Factories\ConfigurationResolverFactory;
+use App\Output\AgentReporter;
 use Illuminate\Console\Command;
 use PhpCsFixer\Console\Report\FixReport;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -45,7 +47,9 @@ class ElaborateSummary
             $this->output->isDecorated()
         );
 
-        if ($format = $this->input->getOption('format')) {
+        if (ConfigurationResolverFactory::runningInAgent()) {
+            $this->displayUsingFormatter($summary, 'agent');
+        } elseif ($format = $this->input->getOption('format')) {
             $this->displayUsingFormatter($summary, $format);
         } else {
             $this->summaryOutput->handle($summary, $totalFiles);
@@ -74,6 +78,7 @@ class ElaborateSummary
     protected function displayUsingFormatter($summary, ?string $format = null, ?string $outputPath = null)
     {
         $reporter = match ($format) {
+            'agent' => new AgentReporter,
             'checkstyle' => new FixReport\CheckstyleReporter,
             'gitlab' => new FixReport\GitlabReporter,
             'json' => new FixReport\JsonReporter,
