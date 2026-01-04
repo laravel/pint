@@ -47,9 +47,11 @@ class ElaborateSummary
             $this->output->isDecorated()
         );
 
+        $format = $this->input->getOption('format');
+
         if (ConfigurationResolverFactory::runningInAgent()) {
             $this->displayUsingFormatter($summary, 'agent');
-        } elseif ($format = $this->input->getOption('format')) {
+        } elseif ($format) {
             $this->displayUsingFormatter($summary, $format);
         } else {
             $this->summaryOutput->handle($summary, $totalFiles);

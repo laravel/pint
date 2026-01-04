@@ -1,5 +1,10 @@
 <?php
 
+afterEach(function () {
+    putenv('OPENCODE');
+    putenv('CLAUDECODE');
+});
+
 it('outputs checkstyle format', function () {
     [$statusCode, $output] = run('default', [
         'path' => base_path('tests/Fixtures/with-fixable-issues'),
@@ -122,8 +127,6 @@ it('auto-detects agent format via OPENCODE env var', function () {
         '--preset' => 'psr12',
     ]);
 
-    putenv('OPENCODE');
-
     $json = json_decode($output, true);
 
     expect($statusCode)->toBe(1)
@@ -139,8 +142,6 @@ it('auto-detects agent format via CLAUDECODE env var', function () {
         'path' => base_path('tests/Fixtures/with-fixable-issues'),
         '--preset' => 'psr12',
     ]);
-
-    putenv('CLAUDECODE');
 
     $json = json_decode($output, true);
 

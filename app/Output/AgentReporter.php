@@ -21,7 +21,6 @@ final class AgentReporter implements ReporterInterface
      */
     public function generate(ReportSummary $reportSummary): string
     {
-
         $changed = $reportSummary->getChanged();
 
         $projectPath = Project::path().DIRECTORY_SEPARATOR;
@@ -40,7 +39,7 @@ final class AgentReporter implements ReporterInterface
             foreach ($changed as $path => $change) {
                 $output['files'][] = [
                     'path' => str_replace($projectPath, '', $path),
-                    'fixers' => $change['appliedFixers'] ?? [],
+                    'fixers' => $change['appliedFixers'],
                 ];
             }
         }
