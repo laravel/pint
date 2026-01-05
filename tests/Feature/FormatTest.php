@@ -119,6 +119,21 @@ it('outputs agent format with pass status when no issues', function () {
         ->and($json)->not->toHaveKey('files');
 });
 
+it('outputs agent format with fail status on parse errors', function () {
+    [$statusCode, $output] = run('default', [
+        'path' => base_path('tests/Fixtures/with-non-fixable-issues'),
+        '--format' => 'agent',
+    ]);
+
+    $json = json_decode($output, true);
+
+    expect($statusCode)->toBe(1)
+        ->and($output)->toBeJson()
+        ->and($json['result'])->toBe('fail')
+        ->and($json)->toHaveKey('errors')
+        ->and($json['errors'][0])->toHaveKeys(['path', 'message']);
+});
+
 it('auto-detects agent format via OPENCODE env var', function () {
     putenv('OPENCODE=1');
 

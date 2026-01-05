@@ -80,7 +80,7 @@ class ElaborateSummary
     protected function displayUsingFormatter($summary, ?string $format = null, ?string $outputPath = null)
     {
         $reporter = match ($format) {
-            'agent' => new AgentReporter,
+            'agent' => new AgentReporter($this->errors),
             'checkstyle' => new FixReport\CheckstyleReporter,
             'gitlab' => new FixReport\GitlabReporter,
             'json' => new FixReport\JsonReporter,
