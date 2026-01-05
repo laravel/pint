@@ -31,7 +31,7 @@ final class AgentReporter implements ReporterInterface
             default => 'fixed',
         };
 
-        $output = ['status' => $status];
+        $output = ['result' => $status];
 
         if ($changed !== []) {
             $output['files'] = [];

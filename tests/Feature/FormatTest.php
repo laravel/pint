@@ -96,7 +96,7 @@ it('outputs agent format with fail status on test mode', function () {
 
     expect($statusCode)->toBe(1)
         ->and($output)->toBeJson()
-        ->and($json['status'])->toBe('fail')
+        ->and($json['result'])->toBe('fail')
         ->and($json)->toHaveKey('files')
         ->and($json['files'][0])->toHaveKeys(['path', 'fixers'])
         ->and($json['files'][0]['fixers'])->toBeArray()
@@ -115,7 +115,7 @@ it('outputs agent format with pass status when no issues', function () {
 
     expect($statusCode)->toBe(0)
         ->and($output)->toBeJson()
-        ->and($json['status'])->toBe('pass')
+        ->and($json['result'])->toBe('pass')
         ->and($json)->not->toHaveKey('files');
 });
 
