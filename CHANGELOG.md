@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.26.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.27.0...main)
+
+## [v1.27.0](https://github.com/laravel/pint/compare/v1.26.0...v1.27.0) - 2026-01-05
+
+* Adds an `agent` format, which is automatically selected when Pint is executed via Claude Code or OpenCode by [@nunomaduro](https://github.com/nunomaduro) in https://github.com/laravel/pint/pull/415
 
 ## [v1.26.0](https://github.com/laravel/pint/compare/v1.25.1...v1.26.0) - 2025-11-25
 
