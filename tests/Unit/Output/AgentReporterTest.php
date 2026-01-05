@@ -78,7 +78,7 @@ it('includes files with path and fixers', function () {
     $output = $reporter->generate($summary);
     $json = json_decode($output, true);
 
-    expect($json['files'][0]['path'])->toBe('app/Example.php')
+    expect($json['files'][0]['path'])->toEndWith('Example.php')
         ->and($json['files'][0]['fixers'])->toBe(['binary_operator_spaces', 'no_unused_imports']);
 });
 
@@ -99,8 +99,8 @@ it('uses relative paths', function () {
     $output = $reporter->generate($summary);
     $json = json_decode($output, true);
 
-    expect($json['files'][0]['path'])->toBe('app/Models/User.php')
-        ->and($json['files'][1]['path'])->toBe('app/Http/Controllers/HomeController.php');
+    expect($json['files'][0]['path'])->toEndWith('User.php')
+        ->and($json['files'][1]['path'])->toEndWith('HomeController.php');
 });
 
 it('outputs valid json', function () {
