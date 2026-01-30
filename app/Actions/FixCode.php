@@ -110,6 +110,9 @@ class FixCode
         $this->input->setOption('rules', json_encode($resolver->getRules()));
         $this->input->setOption('using-cache', $resolver->getUsingCache() ? 'yes' : 'no');
 
+        // remove config option so that it doesn't get passed to php-cs-fixer
+        $this->input->setOption('config', null);
+
         return $this->input;
     }
 }
