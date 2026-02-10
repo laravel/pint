@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.27.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.27.1...main)
+
+## [v1.27.1](https://github.com/laravel/pint/compare/v1.27.0...v1.27.1) - 2026-02-10
+
+- fix: passing `--parallel` option alongside `--config` by [@kkunjas](https://github.com/kkunjas) in https://github.com/laravel/pint/pull/418
 
 ## [v1.27.0](https://github.com/laravel/pint/compare/v1.26.0...v1.27.0) - 2026-01-05
 
