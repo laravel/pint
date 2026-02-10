@@ -24,7 +24,7 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.93.1",
-        "illuminate/view": "^12.49.0",
+        "illuminate/view": "^12.51.0",
         "larastan/larastan": "^3.9.2",
         "laravel-zero/framework": "^12.0.5",
         "mockery/mockery": "^1.6.12",
