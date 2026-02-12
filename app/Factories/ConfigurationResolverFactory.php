@@ -2,6 +2,7 @@
 
 namespace App\Factories;
 
+use AgentDetector\AgentDetector;
 use App\Project;
 use App\Repositories\ConfigurationJsonRepository;
 use ArrayIterator;
@@ -86,6 +87,6 @@ class ConfigurationResolverFactory
      */
     public static function runningInAgent(): bool
     {
-        return (bool) getenv('OPENCODE') || (bool) getenv('CLAUDECODE');
+        return AgentDetector::detect()->isAgent;
     }
 }
