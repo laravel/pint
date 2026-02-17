@@ -4,7 +4,9 @@ namespace App\Output;
 
 use App\Output\Concerns\InteractsWithSymbols;
 use App\Project;
+use App\Services\PresetManifest;
 use App\ValueObjects\Issue;
+use Illuminate\Support\Str;
 use PhpCsFixer\Runner\Event\FileProcessed;
 
 use function Termwind\render;
@@ -15,17 +17,21 @@ class SummaryOutput
     use InteractsWithSymbols;
 
     /**
-     * The list of presets, in a human-readable format.
+     * Get the list of presets in a human-readable format.
      *
-     * @var array<string, string>
+     * @return array<string, string>
      */
-    protected $presets = [
-        'per' => 'PER',
-        'psr12' => 'PSR 12',
-        'laravel' => 'Laravel',
-        'symfony' => 'Symfony',
-        'empty' => 'Empty',
-    ];
+    protected function getPresets(): array
+    {
+        $presetManifest = resolve(PresetManifest::class);
+        $presets = [];
+
+        foreach ($presetManifest->names() as $preset) {
+            $presets[$preset] = Str::headline($preset);
+        }
+
+        return [...$presets, 'per' => 'PER', 'psr12' => 'PSR 12'];
+    }
 
     /**
      * Creates a new Summary Output instance.
@@ -63,7 +69,7 @@ class SummaryOutput
                 'totalFiles' => $totalFiles,
                 'issues' => $issues,
                 'testing' => $summary->isDryRun(),
-                'preset' => $this->presets[$this->config->preset()],
+                'preset' => $this->getPresets()[$this->config->preset()] ?? $this->config->preset(),
             ]),
         );
 
