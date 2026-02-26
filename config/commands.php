@@ -1,5 +1,18 @@
 <?php
 
+use App\Commands\DefaultCommand;
+use Illuminate\Console\Scheduling\ScheduleFinishCommand;
+use Illuminate\Console\Scheduling\ScheduleRunCommand;
+use LaravelZero\Framework\Commands\BuildCommand;
+use LaravelZero\Framework\Commands\InstallCommand;
+use LaravelZero\Framework\Commands\MakeCommand;
+use LaravelZero\Framework\Commands\RenameCommand;
+use LaravelZero\Framework\Commands\StubPublishCommand;
+use LaravelZero\Framework\Commands\TestMakeCommand;
+use NunoMaduro\Collision\Adapters\Laravel\Commands\TestCommand;
+use NunoMaduro\LaravelConsoleSummary\SummaryCommand;
+use Symfony\Component\Console\Command\DumpCompletionCommand;
+
 return [
 
     /*
@@ -13,7 +26,7 @@ return [
     |
     */
 
-    'default' => \App\Commands\DefaultCommand::class,
+    'default' => DefaultCommand::class,
 
     /*
     |--------------------------------------------------------------------------
@@ -55,7 +68,7 @@ return [
     */
 
     'hidden' => [
-        LaravelZero\Framework\Commands\BuildCommand::class,
+        BuildCommand::class,
     ],
 
     /*
@@ -71,22 +84,22 @@ return [
 
     'remove' => [
         // Illuminate...
-        Illuminate\Console\Scheduling\ScheduleRunCommand::class,
-        Illuminate\Console\Scheduling\ScheduleFinishCommand::class,
+        ScheduleRunCommand::class,
+        ScheduleFinishCommand::class,
 
         // LaravelZero...
-        LaravelZero\Framework\Commands\InstallCommand::class,
-        LaravelZero\Framework\Commands\MakeCommand::class,
-        LaravelZero\Framework\Commands\RenameCommand::class,
-        LaravelZero\Framework\Commands\TestMakeCommand::class,
-        LaravelZero\Framework\Commands\StubPublishCommand::class,
+        InstallCommand::class,
+        MakeCommand::class,
+        RenameCommand::class,
+        TestMakeCommand::class,
+        StubPublishCommand::class,
 
         // NunoMaduro...
-        NunoMaduro\Collision\Adapters\Laravel\Commands\TestCommand::class,
-        NunoMaduro\LaravelConsoleSummary\SummaryCommand::class,
+        TestCommand::class,
+        SummaryCommand::class,
 
         // Symfony...
-        Symfony\Component\Console\Command\DumpCompletionCommand::class,
+        DumpCompletionCommand::class,
     ],
 
 ];

@@ -4,8 +4,14 @@ namespace App\Output;
 
 use App\Output\Concerns\InteractsWithSymbols;
 use App\Project;
+use App\Repositories\ConfigurationJsonRepository;
 use App\ValueObjects\Issue;
+use Illuminate\Support\Collection;
+use PhpCsFixer\Console\Report\FixReport\ReportSummary;
+use PhpCsFixer\Error\ErrorsManager;
 use PhpCsFixer\Runner\Event\FileProcessed;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 use function Termwind\render;
 use function Termwind\renderUsing;
@@ -30,10 +36,10 @@ class SummaryOutput
     /**
      * Creates a new Summary Output instance.
      *
-     * @param  \App\Repositories\ConfigurationJsonRepository  $config
-     * @param  \PhpCsFixer\Error\ErrorsManager  $errors
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
+     * @param  ConfigurationJsonRepository  $config
+     * @param  ErrorsManager  $errors
+     * @param  InputInterface  $input
+     * @param  OutputInterface  $output
      * @return void
      */
     public function __construct(
@@ -48,7 +54,7 @@ class SummaryOutput
     /**
      * Handle the given report summary.
      *
-     * @param  \PhpCsFixer\Console\Report\FixReport\ReportSummary  $summary
+     * @param  ReportSummary  $summary
      * @param  int  $totalFiles
      * @return void
      */
@@ -88,8 +94,8 @@ class SummaryOutput
      * Gets the list of issues from the given summary.
      *
      * @param  string  $path
-     * @param  \PhpCsFixer\Console\Report\FixReport\ReportSummary  $summary
-     * @return \Illuminate\Support\Collection<int, \App\ValueObjects\Issue>
+     * @param  ReportSummary  $summary
+     * @return Collection<int, Issue>
      */
     public function getIssues($path, $summary)
     {

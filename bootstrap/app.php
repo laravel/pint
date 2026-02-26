@@ -1,5 +1,11 @@
 <?php
 
+use App\Exceptions\HandleExceptions;
+use App\Kernel;
+use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Foundation\Exceptions\Handler;
+use LaravelZero\Framework\Application;
+
 /*
 |--------------------------------------------------------------------------
 | Create The Application
@@ -11,7 +17,7 @@
 |
 */
 
-$app = new LaravelZero\Framework\Application(
+$app = new Application(
     dirname(__DIR__)
 );
 
@@ -28,17 +34,17 @@ $app = new LaravelZero\Framework\Application(
 
 $app->singleton(
     Illuminate\Contracts\Console\Kernel::class,
-    App\Kernel::class
+    Kernel::class
 );
 
 $app->singleton(
-    Illuminate\Contracts\Debug\ExceptionHandler::class,
-    Illuminate\Foundation\Exceptions\Handler::class
+    ExceptionHandler::class,
+    Handler::class
 );
 
 $app->singleton(
     Illuminate\Foundation\Bootstrap\HandleExceptions::class,
-    App\Exceptions\HandleExceptions::class
+    HandleExceptions::class
 );
 
 /*

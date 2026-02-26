@@ -4,6 +4,7 @@ namespace App\Factories;
 
 use App\Repositories\ConfigurationJsonRepository;
 use PhpCsFixer\Config;
+use PhpCsFixer\ConfigInterface;
 use PhpCsFixer\Finder;
 use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 
@@ -38,7 +39,7 @@ class ConfigurationFactory
      * Creates a PHP CS Fixer Configuration with the given array of rules.
      *
      * @param  array<string, array<string, array<int|string, string|int|string[]>|bool|string>|bool>  $rules
-     * @return \PhpCsFixer\ConfigInterface
+     * @return ConfigInterface
      */
     public static function preset($rules)
     {
@@ -54,7 +55,7 @@ class ConfigurationFactory
     /**
      * Creates the finder instance.
      *
-     * @return \PhpCsFixer\Finder
+     * @return Finder
      */
     public static function finder()
     {

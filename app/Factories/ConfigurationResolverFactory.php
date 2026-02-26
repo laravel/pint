@@ -9,6 +9,8 @@ use ArrayIterator;
 use PhpCsFixer\Config;
 use PhpCsFixer\Console\ConfigurationResolver;
 use PhpCsFixer\ToolInfo;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class ConfigurationResolverFactory
 {
@@ -29,9 +31,9 @@ class ConfigurationResolverFactory
      * Creates a new PHP CS Fixer Configuration Resolver instance
      * from the given input and output.
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
-     * @return array{\PhpCsFixer\Console\ConfigurationResolver, int}
+     * @param  InputInterface  $input
+     * @param  OutputInterface  $output
+     * @return array{ConfigurationResolver, int}
      */
     public static function fromIO($input, $output)
     {

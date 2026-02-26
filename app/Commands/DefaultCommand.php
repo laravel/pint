@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\Actions\ElaborateSummary;
 use App\Actions\FixCode;
 use App\Factories\ConfigurationFactory;
 use LaravelZero\Framework\Commands\Command;
@@ -60,8 +61,8 @@ class DefaultCommand extends Command
     /**
      * Execute the console command.
      *
-     * @param  \App\Actions\FixCode  $fixCode
-     * @param  \App\Actions\ElaborateSummary  $elaborateSummary
+     * @param  FixCode  $fixCode
+     * @param  ElaborateSummary  $elaborateSummary
      * @return int
      */
     public function handle($fixCode, $elaborateSummary)

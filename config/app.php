@@ -1,5 +1,10 @@
 <?php
 
+use App\Providers\ActionsServiceProvider;
+use App\Providers\AppServiceProvider;
+use App\Providers\CommandsServiceProvider;
+use App\Providers\RepositoriesServiceProvider;
+
 return [
 
     /*
@@ -54,10 +59,10 @@ return [
     */
 
     'providers' => [
-        App\Providers\ActionsServiceProvider::class,
-        App\Providers\AppServiceProvider::class,
-        App\Providers\CommandsServiceProvider::class,
-        App\Providers\RepositoriesServiceProvider::class,
+        ActionsServiceProvider::class,
+        AppServiceProvider::class,
+        CommandsServiceProvider::class,
+        RepositoriesServiceProvider::class,
     ],
 
 ];

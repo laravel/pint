@@ -3,13 +3,14 @@
 namespace App;
 
 use App\Contracts\PathsRepository;
+use Symfony\Component\Console\Input\InputInterface;
 
 class Project
 {
     /**
      * Determine the project paths to apply the code style based on the options and arguments passed.
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
+     * @param  InputInterface  $input
      * @return array<int, string>
      */
     public static function paths($input)
