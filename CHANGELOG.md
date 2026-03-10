@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.27.1...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.28.0...main)
+
+## [v1.28.0](https://github.com/laravel/pint/compare/v1.27.1...v1.28.0) - 2026-03-10
+
+- feat: improves `fully_qualified_strict_types` rule
+- feat: improves agent detector code
 
 ## [v1.27.1](https://github.com/laravel/pint/compare/v1.27.0...v1.27.1) - 2026-02-10
 
