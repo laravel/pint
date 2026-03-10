@@ -3,23 +3,27 @@
 namespace App\Actions;
 
 use App\Factories\ConfigurationResolverFactory;
+use App\Output\ProgressOutput;
 use LaravelZero\Framework\Exceptions\ConsoleException;
 use PhpCsFixer\Console\ConfigurationResolver;
+use PhpCsFixer\Error\ErrorsManager;
 use PhpCsFixer\Runner\Parallel\ParallelConfig;
 use PhpCsFixer\Runner\Runner;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class FixCode
 {
     /**
      * Creates a new Fix Code instance.
      *
-     * @param  \PhpCsFixer\Error\ErrorsManager  $errors
-     * @param  \Symfony\Component\EventDispatcher\EventDispatcher  $events
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
-     * @param  \App\Output\ProgressOutput  $progress
+     * @param  ErrorsManager  $errors
+     * @param  EventDispatcher  $events
+     * @param  InputInterface  $input
+     * @param  OutputInterface  $output
+     * @param  ProgressOutput  $progress
      * @return void
      */
     public function __construct(

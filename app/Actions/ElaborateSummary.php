@@ -4,8 +4,12 @@ namespace App\Actions;
 
 use App\Factories\ConfigurationResolverFactory;
 use App\Output\AgentReporter;
+use App\Output\SummaryOutput;
 use Illuminate\Console\Command;
 use PhpCsFixer\Console\Report\FixReport;
+use PhpCsFixer\Console\Report\FixReport\ReportSummary;
+use PhpCsFixer\Error\ErrorsManager;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ElaborateSummary
@@ -13,10 +17,10 @@ class ElaborateSummary
     /**
      * Creates a new Elaborate Summary instance.
      *
-     * @param  \PhpCsFixer\Error\ErrorsManager  $errors
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
-     * @param  \App\Output\SummaryOutput  $summaryOutput
+     * @param  ErrorsManager  $errors
+     * @param  InputInterface  $input
+     * @param  OutputInterface  $output
+     * @param  SummaryOutput  $summaryOutput
      * @return void
      */
     public function __construct(
@@ -37,7 +41,7 @@ class ElaborateSummary
      */
     public function execute($totalFiles, $changes)
     {
-        $summary = new FixReport\ReportSummary(
+        $summary = new ReportSummary(
             $changes,
             $totalFiles,
             0,
@@ -72,7 +76,7 @@ class ElaborateSummary
     /**
      * Formats the given summary using the "selected" formatter.
      *
-     * @param  \PhpCsFixer\Console\Report\FixReport\ReportSummary  $summary
+     * @param  ReportSummary  $summary
      * @return void
      *
      * @throws \JsonException

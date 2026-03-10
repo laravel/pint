@@ -5,6 +5,7 @@ namespace App\Output;
 use App\Project;
 use PhpCsFixer\Console\Report\FixReport\ReporterInterface;
 use PhpCsFixer\Console\Report\FixReport\ReportSummary;
+use PhpCsFixer\Error\Error;
 use PhpCsFixer\Error\ErrorsManager;
 
 final class AgentReporter implements ReporterInterface
@@ -73,7 +74,7 @@ final class AgentReporter implements ReporterInterface
     /**
      * Get all errors from the errors manager.
      *
-     * @return array<int, \PhpCsFixer\Error\Error>
+     * @return array<int, Error>
      */
     protected function getErrors(): array
     {

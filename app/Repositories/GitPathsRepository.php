@@ -78,7 +78,7 @@ class GitPathsRepository implements PathsRepository
     /**
      * Process the files.
      *
-     * @param  \Illuminate\Support\Collection<int, string>  $fileNames
+     * @param  Collection<int, string>  $fileNames
      * @return array<int, string>
      */
     protected function processFileNames(Collection $fileNames)

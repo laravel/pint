@@ -4,10 +4,12 @@ namespace App\Output\Concerns;
 
 use PhpCsFixer\Error\Error;
 use PhpCsFixer\Runner\Event\FileProcessed;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @property \Symfony\Component\Console\Input\InputInterface $input
- * @property \Symfony\Component\Console\Output\OutputInterface $output
+ * @property InputInterface $input
+ * @property OutputInterface $output
  */
 trait InteractsWithSymbols
 {
