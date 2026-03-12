@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.28.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.29.0...main)
+
+## [v1.29.0](https://github.com/laravel/pint/compare/v1.28.0...v1.29.0) - 2026-03-12
+
+- Adds `Pint/phpdoc_type_annotations_only` custom rule.
 
 ## [v1.28.0](https://github.com/laravel/pint/compare/v1.27.1...v1.28.0) - 2026-03-10
 
