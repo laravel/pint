@@ -8,14 +8,21 @@ use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
+use SplFileInfo;
 
-final class TypeAnnotationsOnlyFixer extends AbstractFixer
+class TypeAnnotationsOnlyFixer extends AbstractFixer
 {
+    /**
+     * Get the name of the fixer.
+     */
     public function getName(): string
     {
         return 'Pint/phpdoc_type_annotations_only';
     }
 
+    /**
+     * Get the definition of the fixer.
+     */
     public function getDefinition(): FixerDefinitionInterface
     {
         return new FixerDefinition(
@@ -25,6 +32,8 @@ final class TypeAnnotationsOnlyFixer extends AbstractFixer
     }
 
     /**
+     * Get the priority of the fixer.
+     *
      * Must run before ClassAttributesSeparationFixer (55),
      * NoMultilineWhitespaceAroundDoubleArrowFixer (31),
      * and all other whitespace/spacing fixers.
@@ -34,30 +43,42 @@ final class TypeAnnotationsOnlyFixer extends AbstractFixer
         return 56;
     }
 
-    public function supports(\SplFileInfo $file): bool
+    /**
+     * Determine whether the fixer supports the given file.
+     */
+    public function supports(SplFileInfo $file): bool
     {
         $path = str_replace('\\', '/', $file->getPathname());
 
         return ! preg_match('#(?:^|/)config/#', $path);
     }
 
+    /**
+     * Determine whether the given tokens are candidates for fixing.
+     */
     public function isCandidate(Tokens $tokens): bool
     {
-        return $tokens->isTokenKindFound(\T_COMMENT)
-            || $tokens->isTokenKindFound(\T_DOC_COMMENT);
+        return $tokens->isTokenKindFound(T_COMMENT)
+            || $tokens->isTokenKindFound(T_DOC_COMMENT);
     }
 
-    protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
+    /**
+     * Apply the fix to the given file.
+     */
+    protected function applyFix(SplFileInfo $file, Tokens $tokens): void
     {
-        for ($index = \count($tokens) - 1; $index >= 0; $index--) {
-            if ($tokens[$index]->isGivenKind(\T_COMMENT)) {
+        for ($index = count($tokens) - 1; $index >= 0; $index--) {
+            if ($tokens[$index]->isGivenKind(T_COMMENT)) {
                 $this->processComment($tokens, $index);
-            } elseif ($tokens[$index]->isGivenKind(\T_DOC_COMMENT)) {
+            } elseif ($tokens[$index]->isGivenKind(T_DOC_COMMENT)) {
                 $this->processDocComment($tokens, $index);
             }
         }
     }
 
+    /**
+     * Process a single-line or block comment token.
+     */
     private function processComment(Tokens $tokens, int $index): void
     {
         $content = $tokens[$index]->getContent();
@@ -70,7 +91,7 @@ final class TypeAnnotationsOnlyFixer extends AbstractFixer
             $placeholder = str_starts_with(ltrim($content), '#') ? '#' : '//';
 
             if (trim($content) !== $placeholder) {
-                $tokens[$index] = new Token([\T_COMMENT, $placeholder]);
+                $tokens[$index] = new Token([T_COMMENT, $placeholder]);
             }
 
             return;
@@ -79,6 +100,9 @@ final class TypeAnnotationsOnlyFixer extends AbstractFixer
         $this->clearAndCleanWhitespace($tokens, $index);
     }
 
+    /**
+     * Determine whether the comment is the only statement inside a body.
+     */
     private function isBodyPlaceholder(Tokens $tokens, int $index): bool
     {
         $prevIndex = $tokens->getPrevNonWhitespace($index);
@@ -90,11 +114,13 @@ final class TypeAnnotationsOnlyFixer extends AbstractFixer
             && $tokens[$nextIndex]->equals('}');
     }
 
+    /**
+     * Process a docblock comment token.
+     */
     private function processDocComment(Tokens $tokens, int $index): void
     {
         $content = $tokens[$index]->getContent();
 
-        // Single-line docblock: /** ... */
         if (! str_contains($content, "\n")) {
             if (! str_contains($content, '@')) {
                 $this->clearAndCleanWhitespace($tokens, $index);
@@ -134,16 +160,18 @@ final class TypeAnnotationsOnlyFixer extends AbstractFixer
         $rebuilt .= $indent.'*/';
 
         if ($rebuilt !== $content) {
-            $tokens[$index] = new Token([\T_DOC_COMMENT, $rebuilt]);
+            $tokens[$index] = new Token([T_DOC_COMMENT, $rebuilt]);
         }
     }
 
+    /**
+     * Clear the token and clean up surrounding whitespace.
+     */
     private function clearAndCleanWhitespace(Tokens $tokens, int $index): void
     {
         $prevIndex = $tokens->getPrevNonWhitespace($index);
         $nextIndex = $tokens->getNextNonWhitespace($index);
 
-        // Check if there was a blank line before the comment
         $hadBlankLineBefore = false;
 
         if ($prevIndex !== null) {
@@ -180,6 +208,8 @@ final class TypeAnnotationsOnlyFixer extends AbstractFixer
     }
 
     /**
+     * Detect the indentation from docblock lines.
+     *
      * @param  array<int, string>  $lines
      */
     private function detectIndent(array $lines): string
