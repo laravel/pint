@@ -25,12 +25,20 @@ final class TypeAnnotationsOnlyFixer extends AbstractFixer
     }
 
     /**
-     * Must run before NoExtraBlankLinesFixer, NoTrailingWhitespaceFixer, NoWhitespaceInBlankLineFixer.
-     * Must run after PhpdocToCommentFixer.
+     * Must run before ClassAttributesSeparationFixer (55),
+     * NoMultilineWhitespaceAroundDoubleArrowFixer (31),
+     * and all other whitespace/spacing fixers.
      */
     public function getPriority(): int
     {
-        return 2;
+        return 56;
+    }
+
+    public function supports(\SplFileInfo $file): bool
+    {
+        $path = str_replace('\\', '/', $file->getPathname());
+
+        return ! preg_match('#(?:^|/)config/#', $path);
     }
 
     public function isCandidate(Tokens $tokens): bool
@@ -135,23 +143,35 @@ final class TypeAnnotationsOnlyFixer extends AbstractFixer
         $prevIndex = $tokens->getPrevNonWhitespace($index);
         $nextIndex = $tokens->getNextNonWhitespace($index);
 
+        // Check if there was a blank line before the comment
+        $hadBlankLineBefore = false;
+
+        if ($prevIndex !== null) {
+            for ($i = $prevIndex + 1; $i < $index; $i++) {
+                if ($tokens[$i]->isWhitespace() && substr_count($tokens[$i]->getContent(), "\n") >= 2) {
+                    $hadBlankLineBefore = true;
+
+                    break;
+                }
+            }
+        }
+
         $tokens->clearTokenAndMergeSurroundingWhitespace($index);
 
         if ($prevIndex === null || $nextIndex === null) {
             return;
         }
 
-        // Find the whitespace token that remains after clearing
         for ($i = $prevIndex + 1; $i < $nextIndex; $i++) {
             if ($tokens[$i]->isWhitespace()) {
                 $ws = $tokens[$i]->getContent();
                 $newlineCount = substr_count($ws, "\n");
 
                 if ($newlineCount > 1) {
-                    // Collapse to a single newline + the indent from the last line
                     $lastNewline = strrpos($ws, "\n");
                     $indent = substr($ws, $lastNewline);
-                    $tokens[$i] = new Token([T_WHITESPACE, $indent]);
+                    $prefix = $hadBlankLineBefore ? "\n" : '';
+                    $tokens[$i] = new Token([T_WHITESPACE, $prefix.$indent]);
                 }
 
                 break;
@@ -159,6 +179,9 @@ final class TypeAnnotationsOnlyFixer extends AbstractFixer
         }
     }
 
+    /**
+     * @param  array<int, string>  $lines
+     */
     private function detectIndent(array $lines): string
     {
         foreach ($lines as $line) {

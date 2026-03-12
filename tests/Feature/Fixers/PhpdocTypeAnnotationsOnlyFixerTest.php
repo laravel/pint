@@ -7,10 +7,10 @@ beforeEach(function () {
     $this->fixer = new TypeAnnotationsOnlyFixer;
 });
 
-function fixCode(TypeAnnotationsOnlyFixer $fixer, string $code): string
+function fixCode(TypeAnnotationsOnlyFixer $fixer, string $code, ?string $filePath = null): string
 {
     $tokens = Tokens::fromCode($code);
-    $fixer->fix(new SplFileInfo(__FILE__), $tokens);
+    $fixer->fix(new SplFileInfo($filePath ?? __FILE__), $tokens);
 
     return $tokens->generateCode();
 }
@@ -212,7 +212,7 @@ it('removes comments that do not contain annotations', function (string $input, 
             }
         }
         PHP,
-        "<?php\n\nclass AppServiceProvider extends ServiceProvider\n{\n    public function register()\n    {\n    }\n    public function boot()\n    {\n    }\n}",
+        "<?php\n\nclass AppServiceProvider extends ServiceProvider\n{\n    public function register()\n    {\n    }\n\n    public function boot()\n    {\n    }\n}",
     ],
     'migration with section comments' => [
         <<<'PHP'
@@ -256,7 +256,7 @@ it('removes comments that do not contain annotations', function (string $input, 
             'url' => env('APP_URL', 'http://localhost'),
         ];
         PHP,
-        "<?php\n\nreturn [\n    'name' => env('APP_NAME', 'Laravel'),\n    'url' => env('APP_URL', 'http://localhost'),\n];",
+        "<?php\n\nreturn [\n    'name' => env('APP_NAME', 'Laravel'),\n\n    'url' => env('APP_URL', 'http://localhost'),\n];",
     ],
     'route grouping comments' => [
         <<<'PHP'
@@ -274,6 +274,7 @@ it('removes comments that do not contain annotations', function (string $input, 
 
         Route::post('/login', [AuthController::class, 'login']);
         Route::post('/logout', [AuthController::class, 'logout']);
+
         Route::resource('users', UserController::class);
         PHP,
     ],
@@ -296,7 +297,7 @@ it('removes comments that do not contain annotations', function (string $input, 
             public function profile() {}
         }
         PHP,
-        "<?php\n\nclass UserController extends Controller\n{\n    public function login() {}\n    public function profile() {}\n}",
+        "<?php\n\nclass UserController extends Controller\n{\n    public function login() {}\n\n    public function profile() {}\n}",
     ],
 ]);
 
@@ -1247,6 +1248,99 @@ it('handles spacing edge cases in comments', function (string $input, string $ex
     ],
 ]);
 
+it('preserves blank line separators between code blocks when removing comments', function (string $input, string $expected) {
+    expect(fixCode($this->fixer, $input))->toBe($expected);
+})->with([
+    'blank line before comment between statements' => [
+        <<<'PHP'
+        <?php
+
+        $ecrUri = sprintf('%s.dkr.ecr.%s', $ecrAccountId, $ecrRegion);
+
+        // While today, the ECR Account is shared across
+        // organizations, we may want to change this in the
+        // future. As such we are storing it per application.
+
+        $application->update([
+            'ecr_account_id' => $ecrAccountId,
+        ]);
+        PHP,
+        <<<'PHP'
+        <?php
+
+        $ecrUri = sprintf('%s.dkr.ecr.%s', $ecrAccountId, $ecrRegion);
+
+        $application->update([
+            'ecr_account_id' => $ecrAccountId,
+        ]);
+        PHP,
+    ],
+    'blank line before single comment between statements' => [
+        <<<'PHP'
+        <?php
+
+        $usageBytes = DataSize::from($usage);
+
+        // This is to make sure we don't exceed the limit
+        if ($usageBytes > $allowedBytes) {
+            $allowanceBytes = $allowedBytes;
+        }
+        PHP,
+        <<<'PHP'
+        <?php
+
+        $usageBytes = DataSize::from($usage);
+
+        if ($usageBytes > $allowedBytes) {
+            $allowanceBytes = $allowedBytes;
+        }
+        PHP,
+    ],
+    'no blank line before comment stays collapsed' => [
+        <<<'PHP'
+        <?php
+
+        $x = 1;
+        // a comment
+        $y = 2;
+        PHP,
+        <<<'PHP'
+        <?php
+
+        $x = 1;
+        $y = 2;
+        PHP,
+    ],
+    'blank lines between methods with docblock comments' => [
+        <<<'PHP'
+        <?php
+
+        class Foo
+        {
+            /**
+             * Create something.
+             */
+            public function create() {}
+
+            /**
+             * Update something.
+             */
+            public function update() {}
+        }
+        PHP,
+        <<<'PHP'
+        <?php
+
+        class Foo
+        {
+            public function create() {}
+
+            public function update() {}
+        }
+        PHP,
+    ],
+]);
+
 it('handles @ signs in non-annotation contexts', function (string $input, string $expected) {
     expect(fixCode($this->fixer, $input))->toBe($expected);
 })->with([
@@ -1877,7 +1971,7 @@ it('preserves empty body placeholder comments', function (string $input, string 
             }
         }
         PHP,
-        "<?php\n\nclass AppServiceProvider extends ServiceProvider\n{\n    public function register()\n    {\n        //\n    }\n    public function boot()\n    {\n        //\n    }\n}",
+        "<?php\n\nclass AppServiceProvider extends ServiceProvider\n{\n    public function register()\n    {\n        //\n    }\n\n    public function boot()\n    {\n        //\n    }\n}",
     ],
 ]);
 
@@ -1906,4 +2000,34 @@ it('does not modify files without comments', function (string $code) {
         }
         PHP,
     ],
+]);
+
+it('skips files in the config directory', function (string $filePath) {
+    $code = <<<'PHP'
+    <?php
+
+    // This comment should be preserved in config files
+    return [
+        'name' => env('APP_NAME', 'Laravel'),
+    ];
+    PHP;
+
+    $fixer = new TypeAnnotationsOnlyFixer;
+
+    expect($fixer->supports(new SplFileInfo($filePath)))->toBeFalse();
+    expect(fixCode($fixer, $code, $filePath))->toBe($code);
+})->with([
+    'config/app.php' => ['/project/config/app.php'],
+    'config/database.php' => ['/project/config/database.php'],
+    'config/nested/services.php' => ['/project/config/nested/services.php'],
+]);
+
+it('does not skip files outside the config directory', function (string $filePath) {
+    $fixer = new TypeAnnotationsOnlyFixer;
+
+    expect($fixer->supports(new SplFileInfo($filePath)))->toBeTrue();
+})->with([
+    'app/Models/User.php' => ['/project/app/Models/User.php'],
+    'app/Configurable.php' => ['/project/app/Configurable.php'],
+    'src/config.php' => ['/project/src/config.php'],
 ]);
