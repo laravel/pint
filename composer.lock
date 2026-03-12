@@ -3058,16 +3058,16 @@
         },
         {
             "name": "laravel-zero/foundation",
-            "version": "v12.53.0",
+            "version": "v12.54.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel-zero/foundation.git",
-                "reference": "ed89d536bf90645219e3e46a1f00b0d8582644f1"
+                "reference": "6ca71aa70897dbe1f456380fc458c9f8705d9bb2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel-zero/foundation/zipball/ed89d536bf90645219e3e46a1f00b0d8582644f1",
-                "reference": "ed89d536bf90645219e3e46a1f00b0d8582644f1",
+                "url": "https://api.github.com/repos/laravel-zero/foundation/zipball/6ca71aa70897dbe1f456380fc458c9f8705d9bb2",
+                "reference": "6ca71aa70897dbe1f456380fc458c9f8705d9bb2",
                 "shasum": ""
             },
             "require": {
@@ -3100,7 +3100,7 @@
                 "laravel"
             ],
             "support": {
-                "source": "https://github.com/laravel-zero/foundation/tree/v12.53.0"
+                "source": "https://github.com/laravel-zero/foundation/tree/v12.54.1"
             },
             "funding": [
                 {
@@ -3112,7 +3112,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-03-03T09:56:28+00:00"
+            "time": "2026-03-12T09:49:43+00:00"
         },
         {
             "name": "laravel-zero/framework",
@@ -3683,16 +3683,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "3.11.1",
+            "version": "3.11.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CarbonPHP/carbon.git",
-                "reference": "f438fcc98f92babee98381d399c65336f3a3827f"
+                "reference": "6a7e652845bb018c668220c2a545aded8594fbbf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CarbonPHP/carbon/zipball/f438fcc98f92babee98381d399c65336f3a3827f",
-                "reference": "f438fcc98f92babee98381d399c65336f3a3827f",
+                "url": "https://api.github.com/repos/CarbonPHP/carbon/zipball/6a7e652845bb018c668220c2a545aded8594fbbf",
+                "reference": "6a7e652845bb018c668220c2a545aded8594fbbf",
                 "shasum": ""
             },
             "require": {
@@ -3784,7 +3784,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-29T09:26:29+00:00"
+            "time": "2026-03-11T17:23:39+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -4223,22 +4223,22 @@
         },
         {
             "name": "pestphp/pest",
-            "version": "v3.8.5",
+            "version": "v3.8.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pestphp/pest.git",
-                "reference": "7796630eafcfd1c02660cecdde3bc6984fbf01f4"
+                "reference": "8871a6f5ef1de8e7c8dee2a270991449a7b6af73"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pestphp/pest/zipball/7796630eafcfd1c02660cecdde3bc6984fbf01f4",
-                "reference": "7796630eafcfd1c02660cecdde3bc6984fbf01f4",
+                "url": "https://api.github.com/repos/pestphp/pest/zipball/8871a6f5ef1de8e7c8dee2a270991449a7b6af73",
+                "reference": "8871a6f5ef1de8e7c8dee2a270991449a7b6af73",
                 "shasum": ""
             },
             "require": {
                 "brianium/paratest": "^7.8.5",
-                "nunomaduro/collision": "^8.8.3",
-                "nunomaduro/termwind": "^2.3.3",
+                "nunomaduro/collision": "^8.9.1",
+                "nunomaduro/termwind": "^2.4.0",
                 "pestphp/pest-plugin": "^3.0.0",
                 "pestphp/pest-plugin-arch": "^3.1.1",
                 "pestphp/pest-plugin-mutate": "^3.0.5",
@@ -4254,7 +4254,7 @@
             "require-dev": {
                 "pestphp/pest-dev-tools": "^3.4.0",
                 "pestphp/pest-plugin-type-coverage": "^3.6.1",
-                "symfony/process": "^7.4.4"
+                "symfony/process": "^7.4.5"
             },
             "bin": [
                 "bin/pest"
@@ -4319,7 +4319,7 @@
             ],
             "support": {
                 "issues": "https://github.com/pestphp/pest/issues",
-                "source": "https://github.com/pestphp/pest/tree/v3.8.5"
+                "source": "https://github.com/pestphp/pest/tree/v3.8.6"
             },
             "funding": [
                 {
@@ -4331,7 +4331,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-01-28T01:33:45+00:00"
+            "time": "2026-03-10T21:04:33+00:00"
         },
         {
             "name": "pestphp/pest-plugin",
@@ -7594,16 +7594,16 @@
         },
         {
             "name": "shipfastlabs/agent-detector",
-            "version": "v1.0.2",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/shipfastlabs/agent-detector.git",
-                "reference": "cb1456fab6cd27c70d561013372e9ec4589263dd"
+                "reference": "eefb18b61968a59a0428a4f75bee2e21596fe949"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/shipfastlabs/agent-detector/zipball/cb1456fab6cd27c70d561013372e9ec4589263dd",
-                "reference": "cb1456fab6cd27c70d561013372e9ec4589263dd",
+                "url": "https://api.github.com/repos/shipfastlabs/agent-detector/zipball/eefb18b61968a59a0428a4f75bee2e21596fe949",
+                "reference": "eefb18b61968a59a0428a4f75bee2e21596fe949",
                 "shasum": ""
             },
             "require": {
@@ -7611,7 +7611,6 @@
             },
             "require-dev": {
                 "laravel/pint": "^1.24.0",
-                "peckphp/peck": "^0.1.3",
                 "pestphp/pest": "^3.8.5|^4.1.0",
                 "pestphp/pest-plugin-type-coverage": "^3.0|^4.0.2",
                 "phpstan/phpstan": "^2.1.26",
@@ -7650,7 +7649,7 @@
             ],
             "support": {
                 "issues": "https://github.com/shipfastlabs/agent-detector/issues",
-                "source": "https://github.com/shipfastlabs/agent-detector/tree/v1.0.2"
+                "source": "https://github.com/shipfastlabs/agent-detector/tree/v1.1.0"
             },
             "funding": [
                 {
@@ -7658,7 +7657,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-03-05T04:18:10+00:00"
+            "time": "2026-03-11T22:59:30+00:00"
         },
         {
             "name": "staabm/side-effects-detector",
