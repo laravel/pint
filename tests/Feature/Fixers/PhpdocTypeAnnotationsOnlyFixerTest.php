@@ -2031,3 +2031,225 @@ it('does not skip files outside the config directory', function (string $filePat
     'app/Configurable.php' => ['/project/app/Configurable.php'],
     'src/config.php' => ['/project/src/config.php'],
 ]);
+
+it('preserves single-line comments when ignore_single_line_comments is true', function (string $input, string $expected) {
+    $this->fixer->configure(['ignore_single_line_comments' => true]);
+    expect(fixCode($this->fixer, $input))->toBe($expected);
+})->with([
+    'double-slash comment is preserved' => [
+        <<<'PHP'
+        <?php
+
+        // This is a comment
+        $x = 1;
+        PHP,
+        <<<'PHP'
+        <?php
+
+        // This is a comment
+        $x = 1;
+        PHP,
+    ],
+    'hash comment is preserved' => [
+        <<<'PHP'
+        <?php
+
+        # This is a hash comment
+        $x = 1;
+        PHP,
+        <<<'PHP'
+        <?php
+
+        # This is a hash comment
+        $x = 1;
+        PHP,
+    ],
+    'trailing comment is preserved' => [
+        <<<'PHP'
+        <?php
+
+        $x = 1; // trailing comment
+        PHP,
+        <<<'PHP'
+        <?php
+
+        $x = 1; // trailing comment
+        PHP,
+    ],
+    'multiple sequential comments are preserved' => [
+        <<<'PHP'
+        <?php
+
+        // First comment
+        // Second comment
+        // Third comment
+        $x = 1;
+        PHP,
+        <<<'PHP'
+        <?php
+
+        // First comment
+        // Second comment
+        // Third comment
+        $x = 1;
+        PHP,
+    ],
+    'TODO comment is preserved' => [
+        <<<'PHP'
+        <?php
+
+        // TODO: refactor this
+        $x = 1;
+        PHP,
+        <<<'PHP'
+        <?php
+
+        // TODO: refactor this
+        $x = 1;
+        PHP,
+    ],
+    'block comment is still removed' => [
+        <<<'PHP'
+        <?php
+
+        /* This is a block comment */
+        $x = 1;
+        PHP,
+        <<<'PHP'
+        <?php
+
+        $x = 1;
+        PHP,
+    ],
+    'docblock without annotations is still removed' => [
+        <<<'PHP'
+        <?php
+
+        /**
+         * Just a description.
+         */
+        $x = 1;
+        PHP,
+        <<<'PHP'
+        <?php
+
+        $x = 1;
+        PHP,
+    ],
+    'docblock prose is still stripped keeping annotations' => [
+        <<<'PHP'
+        <?php
+
+        /**
+         * A helper.
+         *
+         * @param  int  $a
+         * @return int
+         */
+        function add($a) {}
+        PHP,
+        <<<'PHP'
+        <?php
+
+        /**
+         * @param  int  $a
+         * @return int
+         */
+        function add($a) {}
+        PHP,
+    ],
+    'body placeholder comment still works' => [
+        <<<'PHP'
+        <?php
+
+        class Foo
+        {
+            public function bar()
+            {
+                // Moved to a seeder...
+            }
+        }
+        PHP,
+        <<<'PHP'
+        <?php
+
+        class Foo
+        {
+            public function bar()
+            {
+                //
+            }
+        }
+        PHP,
+    ],
+    'section divider comments are preserved' => [
+        <<<'PHP'
+        <?php
+
+        class UserController extends Controller
+        {
+            // ==================
+            // Authentication
+            // ==================
+
+            public function login() {}
+
+            // ==================
+            // Profile
+            // ==================
+
+            public function profile() {}
+        }
+        PHP,
+        <<<'PHP'
+        <?php
+
+        class UserController extends Controller
+        {
+            // ==================
+            // Authentication
+            // ==================
+
+            public function login() {}
+
+            // ==================
+            // Profile
+            // ==================
+
+            public function profile() {}
+        }
+        PHP,
+    ],
+]);
+
+it('still removes single-line comments when ignore_single_line_comments is false', function (string $input, string $expected) {
+    $this->fixer->configure(['ignore_single_line_comments' => false]);
+    expect(fixCode($this->fixer, $input))->toBe($expected);
+})->with([
+    'double-slash comment is removed' => [
+        <<<'PHP'
+        <?php
+
+        // This is a comment
+        $x = 1;
+        PHP,
+        <<<'PHP'
+        <?php
+
+        $x = 1;
+        PHP,
+    ],
+    'hash comment is removed' => [
+        <<<'PHP'
+        <?php
+
+        # This is a hash comment
+        $x = 1;
+        PHP,
+        <<<'PHP'
+        <?php
+
+        $x = 1;
+        PHP,
+    ],
+]);
