@@ -22,6 +22,7 @@ class TypeAnnotationsOnlyFixer extends AbstractFixer implements ConfigurableFixe
 {
     /** @use ConfigurableFixerTrait<array{ignore_single_line_comments?: bool}, array{ignore_single_line_comments: bool}> */
     use ConfigurableFixerTrait;
+
     /**
      * Get the name of the fixer.
      */
