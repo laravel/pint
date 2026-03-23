@@ -6,6 +6,7 @@ use App\Factories\ConfigurationResolverFactory;
 use App\Output\ProgressOutput;
 use LaravelZero\Framework\Exceptions\ConsoleException;
 use PhpCsFixer\Console\ConfigurationResolver;
+use PhpCsFixer\Differ\NullDiffer;
 use PhpCsFixer\Error\ErrorsManager;
 use PhpCsFixer\Runner\Parallel\ParallelConfig;
 use PhpCsFixer\Runner\Runner;
@@ -113,6 +114,8 @@ class FixCode
         $this->input->setOption('allow-risky', $resolver->getRiskyAllowed() ? 'yes' : 'no');
         $this->input->setOption('rules', json_encode($resolver->getRules()));
         $this->input->setOption('using-cache', $resolver->getUsingCache() ? 'yes' : 'no');
+
+        $this->input->setOption('diff', ! $resolver->getDiffer() instanceof NullDiffer);
 
         // Remove config option so it doesn't get passed to php-cs-fixer...
         $this->input->setOption('config', null);
