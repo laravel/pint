@@ -3,23 +3,28 @@
 namespace App\Actions;
 
 use App\Factories\ConfigurationResolverFactory;
+use App\Output\ProgressOutput;
 use LaravelZero\Framework\Exceptions\ConsoleException;
 use PhpCsFixer\Console\ConfigurationResolver;
 use PhpCsFixer\Differ\NullDiffer;
+use PhpCsFixer\Error\ErrorsManager;
+use PhpCsFixer\Runner\Parallel\ParallelConfig;
 use PhpCsFixer\Runner\Runner;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class FixCode
 {
     /**
      * Creates a new Fix Code instance.
      *
-     * @param  \PhpCsFixer\Error\ErrorsManager  $errors
-     * @param  \Symfony\Component\EventDispatcher\EventDispatcher  $events
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
-     * @param  \App\Output\ProgressOutput  $progress
+     * @param  ErrorsManager  $errors
+     * @param  EventDispatcher  $events
+     * @param  InputInterface  $input
+     * @param  OutputInterface  $output
+     * @param  ProgressOutput  $progress
      * @return void
      */
     public function __construct(
@@ -45,7 +50,7 @@ class FixCode
             return [$exception->getCode(), []];
         }
 
-        if (is_null($this->input->getOption('format'))) {
+        if (is_null($this->input->getOption('format')) && ! ConfigurationResolverFactory::runningInAgent()) {
             $this->progress->subscribe();
         }
 
@@ -63,7 +68,7 @@ class FixCode
             $resolver->getCacheManager(),
             $resolver->getDirectory(),
             $resolver->shouldStopOnViolation(),
-            $resolver->getParallelConfig(),
+            $this->getParallelConfig($resolver),
             $this->getInput($resolver),
         ));
 
@@ -71,7 +76,27 @@ class FixCode
     }
 
     /**
-     * Gets the input for the PHP CS Fixer Runner.
+     * Get the ParallelConfig for the number of cores.
+     */
+    private function getParallelConfig(ConfigurationResolver $resolver): ParallelConfig
+    {
+        $maxProcesses = intval($this->input->getOption('max-processes') ?? 0);
+
+        if (! $this->input->getOption('parallel') || $maxProcesses < 1) {
+            return $resolver->getParallelConfig();
+        }
+
+        $parallelConfig = $resolver->getParallelConfig();
+
+        return new ParallelConfig(
+            $maxProcesses,
+            $parallelConfig->getFilesPerProcess(),
+            $parallelConfig->getProcessTimeout()
+        );
+    }
+
+    /**
+     * Get the input for the PHP CS Fixer Runner.
      */
     private function getInput(ConfigurationResolver $resolver): InputInterface
     {
@@ -91,6 +116,9 @@ class FixCode
         $this->input->setOption('using-cache', $resolver->getUsingCache() ? 'yes' : 'no');
 
         $this->input->setOption('diff', ! $resolver->getDiffer() instanceof NullDiffer);
+
+        // Remove config option so it doesn't get passed to php-cs-fixer...
+        $this->input->setOption('config', null);
 
         return $this->input;
     }

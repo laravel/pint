@@ -1,5 +1,10 @@
 <?php
 
+afterEach(function () {
+    putenv('OPENCODE');
+    putenv('CLAUDECODE');
+});
+
 it('outputs checkstyle format', function () {
     [$statusCode, $output] = run('default', [
         'path' => base_path('tests/Fixtures/with-fixable-issues'),
@@ -78,4 +83,85 @@ it('outputs gitlab format', function () {
         ->not->toContain(sprintf('⨯ %s', implode(DIRECTORY_SEPARATOR, [
             'tests', 'Fixtures', 'with-fixable-issues', 'file.php',
         ])));
+});
+
+it('outputs agent format with fail status on test mode', function () {
+    [$statusCode, $output] = run('default', [
+        'path' => base_path('tests/Fixtures/with-fixable-issues'),
+        '--preset' => 'psr12',
+        '--format' => 'agent',
+    ]);
+
+    $json = json_decode($output, true);
+
+    expect($statusCode)->toBe(1)
+        ->and($output)->toBeJson()
+        ->and($json['result'])->toBe('fail')
+        ->and($json)->toHaveKey('files')
+        ->and($json['files'][0])->toHaveKeys(['path', 'fixers'])
+        ->and($json['files'][0]['fixers'])->toBeArray()
+        ->and($json)->not->toHaveKey('about')
+        ->and($json)->not->toHaveKey('time')
+        ->and($json)->not->toHaveKey('memory');
+});
+
+it('outputs agent format with pass status when no issues', function () {
+    [$statusCode, $output] = run('default', [
+        'path' => base_path('tests/Fixtures/without-issues-laravel'),
+        '--format' => 'agent',
+    ]);
+
+    $json = json_decode($output, true);
+
+    expect($statusCode)->toBe(0)
+        ->and($output)->toBeJson()
+        ->and($json['result'])->toBe('pass')
+        ->and($json)->not->toHaveKey('files');
+});
+
+it('outputs agent format with fail status on parse errors', function () {
+    [$statusCode, $output] = run('default', [
+        'path' => base_path('tests/Fixtures/with-non-fixable-issues'),
+        '--format' => 'agent',
+    ]);
+
+    $json = json_decode($output, true);
+
+    expect($statusCode)->toBe(1)
+        ->and($output)->toBeJson()
+        ->and($json['result'])->toBe('fail')
+        ->and($json)->toHaveKey('errors')
+        ->and($json['errors'][0])->toHaveKeys(['path', 'message']);
+});
+
+it('auto-detects agent format via OPENCODE env var', function () {
+    putenv('OPENCODE=1');
+
+    [$statusCode, $output] = run('default', [
+        'path' => base_path('tests/Fixtures/with-fixable-issues'),
+        '--preset' => 'psr12',
+    ]);
+
+    $json = json_decode($output, true);
+
+    expect($statusCode)->toBe(1)
+        ->and($output)->toBeJson()
+        ->and($json)->toHaveKey('files')
+        ->and($json['files'][0])->toHaveKeys(['path', 'fixers']);
+});
+
+it('auto-detects agent format via CLAUDECODE env var', function () {
+    putenv('CLAUDECODE=1');
+
+    [$statusCode, $output] = run('default', [
+        'path' => base_path('tests/Fixtures/with-fixable-issues'),
+        '--preset' => 'psr12',
+    ]);
+
+    $json = json_decode($output, true);
+
+    expect($statusCode)->toBe(1)
+        ->and($output)->toBeJson()
+        ->and($json)->toHaveKey('files')
+        ->and($json['files'][0])->toHaveKeys(['path', 'fixers']);
 });

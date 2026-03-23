@@ -1,6 +1,41 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.24.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.29.0...main)
+
+## [v1.29.0](https://github.com/laravel/pint/compare/v1.28.0...v1.29.0) - 2026-03-12
+
+- Adds `Pint/phpdoc_type_annotations_only` custom rule.
+
+## [v1.28.0](https://github.com/laravel/pint/compare/v1.27.1...v1.28.0) - 2026-03-10
+
+- feat: improves `fully_qualified_strict_types` rule
+- feat: improves agent detector code
+
+## [v1.27.1](https://github.com/laravel/pint/compare/v1.27.0...v1.27.1) - 2026-02-10
+
+- fix: passing `--parallel` option alongside `--config` by [@kkunjas](https://github.com/kkunjas) in https://github.com/laravel/pint/pull/418
+
+## [v1.27.0](https://github.com/laravel/pint/compare/v1.26.0...v1.27.0) - 2026-01-05
+
+* Adds an `agent` format, which is automatically selected when Pint is executed via Claude Code or OpenCode by [@nunomaduro](https://github.com/nunomaduro) in https://github.com/laravel/pint/pull/415
+
+## [v1.26.0](https://github.com/laravel/pint/compare/v1.25.1...v1.26.0) - 2025-11-25
+
+* Adds partial support to php 8.5 by [@nunomaduro](https://github.com/nunomaduro) in https://github.com/laravel/pint/pull/411
+* Adds`stdin` support with explicit opt-in flag by [@A909M](https://github.com/A909M) in https://github.com/laravel/pint/pull/403
+* Fixes composer allowing to install `pint` as non "dev" dependency by [@SamAsEnd](https://github.com/SamAsEnd) in https://github.com/laravel/pint/pull/407
+
+## [v1.25.1](https://github.com/laravel/pint/compare/v1.25.0...v1.25.1) - 2025-09-19
+
+* Revert "feat: add support for formatting code from stdin" by [@crynobone](https://github.com/crynobone) in https://github.com/laravel/pint/pull/402
+
+## [v1.25.0](https://github.com/laravel/pint/compare/v1.24.0...v1.25.0) - 2025-09-17
+
+* feat: add support for formatting code from stdin by [@calebdw](https://github.com/calebdw) in https://github.com/laravel/pint/pull/390
+* Allow setting the number of max processes for parallel mode by [@cosmastech](https://github.com/cosmastech) in https://github.com/laravel/pint/pull/392
+* Update dependencies by [@crynobone](https://github.com/crynobone) in https://github.com/laravel/pint/pull/394
+* feat: support boolean shorthand for 'cast_spaces' and add tests by [@artengin](https://github.com/artengin) in https://github.com/laravel/pint/pull/398
+* Fixes compatibility with php-cs-fixer v3.87.0 by [@crynobone](https://github.com/crynobone) in https://github.com/laravel/pint/pull/400
 
 ## [v1.24.0](https://github.com/laravel/pint/compare/v1.23.0...v1.24.0) - 2025-07-10
 
