@@ -3217,6 +3217,10 @@
                 "phpdoc_var_without_name": {
                     "description": "`@var` and `@type` annotations of classy properties should not contain the name."
                 },
+                "Pint/phpdoc_type_annotations_only": {
+                    "description": "Removes all prose from comments, keeping only `@` annotations (e.g. `@param`, `@return`, `@var`, `@phpstan-type`). Use `@note`, `@warning`, or `@todo` to preserve comments.",
+                    "type": "boolean"
+                },
                 "pow_to_exponentiation": {
                     "description": "Converts `pow` to the `**` operator."
                 },
