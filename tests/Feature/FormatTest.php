@@ -5,6 +5,31 @@ afterEach(function () {
     putenv('CLAUDECODE');
 });
 
+it('writes parse errors to stderr when using junit format', function () {
+    $stdout = tempnam(sys_get_temp_dir(), 'pint-stdout-');
+    $stderr = tempnam(sys_get_temp_dir(), 'pint-stderr-');
+    $exitCode = null;
+
+    exec(sprintf(
+        'env -u CODEX_THREAD_ID -u CODEX_SANDBOX -u OPENCODE -u CLAUDECODE ./pint tests/Fixtures/with-non-fixable-issues --format=junit > %s 2> %s',
+        escapeshellarg($stdout),
+        escapeshellarg($stderr),
+    ), $unusedOutput, $exitCode);
+
+    expect($exitCode)->toBe(1)
+        ->and(file_get_contents($stdout))
+        ->toContain('<?xml version="1.0" encoding="UTF-8"?>')
+        ->and(file_get_contents($stderr))
+        ->toContain('Files that were not fixed due to errors reported during linting before fixing:')
+        ->toContain(implode(DIRECTORY_SEPARATOR, [
+            'tests', 'Fixtures', 'with-non-fixable-issues', 'file.php',
+        ]))
+        ->toContain('Parse error: syntax error');
+
+    @unlink($stdout);
+    @unlink($stderr);
+});
+
 it('outputs checkstyle format', function () {
     [$statusCode, $output] = run('default', [
         'path' => base_path('tests/Fixtures/with-fixable-issues'),

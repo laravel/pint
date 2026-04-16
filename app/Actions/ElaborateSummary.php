@@ -8,6 +8,7 @@ use App\Output\SummaryOutput;
 use Illuminate\Console\Command;
 use PhpCsFixer\Console\Report\FixReport;
 use PhpCsFixer\Console\Report\FixReport\ReportSummary;
+use PhpCsFixer\Error\Error;
 use PhpCsFixer\Error\ErrorsManager;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -65,6 +66,10 @@ class ElaborateSummary
             $this->displayUsingFormatter($summary, $outputFormat ?: $format, $file);
         }
 
+        if ($this->shouldDisplayErrorsUsingErrorOutput($format, $this->input->getOption('output-format'))) {
+            $this->displayErrorsUsingErrorOutput();
+        }
+
         $failure = (($summary->isDryRun() || $this->input->getOption('repair')) && count($changes) > 0)
             || count($this->errors->getInvalidErrors()) > 0
             || count($this->errors->getExceptionErrors()) > 0
@@ -101,5 +106,87 @@ class ElaborateSummary
         }
 
         $this->output->write($reporter->generate($summary));
+    }
+
+    /**
+     * Determine if formatter-based output should be accompanied by stderr errors.
+     *
+     * @param  string|null  $format
+     * @param  string|null  $outputFormat
+     * @return bool
+     */
+    protected function shouldDisplayErrorsUsingErrorOutput($format, $outputFormat)
+    {
+        $formats = array_filter([$format, $outputFormat]);
+
+        return count(array_intersect($formats, [
+            'checkstyle',
+            'gitlab',
+            'json',
+            'junit',
+            'xml',
+        ])) > 0;
+    }
+
+    /**
+     * Display linting and fixing errors on stderr when available.
+     *
+     * This preserves machine-readable stdout output while still surfacing
+     * the reason the command failed.
+     *
+     * @return void
+     */
+    protected function displayErrorsUsingErrorOutput()
+    {
+        $errorOutput = fopen('php://stderr', 'w');
+
+        if ($errorOutput === false) {
+            return;
+        }
+
+        if (count($this->errors->getInvalidErrors()) > 0) {
+            $this->writeErrors($errorOutput, 'linting before fixing', $this->errors->getInvalidErrors());
+        }
+
+        if (count($this->errors->getExceptionErrors()) > 0) {
+            $this->writeErrors($errorOutput, 'fixing', $this->errors->getExceptionErrors());
+        }
+
+        if (count($this->errors->getLintErrors()) > 0) {
+            $this->writeErrors($errorOutput, 'linting after fixing', $this->errors->getLintErrors());
+        }
+
+        fclose($errorOutput);
+    }
+
+    /**
+     * Write the given errors to stderr in a concise human-readable format.
+     *
+     * @param  resource  $output
+     * @param  array<int, Error>  $errors
+     * @return void
+     */
+    protected function writeErrors($output, string $process, $errors)
+    {
+        fwrite($output, PHP_EOL);
+        fwrite($output, sprintf(
+            'Files that were not fixed due to errors reported during %s:',
+            $process,
+        ).PHP_EOL);
+
+        foreach ($errors as $index => $error) {
+            fwrite($output, sprintf(
+                '  %d) %s',
+                $index + 1,
+                $error->getFilePath(),
+            ).PHP_EOL);
+
+            if ($error->getSource() !== null) {
+                fwrite($output, sprintf(
+                    '     %s',
+                    $error->getSource()->getMessage(),
+                ).PHP_EOL);
+            }
+        }
     }
 }
