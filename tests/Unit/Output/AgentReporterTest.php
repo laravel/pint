@@ -122,3 +122,14 @@ it('returns format name as agent', function () {
 
     expect($reporter->getFormat())->toBe('agent');
 });
+
+it('includes tool key as pint first in output', function () {
+    $reporter = new AgentReporter;
+    $summary = new ReportSummary([], 10, 0, 0, false, false, false);
+
+    $output = $reporter->generate($summary);
+    $json = json_decode($output, true);
+
+    expect($json['tool'])->toBe('pint')
+        ->and(array_key_first($json))->toBe('tool');
+});

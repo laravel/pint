@@ -44,7 +44,7 @@ final class AgentReporter implements ReporterInterface
             default => 'fixed',
         };
 
-        $output = ['result' => $result];
+        $output = ['tool' => 'pint', 'result' => $result];
 
         if ($changed !== []) {
             $output['files'] = [];
