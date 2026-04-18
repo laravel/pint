@@ -39,7 +39,7 @@ final class AgentReporter implements ReporterInterface
 
         $result = match (true) {
             $errors !== [] => 'fail',
-            $changed === [] => 'pass',
+            $changed === [] => 'passed',
             $reportSummary->isDryRun() => 'fail',
             default => 'fixed',
         };
