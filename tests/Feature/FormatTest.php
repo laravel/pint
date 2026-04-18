@@ -105,7 +105,7 @@ it('outputs agent format with fail status on test mode', function () {
         ->and($json)->not->toHaveKey('memory');
 });
 
-it('outputs agent format with pass status when no issues', function () {
+it('outputs agent format with passed status when no issues', function () {
     [$statusCode, $output] = run('default', [
         'path' => base_path('tests/Fixtures/without-issues-laravel'),
         '--format' => 'agent',
@@ -115,7 +115,7 @@ it('outputs agent format with pass status when no issues', function () {
 
     expect($statusCode)->toBe(0)
         ->and($output)->toBeJson()
-        ->and($json['result'])->toBe('pass')
+        ->and($json['result'])->toBe('passed')
         ->and($json)->not->toHaveKey('files');
 });
 

@@ -5,14 +5,14 @@ use PhpCsFixer\Console\Report\FixReport\ReportSummary;
 use PhpCsFixer\Error\Error;
 use PhpCsFixer\Error\ErrorsManager;
 
-it('returns pass when no changes and no errors', function () {
+it('returns passed when no changes and no errors', function () {
     $reporter = new AgentReporter;
     $summary = new ReportSummary([], 10, 0, 0, false, false, false);
 
     $output = $reporter->generate($summary);
     $json = json_decode($output, true);
 
-    expect($json['result'])->toBe('pass')
+    expect($json['result'])->toBe('passed')
         ->and($json)->not->toHaveKey('files')
         ->and($json)->not->toHaveKey('errors');
 });
@@ -121,4 +121,15 @@ it('returns format name as agent', function () {
     $reporter = new AgentReporter;
 
     expect($reporter->getFormat())->toBe('agent');
+});
+
+it('includes tool key as pint first in output', function () {
+    $reporter = new AgentReporter;
+    $summary = new ReportSummary([], 10, 0, 0, false, false, false);
+
+    $output = $reporter->generate($summary);
+    $json = json_decode($output, true);
+
+    expect($json['tool'])->toBe('pint')
+        ->and(array_key_first($json))->toBe('tool');
 });

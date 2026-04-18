@@ -39,12 +39,12 @@ final class AgentReporter implements ReporterInterface
 
         $result = match (true) {
             $errors !== [] => 'fail',
-            $changed === [] => 'pass',
+            $changed === [] => 'passed',
             $reportSummary->isDryRun() => 'fail',
             default => 'fixed',
         };
 
-        $output = ['result' => $result];
+        $output = ['tool' => 'pint', 'result' => $result];
 
         if ($changed !== []) {
             $output['files'] = [];
