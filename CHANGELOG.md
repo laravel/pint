@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.29.0...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.29.1...main)
+
+## [v1.29.1](https://github.com/laravel/pint/compare/v1.29.0...v1.29.1) - 2026-04-20
+
+- Fixes pint not honoring verbose mode when parallel by [@moshe-autoleadstar](https://github.com/moshe-autoleadstar) in https://github.com/laravel/pint/pull/387
+- Ensures agent output is consistent with PAO by [@nunomaduro](https://github.com/nunomaduro) in https://github.com/laravel/pint/pull/432
 
 ## [v1.29.0](https://github.com/laravel/pint/compare/v1.28.0...v1.29.0) - 2026-03-12
 
