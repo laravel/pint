@@ -2,7 +2,7 @@
 
 namespace App\Factories;
 
-use AgentDetector\AgentDetector;
+use Laravel\AgentDetector\AgentDetector;
 use App\Project;
 use App\Repositories\ConfigurationJsonRepository;
 use ArrayIterator;

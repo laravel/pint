@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0dee5896373f9931ba36a7e9d4b33da5",
+    "content-hash": "ba45d24ff592640f7dd607ee06b5baf6",
     "packages": [],
     "packages-dev": [
         {
@@ -3303,16 +3303,16 @@
         },
         {
             "name": "laravel/agent-detector",
-            "version": "v1.1.4",
+            "version": "v2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/agent-detector.git",
-                "reference": "7719ba7ebbed18911494467139c389549ed53467"
+                "reference": "90694b9256099591cf9e55d08c18ba7a00bf099f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/agent-detector/zipball/7719ba7ebbed18911494467139c389549ed53467",
-                "reference": "7719ba7ebbed18911494467139c389549ed53467",
+                "url": "https://api.github.com/repos/laravel/agent-detector/zipball/90694b9256099591cf9e55d08c18ba7a00bf099f",
+                "reference": "90694b9256099591cf9e55d08c18ba7a00bf099f",
                 "shasum": ""
             },
             "require": {
@@ -3332,7 +3332,7 @@
                     "src/functions.php"
                 ],
                 "psr-4": {
-                    "AgentDetector\\": "src/"
+                    "Laravel\\AgentDetector\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -3341,11 +3341,12 @@
             ],
             "authors": [
                 {
-                    "name": "Pushpak Chahjed",
-                    "email": "pushpak1300@gmail.com"
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
                 }
             ],
             "description": "Detect if code is running in an AI agent or automated development environment",
+            "homepage": "https://github.com/laravel/agent-detector",
             "keywords": [
                 "Agent",
                 "ai",
@@ -3358,9 +3359,9 @@
             ],
             "support": {
                 "issues": "https://github.com/laravel/agent-detector/issues",
-                "source": "https://github.com/laravel/agent-detector/tree/v1.1.4"
+                "source": "https://github.com/laravel/agent-detector"
             },
-            "time": "2026-04-26T17:43:21+00:00"
+            "time": "2026-04-29T18:32:34+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -10511,5 +10512,5 @@
     "platform-overrides": {
         "php": "8.2.0"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }
