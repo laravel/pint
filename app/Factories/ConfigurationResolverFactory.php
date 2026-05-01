@@ -2,10 +2,10 @@
 
 namespace App\Factories;
 
-use Laravel\AgentDetector\AgentDetector;
 use App\Project;
 use App\Repositories\ConfigurationJsonRepository;
 use ArrayIterator;
+use Laravel\AgentDetector\AgentDetector;
 use PhpCsFixer\Config;
 use PhpCsFixer\Console\ConfigurationResolver;
 use PhpCsFixer\ToolInfo;
