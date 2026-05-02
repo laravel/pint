@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Contracts\PathsRepository;
 use App\Factories\ConfigurationFactory;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use Symfony\Component\Process\Process;
 
 class GitPathsRepository implements PathsRepository
@@ -32,17 +31,15 @@ class GitPathsRepository implements PathsRepository
      */
     public function dirty()
     {
-        $process = tap(new Process(['git', 'status', '--short', '--', '**.php']))->run();
+        $process = tap(new Process(['git', 'diff', '--name-only', 'HEAD', '--', '**.php']))->run();
 
         if (! $process->isSuccessful()) {
             abort(1, 'The [--dirty] option is only available when using Git.');
         }
 
         $dirtyFiles = collect(preg_split('/\R+/', $process->getOutput(), flags: PREG_SPLIT_NO_EMPTY))
-            ->mapWithKeys(fn ($file) => [substr($file, 3) => trim(substr($file, 0, 3))])
-            ->reject(fn ($status) => $status === 'D')
-            ->map(fn ($status, $file) => $status === 'R' ? Str::after($file, ' -> ') : $file)
-            ->values();
+            ->values()
+            ->map(fn ($s) => (string) $s);
 
         return $this->processFileNames($dirtyFiles);
     }
@@ -83,21 +80,26 @@ class GitPathsRepository implements PathsRepository
      */
     protected function processFileNames(Collection $fileNames)
     {
+        $gitRoot = trim(tap(new Process(['git', 'rev-parse', '--show-toplevel']))->run()->getOutput());
+
         $processedFileNames = $fileNames
-            ->map(function ($file) {
+            ->map(function ($file) use ($gitRoot) {
+                $absolutePath = $gitRoot.DIRECTORY_SEPARATOR.$file;
+
                 if (PHP_OS_FAMILY === 'Windows') {
-                    $file = str_replace('/', DIRECTORY_SEPARATOR, $file);
+                    $absolutePath = str_replace('/', DIRECTORY_SEPARATOR, $absolutePath);
                 }
 
-                return $this->path.DIRECTORY_SEPARATOR.$file;
+                return $absolutePath;
             })
             ->all();
 
         $files = array_values(array_map(function ($splFile) {
             return $splFile->getPathname();
-        }, iterator_to_array(ConfigurationFactory::finder()
-            ->in($this->path)
-            ->files()
+        }, iterator_to_array(
+            ConfigurationFactory::finder()
+                ->in($this->path)
+                ->files()
         )));
 
         return array_values(array_intersect($files, $processedFileNames));
