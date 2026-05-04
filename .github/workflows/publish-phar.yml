@@ -28,7 +28,7 @@ jobs:
           echo "tag=${GITHUB_REF##*v}" >> "$GITHUB_OUTPUT"
 
       - name: Checkout the code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: v${{ steps.tag.outputs.tag }}
 
@@ -48,7 +48,7 @@ jobs:
         run: ./pint app:build pint.phar --build-version=${{ steps.tag.outputs.tag }}
 
       - name: Upload the PHAR artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: pint.phar
           path: builds/pint.phar

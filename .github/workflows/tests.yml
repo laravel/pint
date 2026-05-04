@@ -28,10 +28,10 @@ jobs:
           git config --global core.eol lf
 
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Checkout skeleton code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: 'skeleton'
           repository: 'laravel/laravel'
