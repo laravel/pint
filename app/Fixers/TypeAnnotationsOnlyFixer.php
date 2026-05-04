@@ -3,6 +3,11 @@
 namespace App\Fixers;
 
 use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\Fixer\ConfigurableFixerInterface;
+use PhpCsFixer\Fixer\ConfigurableFixerTrait;
+use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
+use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverInterface;
+use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
@@ -10,8 +15,14 @@ use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 use SplFileInfo;
 
-class TypeAnnotationsOnlyFixer extends AbstractFixer
+/**
+ * @implements ConfigurableFixerInterface<array{ignore_single_line_comments?: bool}, array{ignore_single_line_comments: bool}>
+ */
+class TypeAnnotationsOnlyFixer extends AbstractFixer implements ConfigurableFixerInterface
 {
+    /** @use ConfigurableFixerTrait<array{ignore_single_line_comments?: bool}, array{ignore_single_line_comments: bool}> */
+    use ConfigurableFixerTrait;
+
     /**
      * Get the name of the fixer.
      */
@@ -97,7 +108,32 @@ class TypeAnnotationsOnlyFixer extends AbstractFixer
             return;
         }
 
+        if ($this->configuration['ignore_single_line_comments'] && $this->isSingleLineComment($content)) {
+            return;
+        }
+
         $this->clearAndCleanWhitespace($tokens, $index);
+    }
+
+    /**
+     * Determine whether the comment content is a single-line comment.
+     */
+    private function isSingleLineComment(string $content): bool
+    {
+        return str_starts_with(ltrim($content), '//') || str_starts_with(ltrim($content), '#');
+    }
+
+    /**
+     * Create the configuration definition.
+     */
+    protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
+    {
+        return new FixerConfigurationResolver([
+            (new FixerOptionBuilder('ignore_single_line_comments', 'Whether single-line comments (`//` and `#`) should be preserved.'))
+                ->setAllowedTypes(['bool'])
+                ->setDefault(false)
+                ->getOption(),
+        ]);
     }
 
     /**
