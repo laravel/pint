@@ -16,8 +16,47 @@ use Illuminate\Foundation\Console\Kernel;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Output\ConsoleSectionOutput;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Tests\TestCase;
+
+/**
+ * A buffered output that also implements ConsoleOutputInterface so that
+ * code writing to getErrorOutput() can be captured in tests.
+ */
+class TestConsoleOutput extends BufferedOutput implements ConsoleOutputInterface
+{
+    private BufferedOutput $errorBuffer;
+
+    public function __construct()
+    {
+        parent::__construct(BufferedOutput::VERBOSITY_VERBOSE);
+        $this->errorBuffer = new BufferedOutput(BufferedOutput::VERBOSITY_VERBOSE);
+    }
+
+    public function getErrorOutput(): OutputInterface
+    {
+        return $this->errorBuffer;
+    }
+
+    public function setErrorOutput(OutputInterface $error): void
+    {
+        $this->errorBuffer = $error;
+    }
+
+    public function section(): ConsoleSectionOutput
+    {
+        $sections = [];
+
+        return new ConsoleSectionOutput($this->getStream() ?: fopen('php://memory', 'rw+'), $sections, $this->getVerbosity(), $this->isDecorated(), $this->getFormatter());
+    }
+
+    public function fetchError(): string
+    {
+        return preg_replace('#\\x1b[[][^A-Za-z]*[A-Za-z]#', '', $this->errorBuffer->fetch()) ?? '';
+    }
+}
 
 uses(TestCase::class)->in('Feature');
 
@@ -52,7 +91,7 @@ expect()->extend('toBeOne', function () {
  *
  * @param  string  $command
  * @param  array<string, string>  $arguments
- * @return array{int, BufferedOutput}
+ * @return array{int, string, string}
  */
 function run($command, $arguments)
 {
@@ -70,16 +109,15 @@ function run($command, $arguments)
     };
 
     $input = new ArrayInput($arguments, $commandInstance->getDefinition());
-    $output = new BufferedOutput(
-        BufferedOutput::VERBOSITY_VERBOSE,
-    );
+    $output = new TestConsoleOutput;
 
     app()->singleton(InputInterface::class, fn () => $input);
     app()->singleton(OutputInterface::class, fn () => $output);
 
     $statusCode = resolve(Kernel::class)->call($command, $arguments, $output);
 
-    $output = preg_replace('#\\x1b[[][^A-Za-z]*[A-Za-z]#', '', $output->fetch());
+    $stdout = preg_replace('#\\x1b[[][^A-Za-z]*[A-Za-z]#', '', $output->fetch()) ?? '';
+    $stderr = $output->fetchError();
 
-    return [$statusCode, $output];
+    return [$statusCode, $stdout, $stderr];
 }

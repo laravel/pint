@@ -139,3 +139,14 @@ it('outputs json format file and xml format in cli', function () use ($file) {
         ])));
 
 });
+
+it('writes parse errors to stderr when using --format', function () {
+    [$statusCode, $output, $errorOutput] = run('default', [
+        'path' => base_path('tests/Fixtures/with-non-fixable-issues'),
+        '--format' => 'junit',
+    ]);
+
+    expect($statusCode)->toBe(1)
+        ->and($output)->toContain('<?xml version="1.0" encoding="UTF-8"?>')
+        ->and($errorOutput)->toContain('Parse error');
+});

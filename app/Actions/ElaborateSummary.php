@@ -10,6 +10,7 @@ use PhpCsFixer\Console\Report\FixReport;
 use PhpCsFixer\Console\Report\FixReport\ReportSummary;
 use PhpCsFixer\Error\ErrorsManager;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ElaborateSummary
@@ -65,12 +66,46 @@ class ElaborateSummary
             $this->displayUsingFormatter($summary, $outputFormat ?: $format, $file);
         }
 
+        if ($format) {
+            $this->writeErrorsToErrorOutput();
+        }
+
         $failure = (($summary->isDryRun() || $this->input->getOption('repair')) && count($changes) > 0)
             || count($this->errors->getInvalidErrors()) > 0
             || count($this->errors->getExceptionErrors()) > 0
             || count($this->errors->getLintErrors()) > 0;
 
         return $failure ? Command::FAILURE : Command::SUCCESS;
+    }
+
+    /**
+     * Writes lint, parse, and exception errors to stderr so they remain visible
+     * when stdout is redirected to a file via --format.
+     */
+    protected function writeErrorsToErrorOutput(): void
+    {
+        $allErrors = array_merge(
+            $this->errors->getInvalidErrors(),
+            $this->errors->getExceptionErrors(),
+            $this->errors->getLintErrors()
+        );
+
+        if (count($allErrors) === 0) {
+            return;
+        }
+
+        $errorOutput = $this->output instanceof ConsoleOutputInterface
+            ? $this->output->getErrorOutput()
+            : $this->output;
+
+        foreach ($allErrors as $error) {
+            $source = $error->getSource();
+            $errorOutput->writeln(sprintf(
+                '  <error>ERROR</error> %s: %s',
+                $error->getFilePath(),
+                $source !== null ? $source->getMessage() : 'Unknown error',
+            ));
+        }
     }
 
     /**
