@@ -79,36 +79,6 @@ class ElaborateSummary
     }
 
     /**
-     * Writes lint, parse, and exception errors to stderr so they remain visible
-     * when stdout is redirected to a file via --format.
-     */
-    protected function writeErrorsToErrorOutput(): void
-    {
-        $allErrors = array_merge(
-            $this->errors->getInvalidErrors(),
-            $this->errors->getExceptionErrors(),
-            $this->errors->getLintErrors()
-        );
-
-        if (count($allErrors) === 0) {
-            return;
-        }
-
-        $errorOutput = $this->output instanceof ConsoleOutputInterface
-            ? $this->output->getErrorOutput()
-            : $this->output;
-
-        foreach ($allErrors as $error) {
-            $source = $error->getSource();
-            $errorOutput->writeln(sprintf(
-                '  <error>ERROR</error> %s: %s',
-                $error->getFilePath(),
-                $source !== null ? $source->getMessage() : 'Unknown error',
-            ));
-        }
-    }
-
-    /**
      * Formats the given summary using the "selected" formatter.
      *
      * @param  ReportSummary  $summary
@@ -136,5 +106,35 @@ class ElaborateSummary
         }
 
         $this->output->write($reporter->generate($summary));
+    }
+
+    /**
+     * Write lint, parse, and exception errors to stderr so they remain visible when stdout is redirected to a file via --format.
+     */
+    protected function writeErrorsToErrorOutput(): void
+    {
+        $allErrors = array_merge(
+            $this->errors->getInvalidErrors(),
+            $this->errors->getExceptionErrors(),
+            $this->errors->getLintErrors()
+        );
+
+        if (count($allErrors) === 0) {
+            return;
+        }
+
+        $errorOutput = $this->output instanceof ConsoleOutputInterface
+            ? $this->output->getErrorOutput()
+            : $this->output;
+
+        foreach ($allErrors as $error) {
+            $source = $error->getSource();
+
+            $errorOutput->writeln(sprintf(
+                '  <error>ERROR</error> %s: %s',
+                $error->getFilePath(),
+                $source !== null ? $source->getMessage() : 'Unknown error',
+            ));
+        }
     }
 }
