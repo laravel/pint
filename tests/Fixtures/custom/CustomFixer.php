@@ -10,7 +10,7 @@ use PhpCsFixer\Tokenizer\Tokens;
 class CustomFixer implements FixerInterface {
 
     public function getName(): string {
-        return 'My/CustomFixer';
+        return 'My/custom_fixer';
     }
 
     public function getDefinition(): FixerDefinitionInterface {

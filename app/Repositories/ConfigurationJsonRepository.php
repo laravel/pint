@@ -83,7 +83,7 @@ class ConfigurationJsonRepository
             ->map(function ($fixerPath) {
                 $fixerProjectPath = Project::path().'/'.$fixerPath;
 
-                spl_autoload_register(fn () => require_once ($fixerProjectPath));
+                require_once ($fixerProjectPath);
 
                 $tokens = PhpToken::tokenize(file_get_contents($fixerProjectPath));
 
