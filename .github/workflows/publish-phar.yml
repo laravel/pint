@@ -9,6 +9,9 @@ on:
         description: 'Tag release version'
         required: true
 
+permissions:
+  contents: write
+
 jobs:
   publish:
     runs-on: ubuntu-22.04
@@ -21,18 +24,19 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             GITHUB_REF=${{ github.event.inputs.tag }}
-          fi          
+          fi
           echo "tag=${GITHUB_REF##*v}" >> "$GITHUB_OUTPUT"
 
       - name: Checkout the code
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
+          persist-credentials: false
           ref: v${{ steps.tag.outputs.tag }}
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # v2
         with:
-          php-version: 8.1
+          php-version: 8.2
           extensions: dom, curl, libxml, mbstring, zip
           ini-values: error_reporting=E_ALL
           tools: composer:v2
@@ -45,7 +49,7 @@ jobs:
         run: ./pint app:build pint.phar --build-version=${{ steps.tag.outputs.tag }}
 
       - name: Upload the PHAR artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: pint.phar
           path: builds/pint.phar

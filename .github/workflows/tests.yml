@@ -9,6 +9,9 @@ on:
   schedule:
     - cron: '0 0 * * *'
 
+permissions:
+  contents: read
+
 jobs:
   tests:
     runs-on: ${{ matrix.os }}
@@ -16,8 +19,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ubuntu-22.04, windows-2019]
-        php: [8.1, 8.2, 8.3]
+        os: [ubuntu-22.04, windows-2022]
+        php: [8.2, 8.3, 8.4, 8.5]
 
     name: PHP ${{ matrix.php }} - ${{ matrix.os }}
 
@@ -28,16 +31,19 @@ jobs:
           git config --global core.eol lf
 
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          persist-credentials: false
 
       - name: Checkout skeleton code
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
+          persist-credentials: false
           path: 'skeleton'
           repository: 'laravel/laravel'
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # v2
         with:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, fileinfo
@@ -52,9 +58,12 @@ jobs:
       - name: Execute lint tests with Laravel preset
         run: ./pint --test
 
+      - name: Execute lint tests in parallel with Laravel preset
+        run: ./pint --parallel --test
+
       - name: Execute static analysis
         run: vendor/bin/phpstan
-        if: matrix.php == '8.1'
+        if: matrix.php == '8.4'
 
       - name: Execute unit/feature tests
         run: vendor/bin/pest

@@ -3,11 +3,13 @@
 namespace App\Output\Concerns;
 
 use PhpCsFixer\Error\Error;
-use PhpCsFixer\FixerFileProcessedEvent;
+use PhpCsFixer\Runner\Event\FileProcessed;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @property \Symfony\Component\Console\Input\InputInterface $input
- * @property \Symfony\Component\Console\Output\OutputInterface $output
+ * @property InputInterface $input
+ * @property OutputInterface $output
  */
 trait InteractsWithSymbols
 {
@@ -17,15 +19,15 @@ trait InteractsWithSymbols
      * @var array<int, array<int|string, array<string, string>|string>>
      */
     protected $statuses = [
-        FixerFileProcessedEvent::STATUS_INVALID => ['symbol' => '!', 'format' => '<options=bold;fg=red>%s</>'],
-        FixerFileProcessedEvent::STATUS_SKIPPED => ['symbol' => '.', 'format' => '<fg=gray>%s</>'],
-        FixerFileProcessedEvent::STATUS_NO_CHANGES => ['symbol' => '.', 'format' => '<fg=gray>%s</>'],
-        FixerFileProcessedEvent::STATUS_FIXED => [
+        FileProcessed::STATUS_INVALID => ['symbol' => '!', 'format' => '<options=bold;fg=red>%s</>'],
+        FileProcessed::STATUS_SKIPPED => ['symbol' => '.', 'format' => '<fg=gray>%s</>'],
+        FileProcessed::STATUS_NO_CHANGES => ['symbol' => '.', 'format' => '<fg=gray>%s</>'],
+        FileProcessed::STATUS_FIXED => [
             ['symbol' => '⨯', 'format' => '<options=bold;fg=red>%s</>'],
             ['symbol' => '✓', 'format' => '<options=bold;fg=green>%s</>'],
         ],
-        FixerFileProcessedEvent::STATUS_EXCEPTION => ['symbol' => '!', 'format' => '<options=bold;fg=red>%s</>'],
-        FixerFileProcessedEvent::STATUS_LINT => ['symbol' => '!', 'format' => '<options=bold;fg=red>%s</>'],
+        FileProcessed::STATUS_EXCEPTION => ['symbol' => '!', 'format' => '<options=bold;fg=red>%s</>'],
+        FileProcessed::STATUS_LINT => ['symbol' => '!', 'format' => '<options=bold;fg=red>%s</>'],
     ];
 
     /**
@@ -60,10 +62,10 @@ trait InteractsWithSymbols
     protected function getSymbolFromErrorType($type)
     {
         $status = match ($type) {
-            Error::TYPE_INVALID => FixerFileProcessedEvent::STATUS_INVALID,
-            Error::TYPE_EXCEPTION => FixerFileProcessedEvent::STATUS_EXCEPTION,
-            Error::TYPE_LINT => FixerFileProcessedEvent::STATUS_LINT,
-            default => FixerFileProcessedEvent::STATUS_INVALID,
+            Error::TYPE_INVALID => FileProcessed::STATUS_INVALID,
+            Error::TYPE_EXCEPTION => FileProcessed::STATUS_EXCEPTION,
+            Error::TYPE_LINT => FileProcessed::STATUS_LINT,
+            default => FileProcessed::STATUS_INVALID,
         };
 
         return $this->getSymbol($status);

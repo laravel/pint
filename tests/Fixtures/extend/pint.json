@@ -1,0 +1,14 @@
+{
+    "extend": "./base.json",
+    "preset": "laravel",
+    "rules": {
+        "declare_strict_types": true,
+        "lowercase_keywords": true,
+        "lowercase_static_reference": true,
+        "final_class": true,
+        "fully_qualified_strict_types": false,
+        "global_namespace_import": {
+            "import_functions": true
+        }
+    }
+}
