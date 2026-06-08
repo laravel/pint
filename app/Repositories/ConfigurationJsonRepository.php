@@ -101,7 +101,8 @@ class ConfigurationJsonRepository
     protected function fileExists(string $path)
     {
         return match (true) {
-            str_starts_with($path, 'http://') || str_starts_with($path, 'https://') => str_contains(get_headers($path)[0], '200 OK'),
+            str_starts_with($path, 'http://') => abort(1, 'Loading the configuration over plaintext HTTP is not allowed. Use HTTPS.'),
+            str_starts_with($path, 'https://') => str_contains(get_headers($path)[0], '200 OK'),
             default => file_exists($path)
         };
     }
