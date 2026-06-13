@@ -75,3 +75,14 @@ it('throw an error if the extended configuration also has an extend', function (
 
     $repository->finder();
 })->throws(LogicException::class);
+
+it('may have custom fixers options', function () {
+    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/custom/pint.json', null);
+
+    expect($repository->customFixers())
+        ->ToBeArray()
+        ->toContainOnlyInstancesOf(\PhpCsFixer\Fixer\FixerInterface::class)
+        ->toMatchArray([
+            new \Tests\Fixtures\custom\CustomFixer,
+        ]);
+});

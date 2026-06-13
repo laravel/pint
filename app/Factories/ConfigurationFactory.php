@@ -43,13 +43,16 @@ class ConfigurationFactory
      */
     public static function preset($rules)
     {
+        $configRepo = resolve(ConfigurationJsonRepository::class);
+
         return (new Config)
             ->setParallelConfig(ParallelConfigFactory::detect())
             ->setFinder(self::finder())
-            ->setRules(array_merge($rules, resolve(ConfigurationJsonRepository::class)->rules()))
+            ->setRules(array_merge($rules, $configRepo->rules()))
             ->setRiskyAllowed(true)
             ->setUsingCache(true)
-            ->setUnsupportedPhpVersionAllowed(true);
+            ->setUnsupportedPhpVersionAllowed(true)
+            ->registerCustomFixers($configRepo->customFixers());
     }
 
     /**
