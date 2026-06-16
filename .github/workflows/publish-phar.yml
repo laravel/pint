@@ -1,8 +1,9 @@
 name: Publish the released PHAR
 
 on:
-  release:
-    types: [created]
+  push:
+    tags:
+      - 'v*'
   workflow_dispatch:
     inputs:
       tag:
@@ -54,7 +55,10 @@ jobs:
           name: pint.phar
           path: builds/pint.phar
 
-      - name: Upload the PHAR to release
-        run: gh release upload v${{ steps.tag.outputs.tag }} builds/pint.phar
+      - name: Publish the release with the PHAR attached
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Immutable releases reject assets added after publication, so the PHAR
+          # is attached as the release is created, in a single atomic step.
+          gh release create "v${{ steps.tag.outputs.tag }}" builds/pint.phar --generate-notes

@@ -11,4 +11,12 @@
 
 5. Commit all changes
 6. Push all commits to GitHub
-7. [Create a new GitHub release](https://github.com/laravel/pint/releases/new) with the release notes
+7. Tag the release and push the tag:
+
+```zsh
+git tag v1.x.y
+git push origin v1.x.y
+```
+
+8. Edit the release title or notes on GitHub if needed (these remain editable
+   even though immutable releases lock the assets and tag)
