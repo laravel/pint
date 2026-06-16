@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/pint/compare/v1.29.1...main)
+## [Unreleased](https://github.com/laravel/pint/compare/v1.29.2...main)
+
+## [v1.29.2](https://github.com/laravel/pint/compare/v1.29.1...v1.29.2) - 2026-06-16
+
+- fix: no longer accepts loading a configuration over insecure `http`
+- fix: sends errors to stderr
+- chore: various actions regarding github security
+- chore: uses `laravel/agent-detector`
 
 ## [v1.29.1](https://github.com/laravel/pint/compare/v1.29.0...v1.29.1) - 2026-04-20
 
