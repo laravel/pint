@@ -1,0 +1,9 @@
+{
+    "preset": "empty",
+    "in": [
+        "included"
+    ],
+    "rules": {
+        "no_unused_imports": true
+    }
+}

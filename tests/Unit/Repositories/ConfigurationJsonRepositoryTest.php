@@ -41,6 +41,16 @@ it('may have finder options', function () {
     ]);
 });
 
+it('may define paths to inspect', function () {
+    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/finder-in/pint.json', null);
+
+    expect($repository->finder())->toMatchArray([
+        'in' => [
+            'included',
+        ],
+    ])->and($repository->hasIncludedPaths())->toBeTrue();
+});
+
 it('may have a preset option', function () {
     $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/preset/pint.json', null);
 
