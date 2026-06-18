@@ -67,9 +67,7 @@ class ConfigurationJsonRepository
      */
     public function hasIncludedPaths()
     {
-        $includedPaths = $this->finder()['in'] ?? null;
-
-        return $includedPaths !== null && $includedPaths !== [] && $includedPaths !== '';
+        return ! empty($this->finder()['in'] ?? null);
     }
 
     /**
