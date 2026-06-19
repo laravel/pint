@@ -53,9 +53,9 @@ class GitPathsRepository implements PathsRepository
     public function diff($branch)
     {
         $files = [
-            'committed' => tap(new Process(['git', 'diff', '--name-only', '--diff-filter=AM', "{$branch}...HEAD", '--', '**.php']))->run(),
-            'staged' => tap(new Process(['git', 'diff', '--name-only', '--diff-filter=AM', '--cached', '--', '**.php']))->run(),
-            'unstaged' => tap(new Process(['git', 'diff', '--name-only', '--diff-filter=AM', '--', '**.php']))->run(),
+            'committed' => tap(new Process(['git', 'diff', '--name-only', '--diff-filter=AMR', "{$branch}...HEAD", '--', '**.php']))->run(),
+            'staged' => tap(new Process(['git', 'diff', '--name-only', '--diff-filter=AMR', '--cached', '--', '**.php']))->run(),
+            'unstaged' => tap(new Process(['git', 'diff', '--name-only', '--diff-filter=AMR', '--', '**.php']))->run(),
             'untracked' => tap(new Process(['git', 'ls-files', '--others', '--exclude-standard', '--', '**.php']))->run(),
         ];
 
