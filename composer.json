@@ -35,8 +35,16 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
+            "Laravel\\Pint\\": "src/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Laravel\\Pint\\PintServiceProvider"
+            ]
         }
     },
     "autoload-dev": {
