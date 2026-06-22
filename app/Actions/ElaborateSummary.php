@@ -5,6 +5,7 @@ namespace App\Actions;
 use App\Factories\ConfigurationResolverFactory;
 use App\Output\AgentReporter;
 use App\Output\SummaryOutput;
+use App\Project;
 use Illuminate\Console\Command;
 use PhpCsFixer\Console\Report\FixReport;
 use PhpCsFixer\Console\Report\FixReport\ReportSummary;
@@ -58,6 +59,8 @@ class ElaborateSummary
             $this->displayUsingFormatter($summary, 'agent');
         } elseif ($format) {
             $this->displayUsingFormatter($summary, $format);
+        } elseif ($this->output->isQuiet()) {
+            $this->writeIssuesToErrorOutput($summary);
         } else {
             $this->summaryOutput->handle($summary, $totalFiles);
         }
@@ -106,6 +109,31 @@ class ElaborateSummary
         }
 
         $this->output->write($reporter->generate($summary));
+    }
+
+    /**
+     * Write style issues and errors to stderr so they remain visible when --quiet suppresses stdout.
+     */
+    protected function writeIssuesToErrorOutput(ReportSummary $summary): void
+    {
+        $issues = $this->summaryOutput->getIssues(Project::path(), $summary);
+
+        if ($issues->isEmpty()) {
+            return;
+        }
+
+        $errorOutput = $this->output instanceof ConsoleOutputInterface
+            ? $this->output->getErrorOutput()
+            : $this->output;
+
+        foreach ($issues as $issue) {
+            $errorOutput->writeln(sprintf(
+                '  %s %s: %s',
+                $issue->symbol(),
+                $issue->file(),
+                $issue->description($summary->isDryRun()),
+            ), OutputInterface::VERBOSITY_QUIET);
+        }
     }
 
     /**

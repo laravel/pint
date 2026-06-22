@@ -38,3 +38,28 @@ it('may pass', function () {
         ->and($output)
         ->toContain('PASS');
 });
+
+it('writes style issues to stderr and nothing to stdout when --quiet is set', function () {
+    [$statusCode, $stdout, $stderr] = run('default', [
+        'path' => base_path('tests/Fixtures/with-fixable-issues'),
+        '--preset' => 'psr12',
+        '--quiet' => true,
+    ]);
+
+    expect($statusCode)->toBe(1)
+        ->and($stdout)->toBe('')
+        ->and($stderr)->toContain(implode(DIRECTORY_SEPARATOR, [
+            'tests', 'Fixtures', 'with-fixable-issues', 'file.php',
+        ]));
+});
+
+it('writes nothing to stderr when --quiet is set and there are no issues', function () {
+    [$statusCode, $stdout, $stderr] = run('default', [
+        'path' => base_path('tests/Fixtures/without-issues-laravel'),
+        '--quiet' => true,
+    ]);
+
+    expect($statusCode)->toBe(0)
+        ->and($stdout)->toBe('')
+        ->and($stderr)->toBe('');
+});
