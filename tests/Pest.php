@@ -35,6 +35,12 @@ class TestConsoleOutput extends BufferedOutput implements ConsoleOutputInterface
         $this->errorBuffer = new BufferedOutput(BufferedOutput::VERBOSITY_VERBOSE);
     }
 
+    public function setVerbosity(int $level): void
+    {
+        parent::setVerbosity($level);
+        $this->errorBuffer->setVerbosity($level);
+    }
+
     public function getErrorOutput(): OutputInterface
     {
         return $this->errorBuffer;
@@ -108,7 +114,10 @@ function run($command, $arguments)
         'default' => resolve(DefaultCommand::class),
     };
 
-    $input = new ArrayInput($arguments, $commandInstance->getDefinition());
+    // Strip global Symfony options — the command definition in tests excludes them because Application::mergeApplicationDefinition() is not called in the test path.
+    $inputArguments = array_diff_key($arguments, array_flip(['--quiet', '-q']));
+
+    $input = new ArrayInput($inputArguments, $commandInstance->getDefinition());
     $output = new TestConsoleOutput;
 
     app()->singleton(InputInterface::class, fn () => $input);
