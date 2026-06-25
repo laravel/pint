@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<body>
-<style>
+   <body>
+        <style>
 .box { width: <?php echo $width; ?>px; }
 </style>
-</body>
+        </body>
 </html>

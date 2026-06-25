@@ -1,11 +1,11 @@
-<span {{ $attributes->merge(['class' => $classes]) }}>
-    {{ $slot }}
+<span {{$attributes->merge(['class' => $classes])}}>
+{{$slot}}
 </span>
 
-<a {{ $attributes->merge(['class' => 'inline-flex items-center']) }}>
-    {{ $slot }}
+<a {{$attributes->merge(['class' => 'inline-flex items-center'])}}>
+{{$slot}}
 </a>
 
-<label {{ $attributes->merge(['class' => 'block font-medium text-sm text-gray-700']) }}>
-    {{ $value ?? $slot }}
+<label {{$attributes->merge(['class' => 'block font-medium text-sm text-gray-700'])}}>
+{{$value ?? $slot}}
 </label>

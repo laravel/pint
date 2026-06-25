@@ -1,37 +1,37 @@
-@if($x > $y)
-    a
-@elseif($x < $y)
-    b
+@if(  $x > $y  )
+a
+@elseif(   $x < $y   )
+b
 @else
-    c
+c
 @endif
 
-@unless($ok)
-    d
+@unless(  $ok  )
+d
 @endunless
 
-@while($i < 10)
-    e
+@while(   $i < 10   )
+e
 @endwhile
 
-@for($i = 0; $i < 3; $i++)
-    f
+@for(  $i = 0; $i < 3; $i++  )
+f
 @endfor
 
-@foreach($items as $item)
-    {{ $item }}
+@foreach(   $items as $item   )
+{{   $item   }}
 @endforeach
 
-@forelse($users as $user)
-    {{ $user }}
+@forelse(  $users as $user  )
+{{   $user   }}
 @empty
-    none
+none
 @endforelse
 
-@switch($type)
-    @case(1)
-        one
-        @break
-    @default
-        other
+@switch(   $type   )
+@case(  1  )
+one
+@break
+@default
+other
 @endswitch

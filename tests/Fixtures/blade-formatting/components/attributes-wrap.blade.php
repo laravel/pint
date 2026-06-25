@@ -1,9 +1,9 @@
 <div>
-    <flux:input wire:model.live.debounce.500ms="search" type="search" placeholder="Search teams..." icon="magnifying-glass" class="w-full max-w-md" :disabled="$loading" clearable />
+<flux:input wire:model.live.debounce.500ms="search" type="search" placeholder="Search teams..." icon="magnifying-glass" class="w-full max-w-md" :disabled="$loading" clearable />
 
-    <x-forms.button type="submit" variant="primary" size="lg" :loading="$saving" :disabled="! $form->isValid()" wire:click="save" x-on:click="scrollToTop()" data-testid="save-button">
-        {{ __('Save changes') }}
-    </x-forms.button>
+      <x-forms.button type="submit" variant="primary" size="lg" :loading="$saving" :disabled="! $form->isValid()" wire:click="save" x-on:click="scrollToTop()" data-testid="save-button">
+{{    __('Save changes')    }}
+        </x-forms.button>
 
-    <x-card :title="$title" :$subtitle :items="$collection->all()" {{ $attributes->merge(['class' => 'shadow']) }} />
+  <x-card :title="$title" :$subtitle :items="$collection->all()" {{$attributes->merge(['class' => 'shadow'])}} />
 </div>

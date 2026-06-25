@@ -1,17 +1,17 @@
 <head>
-    @stack('styles')
-    @push('styles')
+        @stack('styles')
+  @push('styles')
         <link rel="stylesheet" href="/app.css" />
     @endpush
-    @prepend('scripts')
+        @prepend('scripts')
         <script src="/early.js"></script>
-    @endprepend
+  @endprepend
     @once
-        @push('scripts')
-            <script src="/once.js"></script>
-        @endpush
+  @push('scripts')
+        <script src="/once.js"></script>
+            @endpush
     @endonce
-    @pushOnce('meta')
-        <meta name="csrf" content="{{ csrf_token() }}" />
-    @endPushOnce
+        @pushOnce('meta')
+        <meta name="csrf" content="{{csrf_token()}}" />
+  @endPushOnce
 </head>

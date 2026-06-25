@@ -13,5 +13,5 @@ new class extends Component
 }; ?>
 
 <div>
-    <button wire:click="increment">{{$count}}</button>
+<button wire:click="increment">{{$count}}</button>
 </div>

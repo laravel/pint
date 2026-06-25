@@ -1,7 +1,7 @@
 @can(
-    'update',
-    $user,
-    $post
+        'update',
+            $user,
+   $post
 )
-    <p>ok</p>
+        <p>ok</p>
 @endcan

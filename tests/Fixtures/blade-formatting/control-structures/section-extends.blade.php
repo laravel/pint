@@ -3,29 +3,29 @@
 @section('title', 'Dashboard')
 
 @section('sidebar')
-    @parent
-    <p>This is appended to the master sidebar.</p>
+  @parent
+        <p>This is appended to the master sidebar.</p>
 @endsection
 
 @section('content')
-    <h1>Dashboard</h1>
-    @hasSection('subtitle')
+        <h1>Dashboard</h1>
+  @hasSection('subtitle')
         <h2>@yield('subtitle')</h2>
     @endif
-    @sectionMissing('banner')
+        @sectionMissing('banner')
         <div class="default-banner">Welcome</div>
     @endif
-    <p>@yield('greeting', 'Hello there')</p>
+  <p>@yield('greeting', 'Hello there')</p>
 @stop
 
 @section('meta')
-    <meta name="description" content="x" />
+        <meta name="description" content="x" />
 @append
 
 @section('legacy')
-    <span>old</span>
+  <span>old</span>
 @overwrite
 
 @section('scripts')
-    <script src="/app.js"></script>
+        <script src="/app.js"></script>
 @show

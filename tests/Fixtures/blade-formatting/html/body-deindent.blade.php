@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-@include('partials.head')
+        <meta charset="utf-8">
+   @include(    'partials.head'    )
 </head>
 <body class="antialiased">
-<header>{{ $title }}</header>
+        <header>{{$title}}</header>
 </body>
 </html>

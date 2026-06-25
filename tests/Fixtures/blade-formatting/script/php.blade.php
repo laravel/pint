@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<body>
+        <body>
 <script>
         @php
             echo 'const ready = true;';
         @endphp
     const a = 1;
 </script>
-</body>
+    </body>
 </html>

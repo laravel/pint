@@ -1,18 +1,18 @@
 <x-app-layout>
-<x-slot:header>
+        <x-slot:header>
 <flux:heading>Teams</flux:heading>
-</x-slot:header>
+  </x-slot:header>
 <div>
-@if ($teams->isNotEmpty())
-<ul>
-@foreach ($teams as $team)
-<li>
+@if (  $teams->isNotEmpty()  )
+        <ul>
+@foreach (  $teams as $team  )
+  <li>
 @can('view', $team)
-<a href="{{ route('teams.show', $team) }}">
-@if ($team->is_current)
-<strong>{{ $team->name }}</strong>
+        <a href="{{route('teams.show', $team)}}">
+@if (  $team->is_current  )
+<strong>{{$team->name}}</strong>
 @else
-{{ $team->name }}
+{{    $team->name    }}
 @endif
 </a>
 @endcan

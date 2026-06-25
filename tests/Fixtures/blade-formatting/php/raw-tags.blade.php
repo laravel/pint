@@ -1,8 +1,8 @@
 <div>
     <?php $greeting = 'Hello'; ?>
-    <p>{{ $greeting }}</p>
+        <p>{{$greeting}}</p>
 
-    @php
+@php
         $status = match ($state) {
             'active' => 'On',
             'paused' => 'Paused',
@@ -16,9 +16,9 @@
         $tags = ['php', 'blade', 'laravel'];
     @endphp
 
-    <span>{{ $status }}</span>
+    <span>{{   $status   }}</span>
     <ul>
-        @foreach ($tags as $tag)
+@foreach    ($tags as $tag)
             <li>{{ $handler(strlen($tag)) }}</li>
         @endforeach
     </ul>

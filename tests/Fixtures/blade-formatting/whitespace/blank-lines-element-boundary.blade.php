@@ -1,7 +1,7 @@
 <div>
 
-    <button>Bar</button>
+        <button>Bar</button>
 
-    <button>Baz</button>
+            <button>Baz</button>
 
 </div>

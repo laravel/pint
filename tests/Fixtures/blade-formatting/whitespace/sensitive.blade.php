@@ -8,5 +8,5 @@
         Keep    this    spacing
         and these line breaks
     </textarea>
-    <p>{{ $after }}</p>
+        <p>{{    $after    }}</p>
 </div>

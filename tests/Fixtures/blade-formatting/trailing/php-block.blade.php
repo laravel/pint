@@ -7,4 +7,4 @@
 
 @php($inline = ['a' => 1])
 
-<p>{{ $data['one'] }}</p>
+<p>{{    $data['one']    }}</p>

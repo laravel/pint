@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<body>
-<style>
+        <body>
+   <style>
 .brand { color: {!! $raw !!}; }
 </style>
-</body>
+  </body>
 </html>

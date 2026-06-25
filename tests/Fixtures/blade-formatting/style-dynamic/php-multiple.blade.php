@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-<body>
-<style>
+   <body>
+        <style>
 .a { color: @php echo $a; @endphp; }
 .b { margin: @php echo $b; @endphp; }
 </style>
-</body>
+        </body>
 </html>

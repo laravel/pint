@@ -1,9 +1,9 @@
 <span @class(['badge', 'badge-active' => $isActive])>
-    {{ $slot }}
+{{$slot}}
 </span>
 
 <button type="submit" @disabled($processing)>
-    {{ $label }}
+{{$label}}
 </button>
 
 @verbatim

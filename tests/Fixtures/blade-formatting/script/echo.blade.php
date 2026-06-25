@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<body>
+        <body>
 <script>
 const count = {{ $count }};
 </script>
-</body>
+    </body>
 </html>

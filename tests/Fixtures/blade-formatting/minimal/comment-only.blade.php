@@ -1,1 +1,1 @@
-{{-- a standalone blade comment --}}
+      {{-- a standalone blade comment --}}

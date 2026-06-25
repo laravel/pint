@@ -8,5 +8,5 @@
             some.very.long.value
         }}</p>
     @endverbatim
-    <p>{{ $afterwards }}</p>
+   <p>{{   $afterwards   }}</p>
 </div>

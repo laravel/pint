@@ -1,4 +1,4 @@
 @include('partials.card', [
-    'title' => 'Hello',
-    'count' => 3,
+        'title'    =>    'Hello',
+            'count' => 3,
 ])

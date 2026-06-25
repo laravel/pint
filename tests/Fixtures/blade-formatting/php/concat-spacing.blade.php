@@ -3,4 +3,4 @@
     $label = 'Question from '.$user->name;
 @endphp
 
-<p>{{ $user->name.': '.$user->handle }}</p>
+    <p>{{$user->name.': '.$user->handle}}</p>
