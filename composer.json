@@ -21,6 +21,7 @@
         "ext-mbstring": "*",
         "ext-tokenizer": "*",
         "ext-xml": "*",
+        "composer/semver": "^3.4.4",
         "laravel/prompts": "^0.3.20"
     },
     "require-dev": {

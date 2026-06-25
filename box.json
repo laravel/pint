@@ -12,8 +12,9 @@
         "composer.json"
     ],
     "blacklist": [
-        "resources/fixers/laravel_blade/prettier-worker.js",
-        "resources/fixers/laravel_blade/prettierrc.json"
+        "resources/js/worker.js",
+        "resources/js/version-probe.js",
+        "resources/prettier/prettierrc.json"
     ],
     "exclude-composer-files": false,
     "exclude-dev-files": false,
