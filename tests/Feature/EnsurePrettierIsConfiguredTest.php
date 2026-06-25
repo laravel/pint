@@ -18,11 +18,35 @@ function actionWithRules(array $rules): EnsurePrettierIsConfigured
 }
 
 /**
+ * Build the action with a prettier instance reporting the given distribution support.
+ *
+ * @param  array<string, mixed>  $rules
+ */
+function actionWithSupport(array $rules, bool $supported): EnsurePrettierIsConfigured
+{
+    $configuration = Mockery::mock(ConfigurationJsonRepository::class);
+    $configuration->shouldReceive('rules')->andReturn($rules);
+
+    $prettier = Mockery::mock(Prettier::class);
+    $prettier->shouldReceive('supported')->andReturn($supported);
+
+    return new EnsurePrettierIsConfigured($prettier, $configuration);
+}
+
+/**
  * Invoke the otherwise protected "needsPrettier" check on the action.
  */
 function needsPrettier(EnsurePrettierIsConfigured $action): bool
 {
     return (fn () => $this->needsPrettier())->call($action);
+}
+
+/**
+ * Invoke the otherwise protected "ensureSupportedDistribution" guard on the action.
+ */
+function ensureSupportedDistribution(EnsurePrettierIsConfigured $action): void
+{
+    (fn () => $this->ensureSupportedDistribution())->call($action);
 }
 
 /**
@@ -48,6 +72,14 @@ it('does not need prettier when the blade rule is explicitly disabled', function
 it('needs prettier when the blade rule is enabled', function () {
     expect(needsPrettier(actionWithRules(['Pint/laravel_blade' => true])))->toBeTrue();
 });
+
+it('aborts naming the enabled rule when the distribution lacks prettier resources', function () {
+    ensureSupportedDistribution(actionWithSupport(['Pint/laravel_blade' => true], supported: false));
+})->throws(Exception::class, 'The [Pint/laravel_blade] rule is not available in this Pint distribution.');
+
+it('does not abort when the distribution ships the prettier resources', function () {
+    ensureSupportedDistribution(actionWithSupport(['Pint/laravel_blade' => true], supported: true));
+})->throwsNoExceptions();
 
 it('requires prettier and its blade plugins as dependencies with version constraints', function () {
     $packages = actionWithRules(['Pint/laravel_blade' => true])->requiredPackages();

@@ -197,6 +197,14 @@ class Prettier
     }
 
     /**
+     * Determine whether the bundled prettier resources ship with this distribution.
+     */
+    public function supported(): bool
+    {
+        return File::exists($this->resourcePath('js/worker.js'));
+    }
+
+    /**
      * Resolve the on-disk path to a bundled resource, relative to "resources".
      */
     protected function resourcePath(string $file): string
@@ -206,12 +214,6 @@ class Prettier
         // Inside a PHAR the package root is two levels up; else base_path().
         $root = $phar === '' ? base_path() : dirname($phar, 2);
 
-        $path = $root.'/resources/'.$file;
-
-        if (! File::exists($path)) {
-            abort(1, 'The [Pint/laravel_blade] rule is not available in this Pint distribution.');
-        }
-
-        return $path;
+        return $root.'/resources/'.$file;
     }
 }
