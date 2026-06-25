@@ -17,7 +17,7 @@ class PhpFragmentFormatter
      *
      * @var array<int, string>
      */
-    private const DENYLIST = ['no_closing_tag'];
+    private const DENYLIST = ['no_closing_tag', 'Pint/laravel_blade'];
 
     /**
      * Fixers skipped only for stripped fragments, where they corrupt the output.
@@ -87,8 +87,6 @@ class PhpFragmentFormatter
         $rules = $this->rules();
 
         $deny = $fragment ? array_merge(self::DENYLIST, self::FRAGMENT_DENYLIST) : self::DENYLIST;
-
-        unset($rules['Pint/laravel_blade']);
 
         foreach ($deny as $name) {
             unset($rules[$name]);
