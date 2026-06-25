@@ -35,8 +35,7 @@ class EnsurePrettierIsConfigured
         }
 
         $this->ensureNodeIsInstalled()
-            ->ensureNodeDependenciesAreInstalled()
-            ->ensurePrettierNodeDependencyIsConfigured();
+            ->ensureNodeDependenciesAreInstalled();
     }
 
     /**
@@ -133,75 +132,6 @@ class EnsurePrettierIsConfigured
         );
 
         return $this;
-    }
-
-    /**
-     * Ensure the project's own prettier configuration matches the options Pint expects.
-     */
-    protected function ensurePrettierNodeDependencyIsConfigured(): static
-    {
-        if (! $this->prettier->hasCustomPrettierConfig()) {
-            return $this;
-        }
-
-        $missingPlugins = collect($this->requiredPackages())
-            ->reject(fn (string $plugin): bool => $this->prettier->hasPlugins([$plugin]))
-            ->values()
-            ->all();
-
-        $mismatchedOptions = $this->mismatchedOptions(
-            $this->prettier->defaultOptions(),
-            $this->prettier->resolveCustomOptions(),
-        );
-
-        if ($missingPlugins === [] && $mismatchedOptions === []) {
-            return $this;
-        }
-
-        $messages = [];
-
-        if ($missingPlugins !== []) {
-            $messages[] = sprintf(
-                'add the following prettier plugins: %s',
-                implode(', ', $missingPlugins),
-            );
-        }
-
-        if ($mismatchedOptions !== []) {
-            $messages[] = sprintf(
-                'set the following prettier options: %s',
-                implode(', ', array_map(
-                    fn (string $option, mixed $value): string => sprintf(
-                        '%s = %s',
-                        $option,
-                        json_encode($value, JSON_UNESCAPED_SLASHES),
-                    ),
-                    array_keys($mismatchedOptions),
-                    array_values($mismatchedOptions),
-                )),
-            );
-        }
-
-        abort(1, sprintf(
-            'The rules enabled in your pint configuration require your prettier configuration to %s.',
-            implode('; and ', $messages),
-        ));
-    }
-
-    /**
-     * The expected options that are missing from, or differ in, the project's configuration.
-     *
-     * @param  array<string, mixed>  $expected
-     * @param  array<string, mixed>  $actual
-     * @return array<string, mixed>
-     */
-    protected function mismatchedOptions(array $expected, array $actual): array
-    {
-        unset($expected['plugins']);
-
-        return collect($expected)
-            ->reject(fn (mixed $value, string $option): bool => array_key_exists($option, $actual) && $actual[$option] === $value)
-            ->all();
     }
 
     /**

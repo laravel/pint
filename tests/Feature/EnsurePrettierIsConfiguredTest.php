@@ -3,73 +3,45 @@
 use App\Actions\EnsurePrettierIsConfigured;
 use App\Repositories\ConfigurationJsonRepository;
 use App\Support\Prettier;
-use LaravelZero\Framework\Exceptions\ConsoleException;
 
 /**
- * Invoke the otherwise protected configuration check on the action.
+ * Build the action with a repository that reports the given rules.
+ *
+ * @param  array<string, mixed>  $rules
  */
-function ensureConfigured(Prettier $prettier): void
+function actionWithRules(array $rules): EnsurePrettierIsConfigured
 {
-    $action = new EnsurePrettierIsConfigured($prettier, new ConfigurationJsonRepository(null, null));
+    $configuration = Mockery::mock(ConfigurationJsonRepository::class);
+    $configuration->shouldReceive('rules')->andReturn($rules);
 
-    (fn () => $this->ensurePrettierNodeDependencyIsConfigured())->call($action);
+    return new EnsurePrettierIsConfigured(new Prettier(base_path()), $configuration);
 }
 
-it('passes when the project has no custom prettier config', function () {
-    $prettier = Mockery::mock(Prettier::class);
-    $prettier->shouldReceive('hasCustomPrettierConfig')->andReturn(false);
+/**
+ * Invoke the otherwise protected "needsPrettier" check on the action.
+ */
+function needsPrettier(EnsurePrettierIsConfigured $action): bool
+{
+    return (fn () => $this->needsPrettier())->call($action);
+}
 
-    ensureConfigured($prettier);
-})->throwsNoExceptions();
+it('does not need prettier when no prettier-backed rule is enabled', function () {
+    expect(needsPrettier(actionWithRules([])))->toBeFalse();
+});
 
-it('passes when the custom config declares every default option with the expected value', function () {
-    $defaults = (new Prettier(base_path()))->defaultOptions();
+it('does not need prettier when the blade rule is explicitly disabled', function () {
+    expect(needsPrettier(actionWithRules(['Pint/laravel_blade' => false])))->toBeFalse();
+});
 
-    $prettier = Mockery::mock(Prettier::class);
-    $prettier->shouldReceive('hasCustomPrettierConfig')->andReturn(true);
-    $prettier->shouldReceive('hasPlugins')->andReturn(true);
-    $prettier->shouldReceive('defaultOptions')->andReturn($defaults);
-    $prettier->shouldReceive('resolveCustomOptions')->andReturn($defaults);
+it('needs prettier when the blade rule is enabled', function () {
+    expect(needsPrettier(actionWithRules(['Pint/laravel_blade' => true])))->toBeTrue();
+});
 
-    ensureConfigured($prettier);
-})->throwsNoExceptions();
+it('requires prettier and its blade plugins as dependencies', function () {
+    $packages = actionWithRules(['Pint/laravel_blade' => true])->requiredPackages();
 
-it('aborts naming an option the custom config is missing', function () {
-    $defaults = (new Prettier(base_path()))->defaultOptions();
-    $resolved = $defaults;
-    unset($resolved['bladeEchoSpacing']);
-
-    $prettier = Mockery::mock(Prettier::class);
-    $prettier->shouldReceive('hasCustomPrettierConfig')->andReturn(true);
-    $prettier->shouldReceive('hasPlugins')->andReturn(true);
-    $prettier->shouldReceive('defaultOptions')->andReturn($defaults);
-    $prettier->shouldReceive('resolveCustomOptions')->andReturn($resolved);
-
-    ensureConfigured($prettier);
-})->throws(ConsoleException::class, 'bladeEchoSpacing');
-
-it('aborts naming an option the custom config sets to a different value', function () {
-    $defaults = (new Prettier(base_path()))->defaultOptions();
-    $resolved = $defaults;
-    $resolved['printWidth'] = 80;
-
-    $prettier = Mockery::mock(Prettier::class);
-    $prettier->shouldReceive('hasCustomPrettierConfig')->andReturn(true);
-    $prettier->shouldReceive('hasPlugins')->andReturn(true);
-    $prettier->shouldReceive('defaultOptions')->andReturn($defaults);
-    $prettier->shouldReceive('resolveCustomOptions')->andReturn($resolved);
-
-    ensureConfigured($prettier);
-})->throws(ConsoleException::class, 'printWidth = 120');
-
-it('aborts when the custom config is missing a required plugin', function () {
-    $defaults = (new Prettier(base_path()))->defaultOptions();
-
-    $prettier = Mockery::mock(Prettier::class);
-    $prettier->shouldReceive('hasCustomPrettierConfig')->andReturn(true);
-    $prettier->shouldReceive('hasPlugins')->andReturn(false);
-    $prettier->shouldReceive('defaultOptions')->andReturn($defaults);
-    $prettier->shouldReceive('resolveCustomOptions')->andReturn($defaults);
-
-    ensureConfigured($prettier);
-})->throws(ConsoleException::class, 'prettier');
+    expect($packages)
+        ->toContain('prettier')
+        ->toContain('prettier-plugin-blade')
+        ->toContain('prettier-plugin-tailwindcss');
+});
