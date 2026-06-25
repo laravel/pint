@@ -177,7 +177,15 @@ class Prettier
      */
     public function workerPath(): string
     {
-        return $this->resourcePath('prettier-worker.js');
+        return $this->resourcePath('js/worker.js');
+    }
+
+    /**
+     * The path to the bundled node script that probes installed package versions.
+     */
+    public function versionProbePath(): string
+    {
+        return $this->resourcePath('js/version-probe.js');
     }
 
     /**
@@ -185,11 +193,11 @@ class Prettier
      */
     public function configPath(): string
     {
-        return $this->resourcePath('prettierrc.json');
+        return $this->resourcePath('prettier/prettierrc.json');
     }
 
     /**
-     * Resolve the on-disk path to a bundled blade resource.
+     * Resolve the on-disk path to a bundled resource, relative to "resources".
      */
     protected function resourcePath(string $file): string
     {
@@ -198,7 +206,7 @@ class Prettier
         // Inside a PHAR the package root is two levels up; else base_path().
         $root = $phar === '' ? base_path() : dirname($phar, 2);
 
-        $path = $root.'/resources/fixers/laravel_blade/'.$file;
+        $path = $root.'/resources/'.$file;
 
         if (! File::exists($path)) {
             abort(1, 'The [Pint/laravel_blade] rule is not available in this Pint distribution.');
