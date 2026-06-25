@@ -1,18 +1,5 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Coverage Guard
-|--------------------------------------------------------------------------
-|
-| These tests keep the fixture/test layout honest as new cases are added: every
-| concern directory must have a matching test file, hold at least one fixture,
-| and pair every ".blade.php" input with a golden ".expected" file. A new
-| fixture dropped into a concern folder is picked up automatically; a brand new
-| concern folder fails here until its one-line test file exists.
-|
-*/
-
 it('has a dedicated test file for every concern', function (string $concern) {
     $studly = str_replace(' ', '', ucwords(str_replace('-', ' ', $concern)));
 
