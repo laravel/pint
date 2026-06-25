@@ -1,4 +1,4 @@
 @foobarbaz(
-    'alpha',
-    'beta'
+        'alpha',
+   'beta'
 )

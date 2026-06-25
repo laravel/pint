@@ -1,9 +1,9 @@
-<pre @class(['code', 'highlighted' => $highlight])>
+    <pre @class(['code', 'highlighted' => $highlight])>
 function example() {
     return 42;
 }
 </pre>
-<pre>
+        <pre>
 
 
 author blank lines above must survive

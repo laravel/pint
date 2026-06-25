@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<body>
+        <body>
 <script>
 const total = <?php echo $total; ?>;
 </script>
-</body>
+    </body>
 </html>

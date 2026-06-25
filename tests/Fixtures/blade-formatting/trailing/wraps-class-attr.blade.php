@@ -1,4 +1,4 @@
 <div @class([
-    'p-4',
-    'bg-red' => $active
+        'p-4',
+   'bg-red'    =>    $active
 ])></div>

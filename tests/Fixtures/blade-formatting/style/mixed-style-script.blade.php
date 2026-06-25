@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<body>
+    <body>
 <style>
 .brand { color: @php echo $brand; @endphp; }
 </style>
@@ -10,5 +10,5 @@
         @endif
     const a = 1;
 </script>
-</body>
+  </body>
 </html>

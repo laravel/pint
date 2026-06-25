@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<body>
+        <body>
 <style>
 .a { color: @php echo $a; @endphp; }
 </style>
-<style>
+   <style>
 .b { color: @php echo $b; @endphp; }
 </style>
-</body>
+  </body>
 </html>

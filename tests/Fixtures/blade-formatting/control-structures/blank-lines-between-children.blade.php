@@ -1,11 +1,11 @@
-@foreach ($items as $item)
-    @include('partials.header')
+@foreach (  $items as $item  )
+        @include('partials.header')
 
-    @include('partials.body')
+  @include('partials.body')
 @endforeach
 
-@if ($condition)
-    <span>first</span>
+@if (  $condition  )
+        <span>first</span>
 
-    <span>second</span>
+  <span>second</span>
 @endif

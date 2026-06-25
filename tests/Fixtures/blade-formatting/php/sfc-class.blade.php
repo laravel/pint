@@ -20,7 +20,7 @@ new class extends Component
 }; ?>
 
 <div>
-    @foreach($items as $item)
-        <p>{{ $item }}</p>
+@foreach($items as $item)
+        <p>{{$item}}</p>
     @endforeach
 </div>

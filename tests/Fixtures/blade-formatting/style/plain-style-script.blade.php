@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<body>
+      <body>
 <style>
 .brand { color: red; }
 </style>
-<script>
+   <script>
 const a = 1;
-</script>
-</body>
+   </script>
+        </body>
 </html>

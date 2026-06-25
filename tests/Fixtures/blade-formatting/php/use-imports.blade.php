@@ -8,4 +8,4 @@
     $engine = $car->engine;
 @endphp
 
-<div>{{ $car }}</div>
+    <div>{{$car}}</div>

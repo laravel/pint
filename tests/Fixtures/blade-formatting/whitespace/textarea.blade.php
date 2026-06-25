@@ -1,8 +1,8 @@
-<div>
+    <div>
     <textarea name="bio" rows="4">{{ $user->bio }}</textarea>
     <textarea>{{ $content }}
 {{ $signature }}</textarea>
-    <pre>{{ $stackTrace }}</pre>
-    <code>composer require {{ $package }}</code>
-    <p>After</p>
+        <pre>{{ $stackTrace }}</pre>
+        <code>composer require {{ $package }}</code>
+        <p>After</p>
 </div>

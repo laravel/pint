@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<body>
+   <body>
 <style>
 .brand { color: {{ $color }}; }
 </style>
-</body>
+        </body>
 </html>

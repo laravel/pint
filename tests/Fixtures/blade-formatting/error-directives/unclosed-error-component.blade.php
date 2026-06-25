@@ -1,17 +1,17 @@
 <div class="bg-gray-100">
-    <div class="space-y-1">
-        <label for="body">Body</label>
+        <div class="space-y-1">
+<label for="body">Body</label>
 
-        <textarea name="body"></textarea>
+<textarea name="body"></textarea>
 
-        @error('body')
-    </div>
+        @error(  'body'  )
+</div>
 
-    <div class="space-y-1">
-        <label for="tags">Tags</label>
+   <div class="space-y-1">
+<label for="tags">Tags</label>
 
-        <select name="tags[]"></select>
+<select name="tags[]"></select>
 
-        @error('tags')
-    </div>
+        @error(   'tags'   )
+</div>
 </div>

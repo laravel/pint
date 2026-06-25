@@ -1,3 +1,3 @@
 @props([
-    'sidebar' => false
-])
+            'sidebar'    =>    false
+        ])

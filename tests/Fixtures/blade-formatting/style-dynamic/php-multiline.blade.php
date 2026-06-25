@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<body>
-<style>
+        <body>
+   <style>
     .brand {
         @php
                 $color = 'red';
@@ -10,5 +10,5 @@
         margin: 0;
     }
 </style>
-</body>
+  </body>
 </html>

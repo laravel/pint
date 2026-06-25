@@ -5,5 +5,5 @@
             <span x-text="!flag"></span>
         </div>
     @endverbatim
-    <p>{{ $afterwards }}</p>
+   <p>{{   $afterwards   }}</p>
 </div>

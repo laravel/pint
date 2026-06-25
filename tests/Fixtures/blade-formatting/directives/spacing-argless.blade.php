@@ -1,22 +1,22 @@
 <form>
-    @csrf
-    @if($ok)
-        ok
-    @else
-        no
-    @endif
+@csrf
+        @if(   $ok   )
+ok
+        @else
+no
+        @endif
 </form>
-@foreach($items as $item)
-    {{ $item }}
+@foreach(  $items as $item  )
+{{   $item   }}
 @endforeach
 @auth
-    in
+in
 @endauth
 @guest
-    out
+out
 @endguest
 @once
-    once
+once
 @endonce
 @php
     $x = 1;

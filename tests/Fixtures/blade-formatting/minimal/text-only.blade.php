@@ -1,1 +1,1 @@
-Just plain text with an echo {{ $value }} and nothing else.
+Just plain text with an echo {{    $value     }} and nothing else.

@@ -1,4 +1,4 @@
 <div>
-	<p>{{ $x }}</p>
-	<span>{{ $y }}</span>
+	<p>{{    $x}}</p>
+	<span>{{$y    }}</span>
 </div>

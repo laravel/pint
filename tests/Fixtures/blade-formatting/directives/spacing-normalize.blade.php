@@ -1,8 +1,8 @@
 @include  ('partials.nav')
-@if( $x )
-    a
-@endif
-@foreach (  $items as $item  )
-    {{ $item }}
-@endforeach
+        @if( $x )
+a
+        @endif
+   @foreach (  $items as $item  )
+{{   $item   }}
+   @endforeach
 @props( ['a','b'] )

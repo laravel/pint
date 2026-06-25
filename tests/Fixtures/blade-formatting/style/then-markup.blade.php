@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<body>
+   <body>
 <style>
 .brand { color: @php echo $brand; @endphp; }
 </style>
-<main>
+        <main>
 <p>Hello</p>
-</main>
-</body>
+   </main>
+  </body>
 </html>

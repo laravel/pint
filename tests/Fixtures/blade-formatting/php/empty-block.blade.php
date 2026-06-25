@@ -1,4 +1,4 @@
 <div>
-    @php
+@php
     @endphp
 </div>

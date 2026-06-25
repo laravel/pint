@@ -1,13 +1,13 @@
 <div>
-    @fragment('user-list')
+@fragment('user-list')
         <ul>
-            @foreach ($users as $user)
-                <li wire:key="user-{{ $user->id }}">{{ $user->name }}</li>
+  @foreach (  $users as $user  )
+        <li wire:key="user-{{$user->id}}">{{    $user->name    }}</li>
             @endforeach
-        </ul>
-    @endfragment
+    </ul>
+        @endfragment
 
-    @fragment('footer')
-        <footer>{{ $count }} users</footer>
+  @fragment('footer')
+        <footer>{{$count}} users</footer>
     @endfragment
 </div>

@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
 <meta charset="utf-8">
-<title>⚡ {{ $title ?? config('app.name') }}</title>
+      <title>⚡ {{$title ?? config('app.name')}}</title>
 <style>
 :root { --brand: {{ $brand ?? '#4f46e5' }}; }
 .btn { padding: @if($dense) 0.25rem @else 0.5rem @endif; }
@@ -15,15 +15,15 @@
 <body class="antialiased bg-gray-50 dark:bg-gray-900">
 {{-- The primary navigation, rendered once per request --}}
 <x-layout :title="$title" :user="auth()->user()">
-@foreach($groups as $group)
-@if($group->visible)
+@foreach(   $groups as $group   )
+@if(   $group->visible   )
 <x-card :key="$group->id" @class(['card', 'card--active' => $group->active])>
 <x-slot:title>
-{{ $group->heading }}
+{{$group->heading}}
 </x-slot:title>
-@forelse($group->items as $item)
+@forelse(   $group->items as $item   )
 <x-item :value="'item-'.$item->id" x-show="!$item.archived">
-{{ $item->label }}
+{{$item->label}}
 </x-item>
 @empty
 <p>No items in this group</p>
@@ -37,7 +37,7 @@
 : 'Not subscribed to any plan at the moment, please consider upgrading' }}
 </div>
 <p>
-{{ collect($metrics)->map(fn ($m) => $m->value)->filter()->sum() }}
+{{collect($metrics)->map(fn ($m) => $m->value)->filter()->sum()}}
 </p>
 @php
 $summary = [

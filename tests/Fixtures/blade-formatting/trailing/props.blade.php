@@ -1,10 +1,10 @@
 @props([
-    'sidebar' => false,
+        'sidebar'    =>    false,
 ])
 
 @props([
-    'title' => '',
-    'active' => false,
+   'title' => '',
+            'active' => false,
 ])
 
 @props(['compact', 'flush'])

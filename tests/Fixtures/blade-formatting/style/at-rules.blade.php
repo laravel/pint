@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<style>
+        <head>
+   <style>
     @media (min-width: 600px) {
         .card {
             padding: 2rem;
@@ -25,7 +25,7 @@
             margin: 0;
         }
     }
-</style>
-</head>
-<body></body>
+   </style>
+            </head>
+  <body></body>
 </html>

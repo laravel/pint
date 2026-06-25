@@ -1,4 +1,4 @@
-<my-widget data-id="{{ $id }}" :config="$config" wire:model="value">
-<span slot="label">{{ $label }}</span>
+<my-widget data-id="{{$id}}" :config="$config" wire:model="value">
+<span slot="label">{{   $label   }}</span>
 <x-icon name="star" />
 </my-widget>
