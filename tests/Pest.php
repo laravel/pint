@@ -109,19 +109,6 @@ uses(TestCase::class)
     })
     ->in('Feature');
 
-/*
-|--------------------------------------------------------------------------
-| Blade Formatting
-|--------------------------------------------------------------------------
-|
-| The Blade formatter shells out to a bundled "node" process (prettier). The
-| tests under "Feature/Blade" each stage one *concern* of fixtures, run Pint
-| over them once, and compare the result against a golden ".expected" file.
-| The check below is cached per process so every blade test is skipped at once
-| (rather than spawning "node --version" repeatedly) when Node is unavailable.
-|
-*/
-
 uses()
     ->beforeEach(function () {
         static $nodeIsAvailable = null;
@@ -139,37 +126,6 @@ uses()
     })
     ->in('Feature/Blade');
 
-/*
-|--------------------------------------------------------------------------
-| Expectations
-|--------------------------------------------------------------------------
-|
-| When you're writing tests, you often need to check that values meet certain conditions. The
-| "expect()" function gives you access to a set of "expectations" methods that you can use
-| to assert different things. Of course, you may extend the Expectation API at any time.
-|
-*/
-
-expect()->extend('toBeOne', function () {
-    return $this->toBe(1);
-});
-
-/*
-|--------------------------------------------------------------------------
-| Functions
-|--------------------------------------------------------------------------
-|
-| While Pest is very powerful out-of-the-box, you may have some testing code specific to your
-| project that you don't want to repeat in every file. Here you can also expose helpers as
-| global functions to help you to reduce the number of lines of code in your test files.
-|
-*/
-
-/**
- * Returns a unique, temporary output file path that is safe to use when
- * running the test suite in parallel. The file is removed automatically
- * once the process terminates.
- */
 function testOutputFile(): string
 {
     $file = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pint-test-'.bin2hex(random_bytes(8));
@@ -183,13 +139,6 @@ function testOutputFile(): string
     return $file;
 }
 
-/**
- * Runs the given console command.
- *
- * @param  string  $command
- * @param  array<string, string>  $arguments
- * @return array{int, string, string}
- */
 function run($command, $arguments)
 {
     $arguments = array_merge([
@@ -222,49 +171,23 @@ function run($command, $arguments)
     return [$statusCode, $stdout, $stderr];
 }
 
-/*
-|--------------------------------------------------------------------------
-| Blade Fixture Helpers
-|--------------------------------------------------------------------------
-|
-| The "Feature/Blade" suite is organised so that every formatting *concern*
-| lives in its own fixture sub-directory and its own test file. Keeping one
-| concern per file lets the parallel test runner spread the (otherwise slow,
-| node-bound) blade work across cores instead of serialising it behind a
-| single dataset. The helpers below stage a concern into a throwaway project,
-| run Pint once, and cache the result for every assertion in that file.
-|
-*/
-
-/**
- * The root directory that holds the blade formatting fixtures.
- */
 function bladeFixtureRoot(): string
 {
     return __DIR__.'/Fixtures/blade-formatting';
 }
 
-/**
- * The directory that holds a single concern's fixtures.
- */
-function bladeConcernRoot(string $concern): string
+function bladeFixtureGroupRoot(string $group): string
 {
-    return bladeFixtureRoot().'/'.$concern;
+    return bladeFixtureRoot().'/'.$group;
+}
+
+function bladeFixtureGroupFiles(string $group): array
+{
+    return bladeFixtureFilesIn(bladeFixtureGroupRoot($group));
 }
 
 /**
- * The blade fixture files belonging to a concern, as paths relative to that
- * concern's directory.
- *
- * @return array<int, string>
- */
-function bladeConcernFiles(string $concern): array
-{
-    return bladeFixtureFilesIn(bladeConcernRoot($concern));
-}
-
-/**
- * Every blade fixture file across all concerns, as paths relative to the
+ * Every blade fixture file across all groups, as paths relative to the
  * fixture root, optionally excluding the (skipped) ignorable fixtures.
  *
  * @return array<int, string>
@@ -364,33 +287,33 @@ function stageBladeFixture(string $tmp, string $sourceRoot, string $relative, bo
 }
 
 /**
- * Stage and format a concern's fixtures, caching the temporary directory so
- * every dataset case in the concern's test file asserts against a single run.
+ * Stage and format a fixture group's fixtures, caching the temporary directory
+ * so every dataset case in the group's test file asserts against a single run.
  *
- * For a regular concern the inputs are staged under "input/" and the golden
+ * For a regular group the inputs are staged under "input/" and the golden
  * files under "golden/" inside one project, so a *single* Pint invocation can
  * cover both the golden-file check (does "input" format to "golden"?) and the
  * idempotency check (does "golden" survive a re-format?). Halving the number
  * of "node" worker boots this way is what keeps the parallel suite fast.
  *
- * The "ignorables" concern is special: those fixtures must be skipped by Pint,
+ * The "ignorables" group is special: those fixtures must be skipped by Pint,
  * which relies on their real relative paths (e.g. "node_modules/...",
  * "resources/views/emails/..."). They are therefore staged at the project root
  * with no "input/" prefix, and formatting them is expected to be a no-op.
  */
-function formatBladeConcern(string $concern): string
+function formatBladeFixtureGroup(string $group): string
 {
     static $cache = [];
 
-    if (isset($cache[$concern])) {
-        return $cache[$concern];
+    if (isset($cache[$group])) {
+        return $cache[$group];
     }
 
-    $sourceRoot = bladeConcernRoot($concern);
+    $sourceRoot = bladeFixtureGroupRoot($group);
     $tmp = freshBladeTempDirectory();
 
-    foreach (bladeConcernFiles($concern) as $relative) {
-        if ($concern === 'ignorables') {
+    foreach (bladeFixtureGroupFiles($group) as $relative) {
+        if ($group === 'ignorables') {
             stageBladeFixture($tmp, $sourceRoot, $relative);
 
             continue;
@@ -402,12 +325,12 @@ function formatBladeConcern(string $concern): string
 
     runPintBlade($tmp);
 
-    return $cache[$concern] = $tmp;
+    return $cache[$group] = $tmp;
 }
 
 /**
- * One representative fixture per non-ignorable concern, used to exercise Pint's
- * "--parallel" worker pool without re-formatting every fixture (the per-concern
+ * One representative fixture per non-ignorable group, used to exercise Pint's
+ * "--parallel" worker pool without re-formatting every fixture (the per-group
  * files already cover correctness; parallelism does not change per-file output).
  *
  * @return array<int, string>
@@ -416,13 +339,13 @@ function bladeParallelSample(): array
 {
     $samples = [];
 
-    foreach (array_map('basename', glob(bladeFixtureRoot().'/*', GLOB_ONLYDIR)) as $concern) {
-        if ($concern === 'ignorables') {
+    foreach (array_map('basename', glob(bladeFixtureRoot().'/*', GLOB_ONLYDIR)) as $group) {
+        if ($group === 'ignorables') {
             continue;
         }
 
-        if (($files = bladeConcernFiles($concern)) !== []) {
-            $samples[] = $concern.'/'.$files[0];
+        if (($files = bladeFixtureGroupFiles($group)) !== []) {
+            $samples[] = $group.'/'.$files[0];
         }
     }
 
@@ -453,42 +376,42 @@ function formatBladeFixturesInParallel(): string
 }
 
 /**
- * Register the golden-file and idempotency tests for a blade concern. Keeping
- * this as a one-line call per concern file keeps every concern in its own test
- * file (so the parallel runner can pick them up) without duplicating the body.
+ * Register the golden-file and idempotency tests for a blade fixture group.
+ * Keeping this as a one-line call per group file keeps every group in its own
+ * test file (so the parallel runner can pick them up) without duplicating body.
  */
-function bladeFixtureTest(string $concern): void
+function bladeFixtureTest(string $group): void
 {
-    if ($concern === 'ignorables') {
-        it('leaves every ignorable fixture untouched', function (string $file) use ($concern) {
-            $tmp = formatBladeConcern($concern);
+    if ($group === 'ignorables') {
+        it('leaves every ignorable fixture untouched', function (string $file) use ($group) {
+            $tmp = formatBladeFixtureGroup($group);
 
             expect(file_get_contents($tmp.'/'.$file))->toBe(
-                file_get_contents(bladeConcernRoot($concern).'/'.$file.'.expected'),
-                "Ignorable fixture [{$concern}/{$file}] was modified but should have been skipped.",
+                file_get_contents(bladeFixtureGroupRoot($group).'/'.$file.'.expected'),
+                "Ignorable fixture [{$group}/{$file}] was modified but should have been skipped.",
             );
-        })->with(fn () => bladeConcernFiles($concern));
+        })->with(fn () => bladeFixtureGroupFiles($group));
 
         return;
     }
 
-    it('formats every fixture to its golden file', function (string $file) use ($concern) {
-        $tmp = formatBladeConcern($concern);
+    it('formats every fixture to its golden file', function (string $file) use ($group) {
+        $tmp = formatBladeFixtureGroup($group);
 
         expect(file_get_contents($tmp.'/input/'.$file))->toBe(
-            file_get_contents(bladeConcernRoot($concern).'/'.$file.'.expected'),
-            "Formatted output does not match the golden file for [{$concern}/{$file}].",
+            file_get_contents(bladeFixtureGroupRoot($group).'/'.$file.'.expected'),
+            "Formatted output does not match the golden file for [{$group}/{$file}].",
         );
-    })->with(fn () => bladeConcernFiles($concern));
+    })->with(fn () => bladeFixtureGroupFiles($group));
 
-    it('re-formats every golden file unchanged (idempotent)', function (string $file) use ($concern) {
-        $tmp = formatBladeConcern($concern);
+    it('re-formats every golden file unchanged (idempotent)', function (string $file) use ($group) {
+        $tmp = formatBladeFixtureGroup($group);
 
         expect(file_get_contents($tmp.'/golden/'.$file))->toBe(
-            file_get_contents(bladeConcernRoot($concern).'/'.$file.'.expected'),
-            "Re-formatting the golden file changed it for [{$concern}/{$file}] (not idempotent).",
+            file_get_contents(bladeFixtureGroupRoot($group).'/'.$file.'.expected'),
+            "Re-formatting the golden file changed it for [{$group}/{$file}] (not idempotent).",
         );
-    })->with(fn () => bladeConcernFiles($concern));
+    })->with(fn () => bladeFixtureGroupFiles($group));
 }
 
 /**
