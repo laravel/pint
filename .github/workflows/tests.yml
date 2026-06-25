@@ -59,7 +59,7 @@ jobs:
         run: ./pint --test
 
       - name: Execute lint tests in parallel with Laravel preset
-        run: ./pint --parallel --test
+        run: ./pint --parallel --blade --test
 
       - name: Execute static analysis
         run: vendor/bin/phpstan
