@@ -25,11 +25,11 @@ it('uses configured in paths when no path is provided', function () {
         chdir($cwd);
     }
 
-    $output = str_replace('\\/', '/', $output);
+    $output = str_replace('\\/', DIRECTORY_SEPARATOR, $output);
 
     expect($statusCode)->toBe(1)
-        ->and($output)->toContain('included/file.php')
-        ->and($output)->not->toContain('excluded/file.php');
+        ->and($output)->toContain(implode(DIRECTORY_SEPARATOR, ['included', 'file.php']))
+        ->and($output)->not->toContain(implode(DIRECTORY_SEPARATOR, ['excluded', 'file.php']));
 });
 
 it('uses explicit paths over configured in paths', function () {
@@ -47,9 +47,9 @@ it('uses explicit paths over configured in paths', function () {
         chdir($cwd);
     }
 
-    $output = str_replace('\\/', '/', $output);
+    $output = str_replace('\\/', DIRECTORY_SEPARATOR, $output);
 
     expect($statusCode)->toBe(1)
-        ->and($output)->toContain('excluded/file.php')
-        ->and($output)->not->toContain('included/file.php');
+        ->and($output)->toContain(implode(DIRECTORY_SEPARATOR, ['excluded', 'file.php']))
+        ->and($output)->not->toContain(implode(DIRECTORY_SEPARATOR, ['included', 'file.php']));
 });
