@@ -1,14 +1,14 @@
 <?php
 
-it('has a dedicated test file for every concern', function (string $concern) {
-    $studly = str_replace(' ', '', ucwords(str_replace('-', ' ', $concern)));
+it('has a dedicated test file for every fixture group', function (string $group) {
+    $studly = str_replace(' ', '', ucwords(str_replace('-', ' ', $group)));
 
     expect(__DIR__."/{$studly}Test.php")->toBeFile(
-        "Concern [{$concern}] is missing its test file [{$studly}Test.php]. Add it with: bladeFixtureTest('{$concern}');",
+        "Fixture group [{$group}] is missing its test file [{$studly}Test.php]. Add it with: bladeFixtureTest('{$group}');",
     );
 
-    expect(bladeConcernFiles($concern))->not->toBeEmpty(
-        "Concern [{$concern}] has no fixtures.",
+    expect(bladeFixtureGroupFiles($group))->not->toBeEmpty(
+        "Fixture group [{$group}] has no fixtures.",
     );
 })->with(fn () => array_map('basename', glob(bladeFixtureRoot().'/*', GLOB_ONLYDIR)));
 
