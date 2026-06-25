@@ -20,15 +20,15 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-tokenizer": "*",
-        "ext-xml": "*",
-        "composer/semver": "^3.4.4",
-        "laravel/prompts": "^0.3.20"
+        "ext-xml": "*"
     },
     "require-dev": {
+        "composer/semver": "^3.4.4",
         "friendsofphp/php-cs-fixer": "^3.95.11",
         "illuminate/view": "^12.62.0",
         "larastan/larastan": "^3.10.0",
         "laravel-zero/framework": "^12.1.0",
+        "laravel/prompts": "^0.3.20",
         "mockery/mockery": "^1.6.12",
         "nunomaduro/termwind": "^2.4.0",
         "pestphp/pest": "^3.8.6",
