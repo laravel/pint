@@ -25,26 +25,6 @@ class Prettier
     public const WORKER_IDLE_TIMEOUT = 30;
 
     /**
-     * The prettier configuration file names that may exist in a project.
-     *
-     * @var array<int, string>
-     */
-    protected const CONFIG_CANDIDATES = [
-        '.prettierrc',
-        '.prettierrc.json',
-        '.prettierrc.yml',
-        '.prettierrc.yaml',
-        '.prettierrc.json5',
-        '.prettierrc.js',
-        '.prettierrc.cjs',
-        '.prettierrc.mjs',
-        '.prettierrc.toml',
-        'prettier.config.js',
-        'prettier.config.cjs',
-        'prettier.config.mjs',
-    ];
-
-    /**
      * The process instance, if any.
      */
     protected ?Process $process = null;
@@ -166,7 +146,7 @@ class Prettier
         }
 
         $this->process = new Process(
-            ['node', $this->workerPath(), $this->projectRoot, $this->configPath() ?? ''],
+            ['node', $this->workerPath(), $this->projectRoot, $this->configPath()],
             $this->projectRoot,
         );
 
@@ -201,94 +181,11 @@ class Prettier
     }
 
     /**
-     * The path to the bundled prettier configuration, or null when the project
-     * ships its own.
+     * The path to the bundled prettier configuration.
      */
-    public function configPath(): ?string
+    public function configPath(): string
     {
-        if ($this->hasCustomPrettierConfig()) {
-            return null;
-        }
-
         return $this->resourcePath('prettierrc.json');
-    }
-
-    /**
-     * Determine whether the project already has a prettier configuration.
-     */
-    public function hasCustomPrettierConfig(): bool
-    {
-        foreach (static::CONFIG_CANDIDATES as $candidate) {
-            if (File::exists($this->projectRoot.'/'.$candidate)) {
-                return true;
-            }
-        }
-
-        return array_key_exists('prettier', $this->packageJson() ?? []);
-    }
-
-    /**
-     * Pint's bundled prettier options for blade formatting.
-     *
-     * @return array<string, mixed>
-     */
-    public function defaultOptions(): array
-    {
-        $contents = json_decode(File::get($this->resourcePath('prettierrc.json')), true);
-
-        return is_array($contents) ? $contents : [];
-    }
-
-    /**
-     * Resolve the project's own prettier options as prettier itself sees them.
-     *
-     * @return array<string, mixed>
-     */
-    public function resolveCustomOptions(): array
-    {
-        $result = new Process(
-            ['node', $this->resolverPath(), $this->projectRoot],
-            $this->projectRoot,
-        );
-
-        $result->run();
-
-        if (! $result->isSuccessful()) {
-            return [];
-        }
-
-        $options = json_decode(trim($result->getOutput()), true);
-
-        return is_array($options) ? $options : [];
-    }
-
-    /**
-     * The path to the bundled prettier configuration resolver on disk.
-     */
-    public function resolverPath(): string
-    {
-        return $this->resourcePath('prettier-resolver.js');
-    }
-
-    /**
-     * Determine whether the project's prettier configuration references all the given plugins.
-     *
-     * @param  array<int, string>  $plugins
-     */
-    public function hasPlugins(array $plugins): bool
-    {
-        $sources = collect(static::CONFIG_CANDIDATES)
-            ->map(fn (string $candidate): string => $this->projectRoot.'/'.$candidate)
-            ->filter(fn (string $file): bool => File::exists($file))
-            ->map(fn (string $file): string => File::get($file));
-
-        if (($prettier = $this->packageJson()['prettier'] ?? null) !== null) {
-            $sources->push((string) json_encode($prettier));
-        }
-
-        $configuration = $sources->implode("\n");
-
-        return collect($plugins)->every(fn (string $plugin): bool => str_contains($configuration, $plugin));
     }
 
     /**
@@ -308,23 +205,5 @@ class Prettier
         }
 
         return $path;
-    }
-
-    /**
-     * The decoded "package.json" contents, if present and valid.
-     *
-     * @return array<string, mixed>|null
-     */
-    protected function packageJson(): ?array
-    {
-        $path = $this->projectRoot.'/package.json';
-
-        if (! File::exists($path)) {
-            return null;
-        }
-
-        $contents = json_decode(File::get($path), true);
-
-        return is_array($contents) ? $contents : null;
     }
 }

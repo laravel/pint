@@ -1,9 +1,9 @@
 const projectRoot = process.argv[2] || process.cwd();
-const configPath = process.argv[3] || null;
+const configPath = process.argv[3];
 
 const prettier = require(require.resolve("prettier", { paths: [projectRoot] }));
 
-const bundledOptions = configPath ? require(configPath) : null;
+const bundledOptions = require(configPath);
 
 function resolvePlugins(plugins) {
     if (!Array.isArray(plugins)) {
@@ -63,13 +63,7 @@ async function handleMessage(input) {
 
         const resolved = filepath.trim();
 
-        const options = resolveOptionPlugins(
-            bundledOptions
-                ? { ...bundledOptions }
-                : (await prettier.resolveConfig(resolved, {
-                      editorconfig: false,
-                  })) || {},
-        );
+        const options = resolveOptionPlugins({ ...bundledOptions });
 
         const formatted = await prettier.format(content, {
             ...options,

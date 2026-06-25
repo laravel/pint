@@ -17,11 +17,6 @@ function silentPrettier(): Prettier
             return __DIR__.'/../Fixtures/prettier/silent-worker.js';
         }
 
-        public function configPath(): ?string
-        {
-            return null;
-        }
-
         protected function workerIdleTimeout(): int
         {
             return 1;
