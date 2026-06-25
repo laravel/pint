@@ -8,8 +8,10 @@ use App\Factories\ConfigurationFactory;
 use App\Repositories\ConfigurationJsonRepository;
 use App\Support\Prettier;
 use Composer\Semver\Semver;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
+use PhpCsFixer\Fixer\FixerInterface;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\progress;
@@ -35,6 +37,8 @@ class EnsurePrettierIsConfigured
             return;
         }
 
+        $this->ensureSupportedDistribution();
+
         $this->ensureNodeIsInstalled()
             ->ensureNodeDependenciesAreInstalled();
     }
@@ -44,11 +48,39 @@ class EnsurePrettierIsConfigured
      */
     protected function needsPrettier(): bool
     {
+        return $this->enabledPrettierFixers()->isNotEmpty();
+    }
+
+    /**
+     * The enabled rules that depend on prettier.
+     *
+     * @return Collection<int, HasPrettierDependencies&FixerInterface>
+     */
+    protected function enabledPrettierFixers(): Collection
+    {
         $rules = $this->configuration->rules();
 
         return collect(ConfigurationFactory::customFixers())
             ->filter(fn ($fixer) => $fixer instanceof HasPrettierDependencies)
-            ->contains(fn ($fixer) => ($rules[$fixer->getName()] ?? false) === true);
+            ->filter(fn ($fixer) => ($rules[$fixer->getName()] ?? false) === true)
+            ->values();
+    }
+
+    /**
+     * Ensure the bundled prettier resources ship with the current distribution.
+     */
+    protected function ensureSupportedDistribution(): void
+    {
+        if ($this->prettier->supported()) {
+            return;
+        }
+
+        abort(1, sprintf(
+            'The [%s] rule is not available in this Pint distribution.',
+            $this->enabledPrettierFixers()
+                ->map(fn ($fixer) => $fixer->getName())
+                ->implode(', '),
+        ));
     }
 
     /**
