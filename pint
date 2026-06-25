@@ -23,6 +23,10 @@ $autoloader->addClassMap([
 ]);
 
 if (($argv[1] ?? null) === 'worker') {
+    $app = require_once __DIR__.'/bootstrap/app.php';
+
+    $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+
     return include __DIR__.'/vendor/bin/php-cs-fixer';
 }
 

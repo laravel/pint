@@ -1,0 +1,3 @@
+<?php
+
+bladeFixtureTest('tailwind');

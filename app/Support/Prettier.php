@@ -1,0 +1,330 @@
+<?php
+
+namespace App\Support;
+
+use App\Exceptions\PrettierException;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+use Symfony\Component\Process\InputStream;
+use Symfony\Component\Process\Process;
+
+class Prettier
+{
+    /**
+     * The configuration version, part of the worker's cache key.
+     *
+     * @var int
+     */
+    public const VERSION = 1;
+
+    /**
+     * The number of seconds the worker may stay silent before it is torn down.
+     *
+     * @var int
+     */
+    public const WORKER_IDLE_TIMEOUT = 30;
+
+    /**
+     * The prettier configuration file names that may exist in a project.
+     *
+     * @var array<int, string>
+     */
+    protected const CONFIG_CANDIDATES = [
+        '.prettierrc',
+        '.prettierrc.json',
+        '.prettierrc.yml',
+        '.prettierrc.yaml',
+        '.prettierrc.json5',
+        '.prettierrc.js',
+        '.prettierrc.cjs',
+        '.prettierrc.mjs',
+        '.prettierrc.toml',
+        'prettier.config.js',
+        'prettier.config.cjs',
+        'prettier.config.mjs',
+    ];
+
+    /**
+     * The process instance, if any.
+     */
+    protected ?Process $process = null;
+
+    /**
+     * The input stream instance, if any.
+     */
+    protected ?InputStream $inputStream = null;
+
+    /**
+     * Create a new prettier instance.
+     */
+    public function __construct(protected string $projectRoot)
+    {
+        //
+    }
+
+    /**
+     * The root directory of the node project.
+     */
+    public function projectRoot(): string
+    {
+        return $this->projectRoot;
+    }
+
+    /**
+     * Formats the given file.
+     *
+     * @throws PrettierException
+     */
+    public function format(string $path, string $content): string
+    {
+        $this->ensureStarted();
+
+        $this->process->clearOutput();
+        $this->process->clearErrorOutput();
+
+        $this->inputStream->write(json_encode([
+            'path' => $path,
+            'content' => $content,
+        ], JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_SUBSTITUTE)."\n");
+
+        // Accumulate every chunk; the OS pipe may split the response across reads.
+        $formatted = '';
+        $error = '';
+        $deadline = microtime(true) + $this->workerIdleTimeout();
+
+        while (true) {
+            if (($chunk = $this->process->getIncrementalOutput()) !== '') {
+                $formatted .= $chunk;
+                $deadline = microtime(true) + $this->workerIdleTimeout();
+            }
+
+            if (str_contains($formatted, '[PINT_PRETTIER_WORKER_END]')) {
+                break;
+            }
+
+            if ($error .= $this->process->getIncrementalErrorOutput()) {
+                break;
+            }
+
+            if (! $this->process->isRunning()) {
+                $error = $this->process->getErrorOutput()
+                    ?: 'Laravel Pint\'s Prettier worker terminated unexpectedly.';
+
+                break;
+            }
+
+            // Alive but silent for too long; tear the worker down and report the file.
+            if (microtime(true) >= $deadline) {
+                $this->ensureTerminated();
+
+                throw new PrettierException(sprintf(
+                    'Laravel Pint\'s Prettier worker timed out while formatting [%s].',
+                    $path,
+                ));
+            }
+
+            usleep(500);
+        }
+
+        $this->process->clearOutput();
+        $this->process->clearErrorOutput();
+
+        if ($error !== '') {
+            throw new PrettierException($error);
+        }
+
+        foreach ([
+            '[PINT_PRETTIER_WORKER_START]',
+            '[PINT_PRETTIER_WORKER_END]',
+        ] as $delimiter) {
+            if (! Str::contains($formatted, $delimiter)) {
+                throw new PrettierException('Laravel Pint\'s Prettier worker did not return a valid response.');
+            }
+        }
+
+        return Str::of($formatted)
+            ->after('[PINT_PRETTIER_WORKER_START]')
+            ->before('[PINT_PRETTIER_WORKER_END]')
+            ->value();
+    }
+
+    /**
+     * The number of seconds the worker may stay silent before it is torn down.
+     */
+    protected function workerIdleTimeout(): int
+    {
+        return self::WORKER_IDLE_TIMEOUT;
+    }
+
+    /**
+     * Ensures the process is started.
+     */
+    public function ensureStarted(): void
+    {
+        if ($this->process) {
+            return;
+        }
+
+        $this->process = new Process(
+            ['node', $this->workerPath(), $this->projectRoot, $this->configPath() ?? ''],
+            $this->projectRoot,
+        );
+
+        $this->process->setTty(false);
+
+        $this->process->setInput(
+            $this->inputStream = new InputStream,
+        );
+
+        $this->process->start();
+    }
+
+    /**
+     * Ensures the process is terminated.
+     */
+    public function ensureTerminated(): void
+    {
+        if ($this->process) {
+            $this->process->stop();
+
+            $this->inputStream = null;
+            $this->process = null;
+        }
+    }
+
+    /**
+     * The path to the bundled prettier worker on disk.
+     */
+    public function workerPath(): string
+    {
+        return $this->resourcePath('prettier-worker.js');
+    }
+
+    /**
+     * The path to the bundled prettier configuration, or null when the project
+     * ships its own.
+     */
+    public function configPath(): ?string
+    {
+        if ($this->hasCustomPrettierConfig()) {
+            return null;
+        }
+
+        return $this->resourcePath('prettierrc.json');
+    }
+
+    /**
+     * Determine whether the project already has a prettier configuration.
+     */
+    public function hasCustomPrettierConfig(): bool
+    {
+        foreach (static::CONFIG_CANDIDATES as $candidate) {
+            if (File::exists($this->projectRoot.'/'.$candidate)) {
+                return true;
+            }
+        }
+
+        return array_key_exists('prettier', $this->packageJson() ?? []);
+    }
+
+    /**
+     * Pint's bundled prettier options for blade formatting.
+     *
+     * @return array<string, mixed>
+     */
+    public function defaultOptions(): array
+    {
+        $contents = json_decode(File::get($this->resourcePath('prettierrc.json')), true);
+
+        return is_array($contents) ? $contents : [];
+    }
+
+    /**
+     * Resolve the project's own prettier options as prettier itself sees them.
+     *
+     * @return array<string, mixed>
+     */
+    public function resolveCustomOptions(): array
+    {
+        $result = new Process(
+            ['node', $this->resolverPath(), $this->projectRoot],
+            $this->projectRoot,
+        );
+
+        $result->run();
+
+        if (! $result->isSuccessful()) {
+            return [];
+        }
+
+        $options = json_decode(trim($result->getOutput()), true);
+
+        return is_array($options) ? $options : [];
+    }
+
+    /**
+     * The path to the bundled prettier configuration resolver on disk.
+     */
+    public function resolverPath(): string
+    {
+        return $this->resourcePath('prettier-resolver.js');
+    }
+
+    /**
+     * Determine whether the project's prettier configuration references all the given plugins.
+     *
+     * @param  array<int, string>  $plugins
+     */
+    public function hasPlugins(array $plugins): bool
+    {
+        $sources = collect(static::CONFIG_CANDIDATES)
+            ->map(fn (string $candidate): string => $this->projectRoot.'/'.$candidate)
+            ->filter(fn (string $file): bool => File::exists($file))
+            ->map(fn (string $file): string => File::get($file));
+
+        if (($prettier = $this->packageJson()['prettier'] ?? null) !== null) {
+            $sources->push((string) json_encode($prettier));
+        }
+
+        $configuration = $sources->implode("\n");
+
+        return collect($plugins)->every(fn (string $plugin): bool => str_contains($configuration, $plugin));
+    }
+
+    /**
+     * Resolve the on-disk path to a bundled blade resource.
+     */
+    protected function resourcePath(string $file): string
+    {
+        $phar = \Phar::running(false);
+
+        // Inside a PHAR the package root is two levels up; else base_path().
+        $root = $phar === '' ? base_path() : dirname($phar, 2);
+
+        $path = $root.'/resources/fixers/laravel_blade/'.$file;
+
+        if (! File::exists($path)) {
+            abort(1, 'The [Pint/laravel_blade] rule is not available in this Pint distribution.');
+        }
+
+        return $path;
+    }
+
+    /**
+     * The decoded "package.json" contents, if present and valid.
+     *
+     * @return array<string, mixed>|null
+     */
+    protected function packageJson(): ?array
+    {
+        $path = $this->projectRoot.'/package.json';
+
+        if (! File::exists($path)) {
+            return null;
+        }
+
+        $contents = json_decode(File::get($path), true);
+
+        return is_array($contents) ? $contents : null;
+    }
+}

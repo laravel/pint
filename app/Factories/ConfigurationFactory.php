@@ -2,10 +2,13 @@
 
 namespace App\Factories;
 
+use App\BladeFormatter;
+use App\Fixers\LaravelBlade\Fixer;
 use App\Repositories\ConfigurationJsonRepository;
 use PhpCsFixer\Config;
 use PhpCsFixer\ConfigInterface;
 use PhpCsFixer\Finder;
+use PhpCsFixer\Fixer\FixerInterface;
 use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 
 class ConfigurationFactory
@@ -20,7 +23,6 @@ class ConfigurationFactory
         '_ide_helper_models.php',
         '_ide_helper.php',
         '.phpstorm.meta.php',
-        '*.blade.php',
     ];
 
     /**
@@ -48,8 +50,21 @@ class ConfigurationFactory
             ->setFinder(self::finder())
             ->setRules(array_merge($rules, resolve(ConfigurationJsonRepository::class)->rules()))
             ->setRiskyAllowed(true)
-            ->setUsingCache(true)
-            ->setUnsupportedPhpVersionAllowed(true);
+            ->setUsingCache(false)
+            ->setUnsupportedPhpVersionAllowed(true)
+            ->registerCustomFixers(self::customFixers());
+    }
+
+    /**
+     * The list of custom fixers Pint registers.
+     *
+     * @return array<int, FixerInterface>
+     */
+    public static function customFixers()
+    {
+        return [
+            new Fixer(resolve(BladeFormatter::class)),
+        ];
     }
 
     /**
@@ -62,7 +77,7 @@ class ConfigurationFactory
         $localConfiguration = resolve(ConfigurationJsonRepository::class);
 
         $finder = Finder::create()
-            ->notName(static::$notName)
+            ->notName(static::notName())
             ->exclude(static::$exclude)
             ->ignoreDotFiles(true)
             ->ignoreVCS(true);
@@ -76,6 +91,34 @@ class ConfigurationFactory
         }
 
         return $finder;
+    }
+
+    /**
+     * The list of files to ignore, accounting for the [Pint/Laravel_blade].
+     *
+     * @return array<int, string>
+     */
+    public static function notName()
+    {
+        $notName = static::$notName;
+
+        if (static::shouldExcludeBladeFiles()) {
+            $notName[] = '*.blade.php';
+        }
+
+        return $notName;
+    }
+
+    /**
+     * Determine whether blade files should be excluded from formatting.
+     *
+     * @return bool
+     */
+    protected static function shouldExcludeBladeFiles()
+    {
+        $rules = resolve(ConfigurationJsonRepository::class)->rules();
+
+        return ($rules['Pint/laravel_blade'] ?? false) === false;
     }
 
     /**
@@ -93,7 +136,7 @@ class ConfigurationFactory
         $relativePath = str_replace('\\', '/', $relativePath);
         $fileName = basename($filePath);
 
-        foreach (static::$notName as $pattern) {
+        foreach (static::notName() as $pattern) {
             if (fnmatch($pattern, $fileName)) {
                 return true;
             }

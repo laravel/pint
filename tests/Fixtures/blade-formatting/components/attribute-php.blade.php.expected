@@ -1,0 +1,4 @@
+<x-card :key="'question-'.$rootId" :items="[1, 2, 3]" :variant="$active ? 'primary' : 'ghost'">
+    <flux:heading :title="$page->title" :level="$depth + 1" />
+    <livewire:comment ::key="literal-attr" :model="$comment->body" />
+</x-card>

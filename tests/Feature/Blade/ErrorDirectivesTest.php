@@ -1,0 +1,3 @@
+<?php
+
+bladeFixtureTest('error-directives');

@@ -1,0 +1,35 @@
+<div>
+    {{-- if / elseif / else, brace form split across islands --}}
+    <?php if ($admin) { ?>
+        <span>Admin</span>
+    <?php } elseif ($editor) { ?>
+        <span>Editor</span>
+    <?php } else { ?>
+        <span>Guest</span>
+    <?php } ?>
+
+    {{-- foreach, brace form split across islands --}}
+    <?php foreach ($users as $user) { ?>
+        <li>{{ $user->name }}</li>
+    <?php } ?>
+
+    {{-- for, brace form split across islands --}}
+    <?php for ($i = 0; $i < 3; $i++) { ?>
+        <span>{{ $i }}</span>
+    <?php } ?>
+
+    {{-- while, brace form split across islands --}}
+    <?php while ($row = next($rows)) { ?>
+        <td>{{ $row }}</td>
+    <?php } ?>
+
+    {{-- if / endif, alternative-syntax form split across islands --}}
+    <?php if ($admin): ?>
+        <span>Admin</span>
+    <?php endif; ?>
+
+    {{-- foreach / endforeach, alternative-syntax form split across islands --}}
+    <?php foreach ($users as $user): ?>
+        <li>{{ $user->name }}</li>
+    <?php endforeach; ?>
+</div>

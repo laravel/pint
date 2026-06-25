@@ -1,8 +1,10 @@
 <?php
 
 use App\Factories\ConfigurationFactory;
+use Symfony\Component\Console\Input\InputInterface;
 
 return ConfigurationFactory::preset([
+    'Pint/laravel_blade' => resolve(InputInterface::class)->getOption('blade'),
     'array_indentation' => true,
     'array_syntax' => ['syntax' => 'short'],
     'binary_operator_spaces' => [

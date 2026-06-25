@@ -1,0 +1,1 @@
+{{-- a standalone blade comment --}}

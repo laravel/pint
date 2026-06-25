@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <style>
+        .brand {
+            color: @php echo $brand; @endphp;
+        }
+    </style>
+    <div class="flex items-center bg-red-500 p-4 text-white">{{ $title }}</div>
+</body>
+</html>

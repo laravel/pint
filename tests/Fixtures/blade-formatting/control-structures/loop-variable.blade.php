@@ -1,0 +1,12 @@
+<ul>
+    @foreach($items as $item)
+        @continue($item->hidden)
+        @break($loop->index > 10)
+        <li class="{{ $loop->first ? 'first' : '' }} {{ $loop->last ? 'last' : '' }}">
+            {{ $loop->iteration }}. {{ $item->name }}
+            @if($loop->depth > 1)
+                (nested {{ $loop->parent->index }})
+            @endif
+        </li>
+    @endforeach
+</ul>

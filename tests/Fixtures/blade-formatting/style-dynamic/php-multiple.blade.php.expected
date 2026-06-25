@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <style>
+        .a {
+            color: @php echo $a; @endphp;
+        }
+        .b {
+            margin: @php echo $b; @endphp;
+        }
+    </style>
+</body>
+</html>

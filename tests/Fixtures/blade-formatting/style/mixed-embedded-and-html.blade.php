@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<style>
+.brand { color: @php echo $brand; @endphp; }
+</style>
+<p>{{ $name }}</p>
+@if ($admin)
+<span>{{ !$banned }}</span>
+@endif
+</body>
+</html>

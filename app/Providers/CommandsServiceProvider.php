@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Actions\ElaborateSummary;
+use App\Actions\EnsurePrettierIsConfigured;
 use App\Actions\FixCode;
 use App\Commands\DefaultCommand;
 use Illuminate\Support\ServiceProvider;
@@ -29,7 +30,8 @@ class CommandsServiceProvider extends ServiceProvider
         $this->app->bindMethod([DefaultCommand::class, 'handle'], function ($command) {
             return $command->handle(
                 resolve(FixCode::class),
-                resolve(ElaborateSummary::class)
+                resolve(ElaborateSummary::class),
+                resolve(EnsurePrettierIsConfigured::class)
             );
         });
     }

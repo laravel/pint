@@ -3,6 +3,7 @@
 namespace App\Commands;
 
 use App\Actions\ElaborateSummary;
+use App\Actions\EnsurePrettierIsConfigured;
 use App\Actions\FixCode;
 use App\Factories\ConfigurationFactory;
 use LaravelZero\Framework\Commands\Command;
@@ -39,6 +40,7 @@ class DefaultCommand extends Command
             ->setDefinition(
                 [
                     new InputArgument('path', InputArgument::IS_ARRAY, 'The path to fix', [(string) getcwd()]),
+                    new InputOption('blade', '', InputOption::VALUE_NONE, 'Enable the [Pint/laravel_blade] rule to format Blade files'),
                     new InputOption('config', '', InputOption::VALUE_REQUIRED, 'The configuration that should be used'),
                     new InputOption('no-config', '', InputOption::VALUE_NONE, 'Disable loading any configuration file'),
                     new InputOption('preset', '', InputOption::VALUE_REQUIRED, 'The preset that should be used'),
@@ -63,10 +65,13 @@ class DefaultCommand extends Command
      *
      * @param  FixCode  $fixCode
      * @param  ElaborateSummary  $elaborateSummary
+     * @param  EnsurePrettierIsConfigured  $ensurePrettierIsConfigured
      * @return int
      */
-    public function handle($fixCode, $elaborateSummary)
+    public function handle($fixCode, $elaborateSummary, $ensurePrettierIsConfigured)
     {
+        $ensurePrettierIsConfigured->execute();
+
         if ($this->hasStdinInput()) {
             return $this->fixStdinInput($fixCode);
         }

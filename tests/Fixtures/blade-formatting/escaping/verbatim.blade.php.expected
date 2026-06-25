@@ -1,0 +1,9 @@
+<div>
+    @verbatim
+        <div class="container">
+            Hello, {{ name }}.
+            <span x-text="! flag"></span>
+        </div>
+    @endverbatim
+    <p>{{ $afterwards }}</p>
+</div>
