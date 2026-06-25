@@ -1,0 +1,8 @@
+<div x-data="{ nav: false, open: false }">
+    <button @click="open = ! open" :class="{ block: nav, hidden: ! nav }">Toggle</button>
+    <input x-bind:type="! showApi ? 'password' : 'text'" :title="! busy ? a : b" />
+    <span x-show="a.length && ! b.total && ! c.total"></span>
+    <ul x-init="items = list.filter((i) => ! i.done)">
+        <li @click="select(i, () => ! i.active)"></li>
+    </ul>
+</div>

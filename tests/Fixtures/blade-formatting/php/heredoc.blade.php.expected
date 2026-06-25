@@ -1,0 +1,11 @@
+@php
+    $sql = <<<'SQL'
+        SELECT * FROM users
+    SQL;
+
+    $note = <<<'EOT'
+        raw $text stays literal
+    EOT;
+@endphp
+
+<p>{{ $sql }}</p>

@@ -1,0 +1,37 @@
+<div>
+    {{-- One-line @if without else --}}
+    <p>@if ($admin) Admin @endif</p>
+
+    {{-- One-line @if with else --}}
+    <p>@if ($admin) Admin @else Guest @endif</p>
+
+    {{-- One-line @if with elseif and else --}}
+    <p>@if ($admin) Admin @elseif ($editor) Editor @else Guest @endif</p>
+
+    {{-- Multi-line @if wrapping html, without else --}}
+    @if ($admin)
+        <span>Admin</span>
+    @endif
+
+    {{-- Multi-line @if wrapping html, with else --}}
+    @if ($admin)
+        <span>Admin</span>
+    @else
+        <span>Guest</span>
+    @endif
+
+    {{-- Multi-line @if wrapping html, with elseif and else --}}
+    @if ($admin)
+        <span>Admin</span>
+    @elseif ($editor)
+        <span>Editor</span>
+    @else
+        <span>Guest</span>
+    @endif
+
+    {{-- One-line raw php if without else --}}
+    <p><?php if ($admin) echo 'Admin'; ?></p>
+
+    {{-- One-line raw php if with else --}}
+    <p><?php if ($admin) echo 'Admin'; else echo 'Guest'; ?></p>
+</div>

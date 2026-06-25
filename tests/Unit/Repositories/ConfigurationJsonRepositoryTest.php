@@ -1,6 +1,22 @@
 <?php
 
 use App\Repositories\ConfigurationJsonRepository;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+
+function bladeInput(bool $blade): InputInterface
+{
+    $input = new ArrayInput(
+        $blade ? ['--blade' => true] : [],
+        new InputDefinition([
+            new InputOption('blade', null, InputOption::VALUE_NONE),
+        ])
+    );
+
+    return $input;
+}
 
 it('works without json file', function () {
     $repository = new ConfigurationJsonRepository(null, 'psr12');
@@ -22,6 +38,36 @@ it('may have rules options', function () {
 
     expect($repository->rules())->toBe([
         'no_unused_imports' => false,
+    ]);
+});
+
+it('enables the blade rule when the --blade option is passed', function () {
+    app()->instance(InputInterface::class, bladeInput(true));
+
+    $repository = new ConfigurationJsonRepository(null, null);
+
+    expect($repository->rules())->toBe([
+        'Pint/laravel_blade' => true,
+    ]);
+});
+
+it('lets the --blade option take over even when disabled in pint.json', function () {
+    app()->instance(InputInterface::class, bladeInput(true));
+
+    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/rules/blade-disabled.json', null);
+
+    expect($repository->rules())->toBe([
+        'Pint/laravel_blade' => true,
+    ]);
+});
+
+it('respects the blade rule from pint.json when the --blade option is absent', function () {
+    app()->instance(InputInterface::class, bladeInput(false));
+
+    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/rules/blade-disabled.json', null);
+
+    expect($repository->rules())->toBe([
+        'Pint/laravel_blade' => false,
     ]);
 });
 

@@ -1,0 +1,8 @@
+<div>
+    <p>{{ $short }}</p>
+    <p>Hello <span>{{ $name }}</span> welcome</p>
+    <p>
+        This is a long paragraph of prose text that definitely goes well beyond the print width limit so we can see
+        whether it reflows nicely across multiple lines like it should now.
+    </p>
+</div>

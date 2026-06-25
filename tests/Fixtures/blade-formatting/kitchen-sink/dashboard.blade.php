@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+<meta charset="utf-8">
+<title>⚡ {{ $title ?? config('app.name') }}</title>
+<style>
+:root { --brand: {{ $brand ?? '#4f46e5' }}; }
+.btn { padding: @if($dense) 0.25rem @else 0.5rem @endif; }
+@media (min-width: {{ $breakpoint }}px) {
+.container { max-width: {{ $maxWidth }}; }
+}
+.label::before { content: '{{ $prefix }}'; }
+</style>
+</head>
+<body class="antialiased bg-gray-50 dark:bg-gray-900">
+{{-- The primary navigation, rendered once per request --}}
+<x-layout :title="$title" :user="auth()->user()">
+@foreach($groups as $group)
+@if($group->visible)
+<x-card :key="$group->id" @class(['card', 'card--active' => $group->active])>
+<x-slot:title>
+{{ $group->heading }}
+</x-slot:title>
+@forelse($group->items as $item)
+<x-item :value="'item-'.$item->id" x-show="!$item.archived">
+{{ $item->label }}
+</x-item>
+@empty
+<p>No items in this group</p>
+@endforelse
+</x-card>
+@endif
+@endforeach
+<div>
+{{ $user->subscription->active
+? 'Subscribed and enjoying all of the premium features that we offer'
+: 'Not subscribed to any plan at the moment, please consider upgrading' }}
+</div>
+<p>
+{{ collect($metrics)->map(fn ($m) => $m->value)->filter()->sum() }}
+</p>
+@php
+$summary = [
+'total' => $total,
+'active' => $activeCount,
+];
+@endphp
+<textarea name="notes" @if($readonly) readonly @endif class="w-full rounded border px-3 py-2">{{ $notes }}</textarea>
+<pre @class(['code', 'highlighted' => $highlight])>
+function example() {
+    return 42;
+}
+</pre>
+<script>
+const config = { locale: "{{ app()->getLocale() }}", csrf: "{{ csrf_token() }}" };
+@if($debug) console.log('debug', !production); @endif
+</script>
+</x-layout>
+</body>
+</html>

@@ -1,8 +1,8 @@
 <?php
 
-$file = \Pest\testDirectory('test-output');
+it('outputs checkstyle format to file and pretty print in cli', function () {
+    $file = testOutputFile();
 
-it('outputs checkstyle format to file and pretty print in cli', function () use ($file) {
     [$statusCode, $output] = run('default', [
         'path' => base_path('tests/Fixtures/with-fixable-issues'),
         '--preset' => 'psr12',
@@ -27,7 +27,9 @@ it('outputs checkstyle format to file and pretty print in cli', function () use 
         ])));
 });
 
-it('outputs json format to file and pretty print in cli', function () use ($file) {
+it('outputs json format to file and pretty print in cli', function () {
+    $file = testOutputFile();
+
     [$statusCode, $output] = run('default', [
         'path' => base_path('tests/Fixtures/with-fixable-issues'),
         '--preset' => 'psr12',
@@ -49,7 +51,9 @@ it('outputs json format to file and pretty print in cli', function () use ($file
         ])));
 });
 
-it('outputs xml format to file and pretty print in cli', function () use ($file) {
+it('outputs xml format to file and pretty print in cli', function () {
+    $file = testOutputFile();
+
     [$statusCode, $output] = run('default', [
         'path' => base_path('tests/Fixtures/with-fixable-issues'),
         '--preset' => 'psr12',
@@ -70,7 +74,9 @@ it('outputs xml format to file and pretty print in cli', function () use ($file)
         ])));
 });
 
-it('outputs junit format to file and pretty print in cli', function () use ($file) {
+it('outputs junit format to file and pretty print in cli', function () {
+    $file = testOutputFile();
+
     [$statusCode, $output] = run('default', [
         'path' => base_path('tests/Fixtures/with-fixable-issues'),
         '--preset' => 'psr12',
@@ -93,7 +99,9 @@ it('outputs junit format to file and pretty print in cli', function () use ($fil
         ])));
 });
 
-it('outputs gitlab format to file and pretty print in cli', function () use ($file) {
+it('outputs gitlab format to file and pretty print in cli', function () {
+    $file = testOutputFile();
+
     [$statusCode, $output] = run('default', [
         'path' => base_path('tests/Fixtures/with-fixable-issues'),
         '--preset' => 'psr12',
@@ -115,7 +123,8 @@ it('outputs gitlab format to file and pretty print in cli', function () use ($fi
         ])));
 });
 
-it('outputs json format file and xml format in cli', function () use ($file) {
+it('outputs json format file and xml format in cli', function () {
+    $file = testOutputFile();
 
     [$statusCode, $output] = run('default', [
         'path' => base_path('tests/Fixtures/with-fixable-issues'),

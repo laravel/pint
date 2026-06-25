@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use Symfony\Component\Console\Input\InputInterface;
+
 class ConfigurationJsonRepository
 {
     /**
@@ -42,11 +44,24 @@ class ConfigurationJsonRepository
     /**
      * Get the rules options.
      *
-     * @return array<int, string>
+     * The "--blade" option is a shortcut that toggles the [Pint/laravel_blade]
+     * rule, so it is folded into the configured rules here.
+     *
+     * @return array<string, mixed>
      */
     public function rules()
     {
-        return $this->get()['rules'] ?? [];
+        $rules = $this->get()['rules'] ?? [];
+
+        if (app()->bound(InputInterface::class)) {
+            $input = resolve(InputInterface::class);
+
+            if ($input->hasOption('blade') && $input->getOption('blade') === true) {
+                $rules['Pint/laravel_blade'] = true;
+            }
+        }
+
+        return $rules;
     }
 
     /**

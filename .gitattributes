@@ -1,5 +1,7 @@
 * text=auto
 
+tests/Fixtures/blade-formatting/normalization/crlf.blade.php -text
+
 *.blade.php diff=html
 *.css diff=css
 *.html diff=html
@@ -24,7 +26,9 @@
 /phpunit.xml.dist export-ignore
 /pint export-ignore
 /pint.json export-ignore
-/resources export-ignore
+/resources/boost export-ignore
+/resources/presets export-ignore
+/resources/views export-ignore
 /src export-ignore
 /storage export-ignore
 /tests export-ignore

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <style>
+        .brand {
+            @php
+                $color = 'red';
+                echo "color: {$color};";
+            @endphp
+            margin: 0;
+        }
+    </style>
+</body>
+</html>

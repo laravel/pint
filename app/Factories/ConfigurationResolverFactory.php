@@ -4,6 +4,7 @@ namespace App\Factories;
 
 use App\Project;
 use App\Repositories\ConfigurationJsonRepository;
+use App\Support\Prettier;
 use ArrayIterator;
 use Laravel\AgentDetector\AgentDetector;
 use PhpCsFixer\Config;
@@ -65,7 +66,7 @@ class ConfigurationResolverFactory
                     realpath(sys_get_temp_dir()),
                     md5(
                         app()->isProduction()
-                        ? implode('|', $path)
+                        ? (implode('|', $path).'||'.(string) Prettier::VERSION)
                         : (string) microtime()
                     ),
                 ]),

@@ -20,10 +20,11 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-tokenizer": "*",
-        "ext-xml": "*"
+        "ext-xml": "*",
+        "laravel/prompts": "^0.3.20"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.95.8",
+        "friendsofphp/php-cs-fixer": "^3.95.11",
         "illuminate/view": "^12.62.0",
         "larastan/larastan": "^3.10.0",
         "laravel-zero/framework": "^12.1.0",
