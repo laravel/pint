@@ -37,9 +37,13 @@ class ConfigurationResolverFactory
      */
     public static function fromIO($input, $output)
     {
+        $localConfiguration = resolve(ConfigurationJsonRepository::class);
+
         $path = Project::paths($input);
 
-        $localConfiguration = resolve(ConfigurationJsonRepository::class);
+        if ($localConfiguration->hasIncludedPaths() && $path === [(string) Project::path()]) {
+            $path = [];
+        }
 
         $preset = $localConfiguration->preset();
 

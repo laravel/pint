@@ -11,6 +11,7 @@ class ConfigurationJsonRepository
      */
     protected $finderOptions = [
         'exclude',
+        'in',
         'notPath',
         'notName',
     ];
@@ -57,6 +58,16 @@ class ConfigurationJsonRepository
     public function cacheFile()
     {
         return $this->get()['cache-file'] ?? null;
+    }
+
+    /**
+     * Determine if the configuration defines paths to inspect.
+     *
+     * @return bool
+     */
+    public function hasIncludedPaths()
+    {
+        return ! empty($this->finder()['in'] ?? null);
     }
 
     /**
