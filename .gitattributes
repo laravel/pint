@@ -22,6 +22,8 @@ tests/Fixtures/blade-formatting/normalization/crlf.blade.php -text
 /box.json export-ignore
 /composer.lock export-ignore
 /config export-ignore
+/package-lock.json export-ignore
+/package.json export-ignore
 /phpstan.neon export-ignore
 /phpunit.xml.dist export-ignore
 /pint export-ignore
