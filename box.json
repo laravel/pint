@@ -12,8 +12,8 @@
         "composer.json"
     ],
     "blacklist": [
-        "resources/js/worker.js",
-        "resources/js/version-probe.js",
+        "resources/js/worker.cjs",
+        "resources/js/version-probe.cjs",
         "resources/prettier/prettierrc.json"
     ],
     "exclude-composer-files": false,

@@ -177,7 +177,7 @@ class Prettier
      */
     public function workerPath(): string
     {
-        return $this->resourcePath('js/worker.js');
+        return $this->resourcePath('js/worker.cjs');
     }
 
     /**
@@ -185,7 +185,7 @@ class Prettier
      */
     public function versionProbePath(): string
     {
-        return $this->resourcePath('js/version-probe.js');
+        return $this->resourcePath('js/version-probe.cjs');
     }
 
     /**
@@ -201,7 +201,7 @@ class Prettier
      */
     public function supported(): bool
     {
-        return File::exists($this->resourcePath('js/worker.js'));
+        return File::exists($this->resourcePath('js/worker.cjs'));
     }
 
     /**
