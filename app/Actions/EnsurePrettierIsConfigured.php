@@ -15,6 +15,7 @@ use PhpCsFixer\Fixer\FixerInterface;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\progress;
+use function Laravel\Prompts\warning;
 
 class EnsurePrettierIsConfigured
 {
@@ -170,12 +171,14 @@ class EnsurePrettierIsConfigured
      */
     protected function installMissing(array $missing, array $required, NodePackageManager $manager, string $projectRoot): void
     {
+        warning(sprintf(
+            'The rules enabled in your pint configuration require the following prettier dependencies to be installed using [%s]: %s.',
+            $manager->binary(),
+            implode(', ', $missing),
+        ));
+
         $confirmed = confirm(
-            label: sprintf(
-                'The rules enabled in your pint configuration require the following prettier dependencies to be installed using [%s]: %s. Would you like to install them now?',
-                $manager->binary(),
-                implode(', ', $missing),
-            ),
+            label: 'Would you like to install them now?',
             default: false,
         );
 
