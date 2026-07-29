@@ -39,3 +39,9 @@ it('resolves the runtime from the project root it was given', function () {
     expect((new Prettier($this->root))->runtimeBinary())->toBe('bun')
         ->and((new Prettier(sys_get_temp_dir()))->runtimeBinary())->toBe('node');
 });
+
+it('does not start the worker for content without ignore range markers', function () {
+    $prettier = new Prettier('/missing-project');
+
+    expect($prettier->ignoreRanges('view.blade.php', '<div>Content</div>'))->toBe([]);
+});
