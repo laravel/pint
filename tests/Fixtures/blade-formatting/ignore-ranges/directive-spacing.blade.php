@@ -1,0 +1,8 @@
+{{-- format-ignore-start --}}
+The following ecrew messages were sent to you.
+
+@foreach($messageData as $ecrewMessage)
+=====
+@endforeach
+{{-- format-ignore-end --}}
+<div  id="after"></div>

@@ -15,7 +15,7 @@ class Prettier
      *
      * @var int
      */
-    public const VERSION = 1;
+    public const VERSION = 2;
 
     /**
      * The number of seconds the worker may stay silent before it is torn down.
@@ -57,28 +57,97 @@ class Prettier
      */
     public function format(string $path, string $content): string
     {
+        $result = $this->send([
+            'type' => 'format',
+            'path' => $path,
+            'content' => $content,
+        ]);
+
+        if (! isset($result['formatted']) || ! is_string($result['formatted'])) {
+            throw new PrettierException('Laravel Pint\'s Prettier worker did not return a valid response.');
+        }
+
+        return $result['formatted'];
+    }
+
+    /**
+     * Format the given file and return its formatter ignore ranges.
+     *
+     * @return array{formatted: string, ranges: array<int, array{start: int, end: int, sourceStart: int, sourceEnd: int}>}
+     *
+     * @throws PrettierException
+     */
+    public function formatWithIgnoreRanges(string $path, string $content): array
+    {
+        $result = $this->send([
+            'type' => 'format-with-ignore-ranges',
+            'path' => $path,
+            'content' => $content,
+        ]);
+
+        if (! isset($result['formatted'], $result['ranges']) || ! is_string($result['formatted']) || ! is_array($result['ranges'])) {
+            throw new PrettierException('Laravel Pint\'s Prettier worker did not return a valid response.');
+        }
+
+        return $result;
+    }
+
+    /**
+     * Return the formatter ignore ranges in the given file.
+     *
+     * @return array<int, array{start: int, end: int}>
+     *
+     * @throws PrettierException
+     */
+    public function ignoreRanges(string $path, string $content): array
+    {
+        if (stripos($content, 'format-ignore-start') === false
+            && stripos($content, 'prettier-ignore-start') === false) {
+            return [];
+        }
+
+        $result = $this->send([
+            'type' => 'ranges',
+            'path' => $path,
+            'content' => $content,
+        ]);
+
+        if (! isset($result['ranges']) || ! is_array($result['ranges'])) {
+            throw new PrettierException('Laravel Pint\'s Prettier worker did not return a valid response.');
+        }
+
+        return $result['ranges'];
+    }
+
+    /**
+     * Send a request to the prettier worker.
+     *
+     * @param  array<string, mixed>  $request
+     * @return array<string, mixed>
+     *
+     * @throws PrettierException
+     */
+    private function send(array $request): array
+    {
         $this->ensureStarted();
 
         $this->process->clearOutput();
         $this->process->clearErrorOutput();
 
-        $this->inputStream->write(json_encode([
-            'path' => $path,
-            'content' => $content,
-        ], JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_SUBSTITUTE)."\n");
+        $this->inputStream->write(json_encode($request, JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_SUBSTITUTE)."\n");
 
         // Accumulate every chunk; the OS pipe may split the response across reads.
-        $formatted = '';
+        $output = '';
         $error = '';
         $deadline = microtime(true) + $this->workerIdleTimeout();
 
         while (true) {
             if (($chunk = $this->process->getIncrementalOutput()) !== '') {
-                $formatted .= $chunk;
+                $output .= $chunk;
                 $deadline = microtime(true) + $this->workerIdleTimeout();
             }
 
-            if (str_contains($formatted, '[PINT_PRETTIER_WORKER_END]')) {
+            if (str_contains($output, '[PINT_PRETTIER_WORKER_END]')) {
                 break;
             }
 
@@ -99,7 +168,7 @@ class Prettier
 
                 throw new PrettierException(sprintf(
                     'Laravel Pint\'s Prettier worker timed out while formatting [%s].',
-                    $path,
+                    $request['path'],
                 ));
             }
 
@@ -117,15 +186,23 @@ class Prettier
             '[PINT_PRETTIER_WORKER_START]',
             '[PINT_PRETTIER_WORKER_END]',
         ] as $delimiter) {
-            if (! Str::contains($formatted, $delimiter)) {
+            if (! Str::contains($output, $delimiter)) {
                 throw new PrettierException('Laravel Pint\'s Prettier worker did not return a valid response.');
             }
         }
 
-        return Str::of($formatted)
+        $response = Str::of($output)
             ->after('[PINT_PRETTIER_WORKER_START]')
             ->before('[PINT_PRETTIER_WORKER_END]')
             ->value();
+
+        $decoded = json_decode($response, true);
+
+        if (! is_array($decoded)) {
+            throw new PrettierException('Laravel Pint\'s Prettier worker did not return a valid response.');
+        }
+
+        return $decoded;
     }
 
     /**

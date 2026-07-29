@@ -1,0 +1,6 @@
+<div>
+    text A</div>
+{{-- format-ignore-start --}}
+<div>
+    text B</div>
+{{-- format-ignore-end --}}

@@ -6,6 +6,7 @@ use App\Actions\EnsurePrettierIsConfigured;
 use App\BladeFormatter;
 use App\Project;
 use App\Repositories\ConfigurationJsonRepository;
+use App\Support\BladeIgnoreRanges;
 use App\Support\Prettier;
 use Illuminate\Support\ServiceProvider;
 use PhpCsFixer\Error\ErrorsManager;
@@ -54,7 +55,10 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(BladeFormatter::class, function ($app) {
-            return new BladeFormatter($app->make(Prettier::class));
+            return new BladeFormatter(
+                $app->make(Prettier::class),
+                $app->make(BladeIgnoreRanges::class),
+            );
         });
     }
 }

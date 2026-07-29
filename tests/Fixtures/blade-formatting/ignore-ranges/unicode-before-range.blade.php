@@ -1,0 +1,6 @@
+<p>𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷</p>
+<div  id="before"></div>
+{{-- format-ignore-start --}}
+@php    $visible = !$hidden; @endphp
+{{-- format-ignore-end --}}
+<div  id="after"></div>

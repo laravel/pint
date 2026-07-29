@@ -14,6 +14,7 @@ use App\PrettierFormatters\JoinDanglingOpenBracket;
 use App\PrettierFormatters\NotOperatorSpacing;
 use App\PrettierFormatters\PhpBlockFormatting;
 use App\PrettierFormatters\StripSensitiveLeadingBlankLines;
+use App\Support\BladeIgnoreRanges;
 use App\Support\Prettier;
 
 class BladeFormatter
@@ -60,6 +61,7 @@ class BladeFormatter
      */
     public function __construct(
         protected Prettier $prettier,
+        protected BladeIgnoreRanges $ignoreRanges,
     ) {
         //
     }
@@ -69,6 +71,9 @@ class BladeFormatter
      */
     public function format(string $path, string $content): string
     {
+        $ranges = $this->prettier->ignoreRanges($path, $content);
+        $content = $this->ignoreRanges->protect($content, $ranges, $content);
+
         $formatters = collect(static::$formatters)->map(
             fn (string $formatter): PrettierPreFormatter|PrettierPostFormatter => resolve($formatter),
         );
@@ -80,13 +85,22 @@ class BladeFormatter
             $content,
         );
 
-        $formatted = $this->prettier->format($path, $content);
+        $content = $this->ignoreRanges->restore($content);
 
-        return $formatters->reduce(
+        if ($ranges === []) {
+            $formatted = $this->prettier->format($path, $content);
+        } else {
+            $result = $this->prettier->formatWithIgnoreRanges($path, $content);
+            $formatted = $this->ignoreRanges->protect($result['formatted'], $result['ranges'], $content);
+        }
+
+        $formatted = $formatters->reduce(
             fn (string $formatted, PrettierPreFormatter|PrettierPostFormatter $formatter): string => $formatter instanceof PrettierPostFormatter
                 ? $formatter->postFormat($formatted)
                 : $formatted,
             $formatted,
         );
+
+        return $this->ignoreRanges->restore($formatted);
     }
 }

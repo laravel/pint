@@ -1,0 +1,5 @@
+{{-- format-ignore-start --}}
+𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷𠮷
+@php    $visible = !$hidden; @endphp
+{{-- format-ignore-end --}}
+<div  id="after"></div>

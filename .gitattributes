@@ -1,6 +1,8 @@
 * text=auto
 
 tests/Fixtures/blade-formatting/normalization/crlf.blade.php -text
+tests/Fixtures/blade-formatting/ignore-ranges/crlf.blade.php -text
+tests/Fixtures/blade-formatting/ignore-ranges/crlf.blade.php.expected -text
 
 *.blade.php diff=html
 *.css diff=css

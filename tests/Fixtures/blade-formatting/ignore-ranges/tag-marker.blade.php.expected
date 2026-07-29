@@ -1,0 +1,5 @@
+<div x-show="!visible" {{-- format-ignore-start --}} id = "preserved">
+    @php    $value = !$hidden; @endphp
+</div>
+{{-- format-ignore-end --}}
+<div id="after"></div>

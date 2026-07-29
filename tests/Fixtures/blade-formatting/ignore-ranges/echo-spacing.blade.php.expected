@@ -1,0 +1,6 @@
+{{-- format-ignore-start --}}
+Dear {{$user->first_name}},  
+Roster on {{$date->format('d-m-Y')}}
+Distance to station: {{ $distance }}
+{{-- format-ignore-end --}}
+<div id="after"></div>
