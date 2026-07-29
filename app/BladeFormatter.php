@@ -4,6 +4,7 @@ namespace App;
 
 use App\Contracts\PrettierPostFormatter;
 use App\Contracts\PrettierPreFormatter;
+use App\Exceptions\PrettierException;
 use App\PrettierFormatters\CollapseShortSlots;
 use App\PrettierFormatters\CollapseSingleAttribute;
 use App\PrettierFormatters\DedentHuggedTerminator;
@@ -86,6 +87,7 @@ class BladeFormatter
      */
     public function format(string $path, string $content): string
     {
+        $original = $content;
         $ranges = $this->prettier->ignoreRanges($path, $content);
         $content = $this->protectIgnoreRanges($content, $ranges, $content);
 
@@ -100,7 +102,7 @@ class BladeFormatter
             $content,
         );
 
-        $content = $this->restoreIgnoreRanges($content);
+        $content = $this->restoreIgnoreRanges($content, $original);
 
         if ($ranges === []) {
             $formatted = $this->prettier->format($path, $content);
@@ -116,13 +118,13 @@ class BladeFormatter
             $formatted,
         );
 
-        return $this->restoreIgnoreRanges($formatted);
+        return $this->restoreIgnoreRanges($formatted, $original);
     }
 
     /**
      * Protect the given formatter ignore ranges.
      *
-     * @param  array<int, array{start: int, end: int, sourceStart?: int, sourceEnd?: int}>  $ranges
+     * @param  array<int, mixed>  $ranges
      */
     private function protectIgnoreRanges(string $content, array $ranges, string $source): string
     {
@@ -136,15 +138,38 @@ class BladeFormatter
 
         $result = '';
         $cursor = 0;
+        $sourceCursor = 0;
+        $contentLength = strlen($content);
+        $sourceLength = strlen($source);
 
         foreach ($ranges as $range) {
-            $token = $this->makeIgnoreRangeToken();
+            if (! is_array($range)
+                || ! isset($range['start'], $range['end'])
+                || ! is_int($range['start'])
+                || ! is_int($range['end'])
+                || array_key_exists('sourceStart', $range) !== array_key_exists('sourceEnd', $range)) {
+                throw new PrettierException('Laravel Pint\'s Prettier worker returned invalid Blade ignore ranges.');
+            }
+
             $sourceStart = $range['sourceStart'] ?? $range['start'];
             $sourceEnd = $range['sourceEnd'] ?? $range['end'];
 
+            if (! is_int($sourceStart)
+                || ! is_int($sourceEnd)
+                || $range['start'] < $cursor
+                || $range['end'] < $range['start']
+                || $range['end'] > $contentLength
+                || $sourceStart < $sourceCursor
+                || $sourceEnd < $sourceStart
+                || $sourceEnd > $sourceLength) {
+                throw new PrettierException('Laravel Pint\'s Prettier worker returned invalid Blade ignore ranges.');
+            }
+
+            $token = $this->makeIgnoreRangeToken();
             $this->ignoreRangeMap[$token] = substr($source, $sourceStart, $sourceEnd - $sourceStart);
             $result .= substr($content, $cursor, $range['start'] - $cursor).$token;
             $cursor = $range['end'];
+            $sourceCursor = $sourceEnd;
         }
 
         return $result.substr($content, $cursor);
@@ -153,7 +178,7 @@ class BladeFormatter
     /**
      * Restore the contents of formatter ignore ranges.
      */
-    private function restoreIgnoreRanges(string $content): string
+    private function restoreIgnoreRanges(string $content, string $fallback): string
     {
         if ($this->ignoreRangeMap === []) {
             $this->ignoreRangeOriginal = '';
@@ -162,14 +187,13 @@ class BladeFormatter
         }
 
         $map = $this->ignoreRangeMap;
-        $original = $this->ignoreRangeOriginal;
 
         $this->ignoreRangeMap = [];
         $this->ignoreRangeOriginal = '';
 
         foreach (array_keys($map) as $token) {
             if (substr_count($content, $token) !== 1) {
-                return $original;
+                return $fallback;
             }
         }
 

@@ -4,7 +4,6 @@ namespace App\Support;
 
 use App\Exceptions\PrettierException;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 use Symfony\Component\Process\InputStream;
 use Symfony\Component\Process\Process;
 
@@ -23,6 +22,13 @@ class Prettier
      * @var int
      */
     public const WORKER_IDLE_TIMEOUT = 30;
+
+    /**
+     * The prefix used to identify worker response lines.
+     *
+     * @var string
+     */
+    private const RESPONSE_PREFIX = '[PINT_PRETTIER_WORKER]';
 
     /**
      * The process instance, if any.
@@ -147,7 +153,7 @@ class Prettier
                 $deadline = microtime(true) + $this->workerIdleTimeout();
             }
 
-            if (str_contains($output, '[PINT_PRETTIER_WORKER_END]')) {
+            if ($this->responseFromOutput($output) !== null) {
                 break;
             }
 
@@ -182,19 +188,11 @@ class Prettier
             throw new PrettierException($error);
         }
 
-        foreach ([
-            '[PINT_PRETTIER_WORKER_START]',
-            '[PINT_PRETTIER_WORKER_END]',
-        ] as $delimiter) {
-            if (! Str::contains($output, $delimiter)) {
-                throw new PrettierException('Laravel Pint\'s Prettier worker did not return a valid response.');
-            }
-        }
+        $response = $this->responseFromOutput($output);
 
-        $response = Str::of($output)
-            ->after('[PINT_PRETTIER_WORKER_START]')
-            ->before('[PINT_PRETTIER_WORKER_END]')
-            ->value();
+        if ($response === null) {
+            throw new PrettierException('Laravel Pint\'s Prettier worker did not return a valid response.');
+        }
 
         $decoded = json_decode($response, true);
 
@@ -203,6 +201,23 @@ class Prettier
         }
 
         return $decoded;
+    }
+
+    /**
+     * Return the first complete worker response in the given output.
+     */
+    private function responseFromOutput(string $output): ?string
+    {
+        $lines = explode("\n", $output);
+        array_pop($lines);
+
+        foreach ($lines as $line) {
+            if (str_starts_with($line, self::RESPONSE_PREFIX)) {
+                return substr($line, strlen(self::RESPONSE_PREFIX));
+            }
+        }
+
+        return null;
     }
 
     /**

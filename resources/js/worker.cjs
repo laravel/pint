@@ -2,8 +2,17 @@ const projectRoot = process.argv[2] || process.cwd();
 const configPath = process.argv[3];
 
 const prettier = require(require.resolve("prettier", { paths: [projectRoot] }));
+const { getBladeIgnoreRanges } = require(
+    require.resolve("prettier-plugin-blade", { paths: [projectRoot] }),
+);
 
 const bundledOptions = require(configPath);
+
+if (typeof getBladeIgnoreRanges !== "function") {
+    throw new Error(
+        "The installed Blade plugin does not expose its ignore range API.",
+    );
+}
 
 function resolvePlugins(plugins) {
     if (!Array.isArray(plugins)) {
@@ -61,12 +70,6 @@ async function handleMessage(input) {
     try {
         const { type = "format", path: filepath, content } = JSON.parse(input);
 
-        if (type === "ranges" && !hasIgnoreRangeMarker(content)) {
-            writeResponse({ ranges: [] });
-
-            return;
-        }
-
         const resolved = filepath.trim();
 
         const options = resolveOptionPlugins({ ...bundledOptions });
@@ -84,17 +87,10 @@ async function handleMessage(input) {
             return;
         }
 
-        if (
-            typeof prettier.__debug?.parse !== "function" ||
-            typeof prettier.__debug?.formatAST !== "function"
-        ) {
-            throw new Error(
-                "The installed Prettier version does not expose the Blade ignore range formatter API.",
-            );
-        }
-
-        const { ast } = await prettier.__debug.parse(content, parseOptions);
-        const sourceRanges = ignoreRanges(ast, normalizedLength(content));
+        const sourceRanges = ignoreRanges(
+            getBladeIgnoreRanges(content, parseOptions),
+            content.length,
+        );
 
         if (type === "ranges") {
             writeResponse({
@@ -106,19 +102,10 @@ async function handleMessage(input) {
             return;
         }
 
-        let { formatted } = await prettier.__debug.formatAST(ast, parseOptions);
-
-        if (content.charCodeAt(0) === 0xfeff) {
-            formatted = `\ufeff${formatted}`;
-        }
-
-        const { ast: formattedAst } = await prettier.__debug.parse(
-            formatted,
-            parseOptions,
-        );
+        const formatted = await prettier.format(content, parseOptions);
         const formattedRanges = ignoreRanges(
-            formattedAst,
-            normalizedLength(formatted),
+            getBladeIgnoreRanges(formatted, parseOptions),
+            formatted.length,
         );
 
         if (formattedRanges.length !== sourceRanges.length) {
@@ -145,18 +132,7 @@ async function handleMessage(input) {
     }
 }
 
-function hasIgnoreRangeMarker(content) {
-    const lower = content.toLowerCase();
-
-    return (
-        lower.includes("format-ignore-start") ||
-        lower.includes("prettier-ignore-start")
-    );
-}
-
-function ignoreRanges(ast, contentLength) {
-    const ranges = ast?.buildResult?.ignoreRanges;
-
+function ignoreRanges(ranges, contentLength) {
     if (
         !Array.isArray(ranges) ||
         !ranges.every(
@@ -181,49 +157,11 @@ function ignoreRanges(ast, contentLength) {
 
 function toByteRange(content, { start, end }) {
     return {
-        start: Buffer.byteLength(
-            content.slice(0, sourceOffset(content, start)),
-            "utf8",
-        ),
-        end: Buffer.byteLength(
-            content.slice(0, sourceOffset(content, end)),
-            "utf8",
-        ),
+        start: Buffer.byteLength(content.slice(0, start), "utf8"),
+        end: Buffer.byteLength(content.slice(0, end), "utf8"),
     };
 }
 
-function normalizedLength(content) {
-    let length = content.length;
-    let offset = 0;
-
-    if (content.charCodeAt(0) === 0xfeff) {
-        length--;
-        offset++;
-    }
-
-    while ((offset = content.indexOf("\r\n", offset)) !== -1) {
-        length--;
-        offset += 2;
-    }
-
-    return length;
-}
-
-function sourceOffset(content, normalizedOffset) {
-    let offset = content.charCodeAt(0) === 0xfeff ? 1 : 0;
-    let normalized = 0;
-
-    while (normalized < normalizedOffset) {
-        offset +=
-            content[offset] === "\r" && content[offset + 1] === "\n" ? 2 : 1;
-        normalized++;
-    }
-
-    return offset;
-}
-
 function writeResponse(response) {
-    process.stdout.write(
-        `[PINT_PRETTIER_WORKER_START]${JSON.stringify(response)}[PINT_PRETTIER_WORKER_END]`,
-    );
+    process.stdout.write(`[PINT_PRETTIER_WORKER]${JSON.stringify(response)}\n`);
 }
