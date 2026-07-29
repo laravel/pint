@@ -36,7 +36,7 @@ class Fixer extends AbstractFixer implements HasPrettierDependencies
     {
         return [
             'prettier' => '^3.8.4',
-            'prettier-plugin-blade' => '^3.2.2',
+            'prettier-plugin-blade' => '^3.3.0',
             'prettier-plugin-tailwindcss' => '^0.8.0',
         ];
     }
