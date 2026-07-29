@@ -4,6 +4,7 @@ namespace App;
 
 use App\Contracts\PrettierPostFormatter;
 use App\Contracts\PrettierPreFormatter;
+use App\Exceptions\PrettierException;
 use App\Exceptions\UnrestorableContentException;
 use App\PrettierFormatters\AlpineMaskPatterns;
 use App\PrettierFormatters\CollapseShortSlots;
@@ -94,47 +95,55 @@ class BladeFormatter
      */
     public function format(string $path, string $content): string
     {
+        $original = $content;
         $ranges = $this->prettier->ignoreRanges($path, $content);
-        $content = $this->protectIgnoreRanges($content, $ranges, $content);
-
         $formatters = collect(static::$formatters)->map(
             fn (string $formatter): PrettierPreFormatter|PrettierPostFormatter => resolve($formatter),
         );
 
-        $masked = $formatters->reduce(
-            fn (string $content, PrettierPreFormatter|PrettierPostFormatter $formatter): string => $formatter instanceof PrettierPreFormatter
-                ? $formatter->preFormat($content)
-                : $content,
-            $content,
-        );
-
-        $content = $this->restoreIgnoreRanges($masked);
-
-        if ($ranges === []) {
-            $formatted = $this->prettier->format($path, $content);
-        } else {
-            $result = $this->prettier->formatWithIgnoreRanges($path, $content);
-            $formatted = $this->protectIgnoreRanges($result['formatted'], $result['ranges'], $content);
-        }
-
         try {
+            $content = $this->protectIgnoreRanges($content, $ranges, $content);
+
+            $masked = $formatters->reduce(
+                fn (string $content, PrettierPreFormatter|PrettierPostFormatter $formatter): string => $formatter instanceof PrettierPreFormatter
+                    ? $formatter->preFormat($content)
+                    : $content,
+                $content,
+            );
+
+            $content = $this->restoreIgnoreRanges($masked);
+
+            if ($ranges === []) {
+                $formatted = $this->prettier->format($path, $content);
+            } else {
+                $result = $this->prettier->formatWithIgnoreRanges($path, $content);
+                $formatted = $this->protectIgnoreRanges($result['formatted'], $result['ranges'], $content);
+            }
+
             $formatted = $formatters->reduce(
                 fn (string $formatted, PrettierPreFormatter|PrettierPostFormatter $formatter): string => $formatter instanceof PrettierPostFormatter
                     ? $formatter->postFormat($formatted)
                     : $formatted,
                 $formatted,
             );
-        } catch (UnrestorableContentException) {
-            return $this->ignoreRangeOriginal;
-        }
 
-        return $this->restoreIgnoreRanges($formatted);
+            return $this->restoreIgnoreRanges($formatted);
+        } catch (UnrestorableContentException) {
+            // A masking pass could not undo its own work, which means prettier lost or
+            // duplicated one of its placeholders. Discard the whole run and hand back the
+            // untouched file: only the original content is guaranteed to be intact once a
+            // masking pass has been given up on.
+            $this->ignoreRangeMap = [];
+            $this->ignoreRangeOriginal = '';
+
+            return $original;
+        }
     }
 
     /**
      * Protect the given formatter ignore ranges.
      *
-     * @param  array<int, array{start: int, end: int, sourceStart?: int, sourceEnd?: int}>  $ranges
+     * @param  array<int, mixed>  $ranges
      */
     private function protectIgnoreRanges(string $content, array $ranges, string $source): string
     {
@@ -148,18 +157,55 @@ class BladeFormatter
 
         $result = '';
         $cursor = 0;
+        $sourceCursor = 0;
+        $contentLength = strlen($content);
+        $sourceLength = strlen($source);
 
         foreach ($ranges as $range) {
-            $token = $this->makeIgnoreRangeToken();
-            $sourceStart = $range['sourceStart'] ?? $range['start'];
-            $sourceEnd = $range['sourceEnd'] ?? $range['end'];
+            [$start, $end, $sourceStart, $sourceEnd] = $this->parseIgnoreRange(
+                $range,
+                $cursor,
+                $sourceCursor,
+                $contentLength,
+                $sourceLength,
+            );
 
+            $token = $this->makeIgnoreRangeToken();
             $this->ignoreRangeMap[$token] = substr($source, $sourceStart, $sourceEnd - $sourceStart);
-            $result .= substr($content, $cursor, $range['start'] - $cursor).$token;
-            $cursor = $range['end'];
+            $result .= substr($content, $cursor, $start - $cursor).$token;
+            $cursor = $end;
+            $sourceCursor = $sourceEnd;
         }
 
         return $result.substr($content, $cursor);
+    }
+
+    /**
+     * Validate and return a formatter ignore range.
+     *
+     * @return array{int, int, int, int}
+     */
+    private function parseIgnoreRange(mixed $range, int $cursor, int $sourceCursor, int $contentLength, int $sourceLength): array
+    {
+        if (! is_array($range)
+            || ! isset($range['start'], $range['end'], $range['sourceStart'], $range['sourceEnd'])
+            || ! is_int($range['start'])
+            || ! is_int($range['end'])
+            || ! is_int($range['sourceStart'])
+            || ! is_int($range['sourceEnd'])) {
+            throw new PrettierException('Laravel Pint\'s Prettier worker returned invalid Blade ignore ranges.');
+        }
+
+        if ($range['start'] < $cursor
+            || $range['end'] < $range['start']
+            || $range['end'] > $contentLength
+            || $range['sourceStart'] < $sourceCursor
+            || $range['sourceEnd'] < $range['sourceStart']
+            || $range['sourceEnd'] > $sourceLength) {
+            throw new PrettierException('Laravel Pint\'s Prettier worker returned invalid Blade ignore ranges.');
+        }
+
+        return [$range['start'], $range['end'], $range['sourceStart'], $range['sourceEnd']];
     }
 
     /**
@@ -174,14 +220,13 @@ class BladeFormatter
         }
 
         $map = $this->ignoreRangeMap;
-        $original = $this->ignoreRangeOriginal;
 
         $this->ignoreRangeMap = [];
         $this->ignoreRangeOriginal = '';
 
         foreach (array_keys($map) as $token) {
             if (substr_count($content, $token) !== 1) {
-                return $original;
+                throw new UnrestorableContentException;
             }
         }
 
