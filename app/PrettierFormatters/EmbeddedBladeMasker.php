@@ -91,13 +91,21 @@ class EmbeddedBladeMasker implements PrettierPostFormatter, PrettierPreFormatter
         while ($offset < $length) {
             $char = $region[$offset];
 
+            // Escaped "@@" is a literal "@"; mask it so prettier can't re-indent the raw-text block around it.
+            if ($char === '@' && $offset + 1 < $length && $region[$offset + 1] === '@') {
+                $result .= $this->mask('@@', $isCss ? 'value' : 'js-expression');
+                $offset += 2;
+
+                continue;
+            }
+
             if ($this->isStringDelimiter($char, $isCss)) {
                 $end = $this->scanStringLiteral($region, $length, $offset, $char);
                 $literal = substr($region, $offset, $end - $offset);
 
                 $result .= $this->containsEcho($literal)
                     ? $this->mask($literal, $isCss ? 'value' : 'js-expression')
-                    : $literal;
+                    : $this->maskEscapedAt($literal, $isCss);
 
                 $offset = $end;
 
@@ -122,6 +130,22 @@ class EmbeddedBladeMasker implements PrettierPostFormatter, PrettierPreFormatter
         }
 
         return $result;
+    }
+
+    /**
+     * Mask every escaped "@@" left inside a string literal that prettier would otherwise re-indent around.
+     */
+    private function maskEscapedAt(string $literal, bool $isCss): string
+    {
+        if (! str_contains($literal, '@@')) {
+            return $literal;
+        }
+
+        return (string) preg_replace_callback(
+            '/@@/',
+            fn (): string => $this->mask('@@', $isCss ? 'value' : 'js-expression'),
+            $literal,
+        );
     }
 
     /**
