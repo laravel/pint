@@ -11,6 +11,7 @@ use App\PrettierFormatters\DirectiveTrailingCommas;
 use App\PrettierFormatters\EmbeddedBladeMasker;
 use App\PrettierFormatters\JoinDanglingCloseBracket;
 use App\PrettierFormatters\JoinDanglingOpenBracket;
+use App\PrettierFormatters\MaskAttributeValues;
 use App\PrettierFormatters\NotOperatorSpacing;
 use App\PrettierFormatters\PhpBlockFormatting;
 use App\PrettierFormatters\StripSensitiveLeadingBlankLines;
@@ -53,6 +54,9 @@ class BladeFormatter
 
         // Runs Pint over the PHP in @php blocks, <?php islands, directives, and echoes.
         PhpBlockFormatting::class,
+
+        // Keeps an Alpine "x-mask" literal byte-stable, since prettier formats it as a JS expression.
+        MaskAttributeValues::class,
     ];
 
     /**
