@@ -13,6 +13,7 @@ class DirectiveTrailingCommas implements PrettierPostFormatter
      */
     private const CONTROL_DIRECTIVES = [
         'if', 'elseif', 'unless', 'while', 'for', 'foreach', 'forelse', 'switch', 'case',
+        'checked', 'selected', 'disabled', 'readonly', 'required',
     ];
 
     /**

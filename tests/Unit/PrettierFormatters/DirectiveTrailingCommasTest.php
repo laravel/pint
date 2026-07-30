@@ -35,6 +35,12 @@ it('never adds a comma to a control-structure condition', function () {
     expect((new DirectiveTrailingCommas)->postFormat($in))->toBe($in);
 });
 
+it('never adds a comma to a conditional attribute directive', function () {
+    $in = "@checked(\n    \$active &&\n    \$enabled\n)\n";
+
+    expect((new DirectiveTrailingCommas)->postFormat($in))->toBe($in);
+});
+
 it('adds a comma to a nested array but never to its enclosing condition', function () {
     $in = "@if (in_array(\$x, [\n    'a',\n    'b'\n]))\n@endif\n";
     $out = "@if (in_array(\$x, [\n    'a',\n    'b',\n]))\n@endif\n";
