@@ -1,0 +1,4 @@
+<div>
+    <input x-mask="a" />
+    <span>badly indented</span>
+</div>

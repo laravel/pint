@@ -39,11 +39,21 @@ class MaskAttributeValues implements PrettierPostFormatter, PrettierPreFormatter
         return (string) preg_replace_callback(
             '/(?<![-\w:])x-mask\s*=\s*(["\'])(.+?)\1/i',
             function (array $matches): string {
-                $token = $this->mask($matches[2]);
+                [$whole, $wholeOffset] = $matches[0];
+                [$value, $valueOffset] = $matches[2];
 
-                return str_replace($matches[2], $token, $matches[0]);
+                $token = $this->mask($value);
+
+                // Splice the token in at the value's exact position within the match, so a value
+                // that also appears inside the attribute name (e.g. "a" in "x-mask") is left alone.
+                $position = $valueOffset - $wholeOffset;
+
+                return substr($whole, 0, $position)
+                    .$token
+                    .substr($whole, $position + strlen($value));
             },
             $content,
+            flags: PREG_OFFSET_CAPTURE,
         );
     }
 
