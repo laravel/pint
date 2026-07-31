@@ -1,7 +1,31 @@
 <?php
 
+use App\BladeFormatter;
 use App\Factories\ConfigurationFactory;
 use App\Repositories\ConfigurationJsonRepository;
+
+it('enables caching when blade formatting is disabled', function () {
+    app()->bind(ConfigurationJsonRepository::class, fn () => new ConfigurationJsonRepository(null, null));
+    app()->bind(BladeFormatter::class, fn () => Mockery::mock(BladeFormatter::class));
+
+    expect(ConfigurationFactory::preset([])->getUsingCache())->toBeTrue();
+});
+
+it('disables caching when blade formatting is enabled', function () {
+    $configPath = tempnam(sys_get_temp_dir(), 'pint-config-');
+    file_put_contents($configPath, json_encode([
+        'rules' => ['Pint/laravel_blade' => true],
+    ]));
+
+    try {
+        app()->bind(ConfigurationJsonRepository::class, fn () => new ConfigurationJsonRepository($configPath, null));
+        app()->bind(BladeFormatter::class, fn () => Mockery::mock(BladeFormatter::class));
+
+        expect(ConfigurationFactory::preset([])->getUsingCache())->toBeFalse();
+    } finally {
+        @unlink($configPath);
+    }
+});
 
 it('returns false for non-excluded files', function () {
     app()->bind(ConfigurationJsonRepository::class, fn () => new ConfigurationJsonRepository(null, null));

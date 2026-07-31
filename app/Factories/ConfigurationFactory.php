@@ -45,12 +45,15 @@ class ConfigurationFactory
      */
     public static function preset($rules)
     {
+        $rules = array_merge($rules, resolve(ConfigurationJsonRepository::class)->rules());
+
+        // PHP CS Fixer's cache signature cannot represent Prettier configuration or Node dependency versions.
         return (new Config)
             ->setParallelConfig(ParallelConfigFactory::detect())
             ->setFinder(self::finder())
-            ->setRules(array_merge($rules, resolve(ConfigurationJsonRepository::class)->rules()))
+            ->setRules($rules)
             ->setRiskyAllowed(true)
-            ->setUsingCache(false)
+            ->setUsingCache(($rules['Pint/laravel_blade'] ?? false) === false)
             ->setUnsupportedPhpVersionAllowed(true)
             ->registerCustomFixers(self::customFixers());
     }
