@@ -7,12 +7,23 @@ use App\Contracts\PrettierPostFormatter;
 class DirectiveTrailingCommas implements PrettierPostFormatter
 {
     /**
-     * Control-structure directives whose top-level "(...)" is a condition, not a call.
+     * Directives whose top-level "(...)" is not a comma-safe call.
+     *
+     * Blade splices these straight into a control structure, a language
+     * construct, or a raw statement, so a trailing comma is a parse error
+     * rather than a harmless extra argument.
      *
      * @var array<int, string>
      */
-    private const CONTROL_DIRECTIVES = [
+    private const NON_CALL_DIRECTIVES = [
+        // Compiled to "if (...)", "for (...)", "switch (...)"...
         'if', 'elseif', 'unless', 'while', 'for', 'foreach', 'forelse', 'switch', 'case',
+        // Compiled to "if (...): echo 'checked'; endif"...
+        'checked', 'selected', 'disabled', 'readonly', 'required',
+        // Compiled to "if (...) break;" and "if (...) continue;"...
+        'break', 'continue',
+        // Compiled to a language construct or a raw statement...
+        'isset', 'empty', 'unset', 'php', 'use',
     ];
 
     /**
@@ -151,7 +162,7 @@ class DirectiveTrailingCommas implements PrettierPostFormatter
     private function scanDirectiveArgs(string $content, int $length, int $start, string $directive, array &$inserts): int
     {
         $stack = [
-            $this->newFrame('(', $start, ! in_array($directive, self::CONTROL_DIRECTIVES, true)),
+            $this->newFrame('(', $start, ! in_array($directive, self::NON_CALL_DIRECTIVES, true)),
         ];
 
         $offset = $start + 1;

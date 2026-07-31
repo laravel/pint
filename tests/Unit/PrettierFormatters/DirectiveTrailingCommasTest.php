@@ -35,6 +35,38 @@ it('never adds a comma to a control-structure condition', function () {
     expect((new DirectiveTrailingCommas)->postFormat($in))->toBe($in);
 });
 
+it('never adds a comma to a directive that is not a call', function (string $directive, string $expression) {
+    $in = "@{$directive}(\n    {$expression}\n)\n";
+
+    expect((new DirectiveTrailingCommas)->postFormat($in))->toBe($in);
+})->with([
+    // Compiled to "if (...)", "for (...)", "switch (...)"...
+    ['if', '$a && $b'],
+    ['elseif', '$a && $b'],
+    ['unless', '$a && $b'],
+    ['while', '$a && $b'],
+    ['for', '$i = 0; $i < 10; $i++'],
+    ['foreach', '$users as $user'],
+    ['forelse', '$users as $user'],
+    ['switch', '$status'],
+    ['case', "'published'"],
+    // Compiled to "if (...): echo 'checked'; endif"...
+    ['checked', '$active && $enabled'],
+    ['selected', '$active && $enabled'],
+    ['disabled', '$active && $enabled'],
+    ['readonly', '$active && $enabled'],
+    ['required', '$active && $enabled'],
+    // Compiled to "if (...) break;" and "if (...) continue;"...
+    ['break', '$loop->index > 3'],
+    ['continue', '$loop->first'],
+    // Compiled to a language construct or a raw statement...
+    ['isset', '$user->name'],
+    ['empty', '$users'],
+    ['unset', '$user'],
+    ['php', '$foo = 1'],
+    ['use', "'App\\Models\\User'"],
+]);
+
 it('adds a comma to a nested array but never to its enclosing condition', function () {
     $in = "@if (in_array(\$x, [\n    'a',\n    'b'\n]))\n@endif\n";
     $out = "@if (in_array(\$x, [\n    'a',\n    'b',\n]))\n@endif\n";
