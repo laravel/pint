@@ -50,7 +50,7 @@ class ConfigurationFactory
             ->setFinder(self::finder())
             ->setRules(array_merge($rules, resolve(ConfigurationJsonRepository::class)->rules()))
             ->setRiskyAllowed(true)
-            ->setUsingCache(false)
+            ->setUsingCache(static::shouldExcludeBladeFiles())
             ->setUnsupportedPhpVersionAllowed(true)
             ->registerCustomFixers(self::customFixers());
     }
