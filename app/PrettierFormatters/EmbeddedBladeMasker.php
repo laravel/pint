@@ -143,7 +143,7 @@ class EmbeddedBladeMasker implements PrettierPostFormatter, PrettierPreFormatter
 
         return (string) preg_replace_callback(
             '/@@/',
-            fn (): string => $this->mask('@@', $isCss ? 'value' : 'js-expression'),
+            fn (): string => $this->mask('@@', $isCss ? 'value' : 'js-string'),
             $literal,
         );
     }
@@ -439,6 +439,10 @@ class EmbeddedBladeMasker implements PrettierPostFormatter, PrettierPreFormatter
         return match ($context) {
             'value', 'js-expression' => "__PINT_BLADE_{$index}__",
             'js-statement' => "__PINT_BLADE_{$index}__;",
+            // Lives only inside a JS string literal. The leading digit keeps it from ever
+            // looking like a bare identifier, so prettier's "quoteProps: as-needed" cannot
+            // strip the surrounding quotes when the string sits in an object-key position.
+            'js-string' => "0__PINT_BLADE_{$index}__",
             default => "--pint-blade-{$index}: 1;",
         };
     }

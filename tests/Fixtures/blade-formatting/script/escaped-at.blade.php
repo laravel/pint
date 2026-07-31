@@ -7,3 +7,9 @@
 <script>
     const email = "support@@example.com";
 </script>
+<script>
+    const handler = {
+      "@@click": "doThing",
+        "@@keyup.enter": "submit",
+    };
+</script>
