@@ -1,0 +1,6 @@
+<script>
+        // reach us at support@@example.com
+    /* the @@ here is a literal at-sign, not a directive */
+        const label = "an @@ inside a string as well";
+    const a = 1;
+</script>

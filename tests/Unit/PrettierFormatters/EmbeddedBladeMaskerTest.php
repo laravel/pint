@@ -2,6 +2,7 @@
 
 use App\Contracts\PrettierPostFormatter;
 use App\Contracts\PrettierPreFormatter;
+use App\Exceptions\UnrestorableContentException;
 use App\PrettierFormatters\EmbeddedBladeMasker;
 
 /**
@@ -14,6 +15,19 @@ function maskerMap(EmbeddedBladeMasker $masker): array
     return (function () {
         /** @var EmbeddedBladeMasker $this */
         return $this->map;
+    })->call($masker);
+}
+
+/**
+ * Read the private escaped-"@@" placeholder => occurrence-count map off a masker instance.
+ *
+ * @return array<string, int>
+ */
+function maskerEscapedCounts(EmbeddedBladeMasker $masker): array
+{
+    return (function () {
+        /** @var EmbeddedBladeMasker $this */
+        return $this->escapedCounts;
     })->call($masker);
 }
 
@@ -197,15 +211,101 @@ it('re-salts the token index when the source already contains a placeholder-like
     expect($masker->postFormat($out))->toBe($in);    // and the round-trip is exact
 });
 
-it('falls back to the original content when a token cannot be restored', function () {
+it('masks an escaped "@@" inside a string literal', function () {
+    $masker = new EmbeddedBladeMasker;
+
+    $in = "<script>\nconst email = \"support@@example.com\";\n</script>";
+    $out = $masker->preFormat($in);
+
+    // The placeholder leads with a digit, so it is neither a valid identifier nor a valid
+    // number and prettier's "quoteProps: as-needed" cannot drop the quotes around it when
+    // the string sits in an object-key position.
+    expect($out)->toBe("<script>\nconst email = \"support0zexample.com\";\n</script>");
+    expect(maskerEscapedCounts($masker))->toBe(['0z' => 1]);
+    expect(maskerMap($masker))->toBe([]);
+    expect($masker->postFormat($out))->toBe($in);
+});
+
+it('masks an escaped "@@" outside any string literal', function () {
+    $masker = new EmbeddedBladeMasker;
+
+    // Prettier's blade plugin re-indents the raw-text block around a bare "@@" a little
+    // further on every pass, so it has to be masked even though it is not a directive.
+    $in = "<script>\n// reach us at support@@example.com\nconst a = 1;\n</script>";
+    $out = $masker->preFormat($in);
+
+    expect($out)->toBe("<script>\n// reach us at supportzzexample.com\nconst a = 1;\n</script>");
+    expect(maskerEscapedCounts($masker))->toBe(['zz' => 1]);
+    expect($masker->postFormat($out))->toBe($in);
+});
+
+it('masks an escaped "@@" without changing the width of the line', function () {
+    $masker = new EmbeddedBladeMasker;
+
+    // Both placeholders are exactly as wide as the "@@" they replace, so prettier measures
+    // the real line length and makes the wrapping decision it would have made unmasked.
+    foreach (['bare' => '@@', 'quoted' => '"@@"'] as $escape) {
+        $in = "<script>\nconst a = {$escape};\n</script>";
+        $out = $masker->preFormat($in);
+
+        expect($out)->not->toContain('@@'); // the escape really was masked
+        expect(strlen($out))->toBe(strlen($in));
+    }
+});
+
+it('shares a single placeholder across every escaped "@@" and restores them all', function () {
+    $masker = new EmbeddedBladeMasker;
+
+    $in = implode("\n", [
+        '<script>',
+        '// a bare @@ and another @@',
+        'const a = "one @@ here";',
+        'const b = "two @@ and @@ here";',
+        'const c = "a doubled @@@@ here";',
+        '</script>',
+    ]);
+
+    $out = $masker->preFormat($in);
+
+    // One placeholder per shape, each carrying the number of escapes it stands in for:
+    // two bare, and five quoted (1 + 2 + 2 for the doubled pair).
+    expect(maskerEscapedCounts($masker))->toBe(['zz' => 2, '0z' => 5]);
+    expect($out)->not->toContain('@@');
+    expect($masker->postFormat($out))->toBe($in);
+});
+
+it('widens the escaped-"@@" placeholder when the source already contains it', function () {
+    $masker = new EmbeddedBladeMasker;
+
+    // Both default placeholders appear verbatim in the HTML body, so each has to grow until
+    // it is unique against the source.
+    $in = "<p>zz and 0z</p>\n<script>\nconst a = \"x@@y\";\n// bare @@ too\n</script>";
+    $out = $masker->preFormat($in);
+
+    expect(maskerEscapedCounts($masker))->toBe(['0zz' => 1, 'zzz' => 1]);
+    expect($out)->toContain('<p>zz and 0z</p>'); // the source literals are untouched
+    expect($masker->postFormat($out))->toBe($in); // and the round-trip is exact
+});
+
+it('bails out when an escaped "@@" does not come back intact', function () {
+    $masker = new EmbeddedBladeMasker;
+
+    $in = "<script>\nconst a = \"@@one\";\nconst b = \"@@two\";\n</script>";
+    $masker->preFormat($in);
+
+    // Two escapes were masked but only one placeholder comes back. Rather than emit a
+    // half-restored file, postFormat gives up on the run.
+    $masker->postFormat("<script>\nconst a = '0zone';\n</script>");
+})->throws(UnrestorableContentException::class);
+
+it('bails out when a token cannot be restored', function () {
     $masker = new EmbeddedBladeMasker;
 
     $in = "<style>\n.a { color: @php echo \$x; @endphp; }\n</style>";
     $masker->preFormat($in);
 
-    // A token is missing from the content handed to postFormat. Rather than emit
-    // a half-restored (corrupt) file, it returns the original verbatim.
-    $corrupted = "<style>\n.a { color: red; }\n</style>";
-
-    expect($masker->postFormat($corrupted))->toBe($in);
-});
+    // A token is missing from the content handed to postFormat. Restoring what is left
+    // would emit a file the masker can no longer vouch for, so it gives up instead and
+    // BladeFormatter hands back the untouched original.
+    $masker->postFormat("<style>\n.a { color: red; }\n</style>");
+})->throws(UnrestorableContentException::class);

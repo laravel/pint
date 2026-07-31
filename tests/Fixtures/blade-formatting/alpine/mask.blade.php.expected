@@ -1,0 +1,11 @@
+<div>
+    <input x-mask="9999-999" placeholder="1234-567" />
+    <input x-mask="(999) 999-9999" />
+    <input x-mask="99/99/9999" />
+    <input x-mask="9999-999" />
+    <input x-mask="9999-999" />
+    <input x-mask.foo="9999-999" />
+    <input x-mask="a" />
+    <input x-mask="{{ $mask }}" />
+    <input x-mask:dynamic="$money($input, '.')" />
+</div>

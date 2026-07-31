@@ -1,0 +1,5 @@
+<style>
+    .a::before{content:"@@one"}
+        .b::after { content: "@@two"; }
+    .c { background: url("@@sprite.png"); }
+</style>

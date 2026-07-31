@@ -4,6 +4,8 @@ namespace App;
 
 use App\Contracts\PrettierPostFormatter;
 use App\Contracts\PrettierPreFormatter;
+use App\Exceptions\UnrestorableContentException;
+use App\PrettierFormatters\AlpineMaskPatterns;
 use App\PrettierFormatters\CollapseShortSlots;
 use App\PrettierFormatters\CollapseSingleAttribute;
 use App\PrettierFormatters\DedentHuggedTerminator;
@@ -51,6 +53,10 @@ class BladeFormatter
         // Masks Blade inside <script>/<style> across prettier, then restores it.
         EmbeddedBladeMasker::class,
 
+        // Masks an Alpine "x-mask" pattern across prettier, which would otherwise
+        // format the literal value as a JS expression, then restores it.
+        AlpineMaskPatterns::class,
+
         // Runs Pint over the PHP in @php blocks, <?php islands, directives, and echoes.
         PhpBlockFormatting::class,
     ];
@@ -73,20 +79,28 @@ class BladeFormatter
             fn (string $formatter): PrettierPreFormatter|PrettierPostFormatter => resolve($formatter),
         );
 
-        $content = $formatters->reduce(
+        $masked = $formatters->reduce(
             fn (string $content, PrettierPreFormatter|PrettierPostFormatter $formatter): string => $formatter instanceof PrettierPreFormatter
                 ? $formatter->preFormat($content)
                 : $content,
             $content,
         );
 
-        $formatted = $this->prettier->format($path, $content);
+        $formatted = $this->prettier->format($path, $masked);
 
-        return $formatters->reduce(
-            fn (string $formatted, PrettierPreFormatter|PrettierPostFormatter $formatter): string => $formatter instanceof PrettierPostFormatter
-                ? $formatter->postFormat($formatted)
-                : $formatted,
-            $formatted,
-        );
+        try {
+            return $formatters->reduce(
+                fn (string $formatted, PrettierPreFormatter|PrettierPostFormatter $formatter): string => $formatter instanceof PrettierPostFormatter
+                    ? $formatter->postFormat($formatted)
+                    : $formatted,
+                $formatted,
+            );
+        } catch (UnrestorableContentException) {
+            // A pre-formatter could not undo its own work, which means prettier lost or
+            // duplicated one of its placeholders. Discard the whole run and hand back the
+            // untouched file: only the original content is guaranteed to be intact once a
+            // masking pass has been given up on.
+            return $content;
+        }
     }
 }

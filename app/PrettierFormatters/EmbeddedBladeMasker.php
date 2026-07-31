@@ -4,6 +4,7 @@ namespace App\PrettierFormatters;
 
 use App\Contracts\PrettierPostFormatter;
 use App\Contracts\PrettierPreFormatter;
+use App\Exceptions\UnrestorableContentException;
 
 class EmbeddedBladeMasker implements PrettierPostFormatter, PrettierPreFormatter
 {
@@ -31,6 +32,20 @@ class EmbeddedBladeMasker implements PrettierPostFormatter, PrettierPreFormatter
     private array $map = [];
 
     /**
+     * The escaped-"@@" placeholder for each position shape ("bare" and "quoted").
+     *
+     * @var array<string, string>
+     */
+    private array $escapedTokens = [];
+
+    /**
+     * How many escaped "@@" each of those placeholders stands in for.
+     *
+     * @var array<string, int>
+     */
+    private array $escapedCounts = [];
+
+    /**
      * The content as it entered preFormat().
      */
     private string $original = '';
@@ -46,6 +61,8 @@ class EmbeddedBladeMasker implements PrettierPostFormatter, PrettierPreFormatter
     public function preFormat(string $content): string
     {
         $this->map = [];
+        $this->escapedTokens = [];
+        $this->escapedCounts = [];
         $this->original = $content;
         $this->counter = 0;
 
@@ -62,21 +79,38 @@ class EmbeddedBladeMasker implements PrettierPostFormatter, PrettierPreFormatter
 
     /**
      * {@inheritDoc}
+     *
+     * @throws UnrestorableContentException
      */
     public function postFormat(string $content): string
     {
-        if ($this->map === []) {
+        if ($this->map === [] && $this->escapedCounts === []) {
             return $content;
         }
 
-        // Every token must appear exactly once; otherwise fall back to the original to avoid corrupting the file.
+        // Every token must appear exactly once. When one does not, restoring would emit a
+        // half-masked file, so bail out and let the whole run be discarded.
         foreach (array_keys($this->map) as $token) {
             if (substr_count($content, $token) !== 1) {
-                return $this->original;
+                throw new UnrestorableContentException;
             }
         }
 
-        return str_replace(array_keys($this->map), array_values($this->map), $content);
+        // An escaped-"@@" placeholder is shared by every occurrence it masked, so it must come
+        // back with that exact count instead.
+        foreach ($this->escapedCounts as $token => $count) {
+            if (substr_count($content, $token) !== $count) {
+                throw new UnrestorableContentException;
+            }
+        }
+
+        $restore = $this->map;
+
+        foreach (array_keys($this->escapedCounts) as $token) {
+            $restore[$token] = '@@';
+        }
+
+        return str_replace(array_keys($restore), array_values($restore), $content);
     }
 
     /**
@@ -91,13 +125,23 @@ class EmbeddedBladeMasker implements PrettierPostFormatter, PrettierPreFormatter
         while ($offset < $length) {
             $char = $region[$offset];
 
+            // An escaped "@@" renders as a literal "@" and is not a directive, but prettier's blade
+            // plugin still re-indents the whole raw-text block around it — a little further on every
+            // pass, so the file never converges. Mask it so prettier cannot see it.
+            if ($char === '@' && $offset + 1 < $length && $region[$offset + 1] === '@') {
+                $result .= $this->escapedAtToken(quoted: false);
+                $offset += 2;
+
+                continue;
+            }
+
             if ($this->isStringDelimiter($char, $isCss)) {
                 $end = $this->scanStringLiteral($region, $length, $offset, $char);
                 $literal = substr($region, $offset, $end - $offset);
 
                 $result .= $this->containsEcho($literal)
                     ? $this->mask($literal, $isCss ? 'value' : 'js-expression')
-                    : $literal;
+                    : $this->maskEscapedAt($literal);
 
                 $offset = $end;
 
@@ -122,6 +166,61 @@ class EmbeddedBladeMasker implements PrettierPostFormatter, PrettierPreFormatter
         }
 
         return $result;
+    }
+
+    /**
+     * Mask every escaped "@@" left inside a string literal that carries no Blade echo.
+     */
+    private function maskEscapedAt(string $literal): string
+    {
+        $count = substr_count($literal, '@@');
+
+        if ($count === 0) {
+            return $literal;
+        }
+
+        return str_replace('@@', $this->escapedAtToken(quoted: true, count: $count), $literal);
+    }
+
+    /**
+     * Reserve the escaped-"@@" placeholder for the given position and record how many
+     * occurrences of "@@" it now stands in for.
+     */
+    private function escapedAtToken(bool $quoted, int $count = 1): string
+    {
+        $shape = $quoted ? 'quoted' : 'bare';
+
+        $token = $this->escapedTokens[$shape] ??= $this->buildEscapedAtToken($quoted);
+
+        $this->escapedCounts[$token] = ($this->escapedCounts[$token] ?? 0) + $count;
+
+        return $token;
+    }
+
+    /**
+     * Build the escaped-"@@" placeholder for the given position, widening it until the source no
+     * longer contains it.
+     *
+     * Unlike the other placeholders this one is two characters wide, exactly like the "@@" it
+     * replaces, so the raw-text block keeps its original line lengths and prettier makes the same
+     * wrapping decisions it would have made for the unmasked source. That is also why a single
+     * placeholder is shared by every occurrence rather than one being minted per "@@".
+     *
+     * A quoted placeholder leads with a digit so that it is neither a valid identifier nor a valid
+     * number, which stops prettier's "quoteProps: as-needed" from dropping the quotes when the
+     * string sits in an object-key position. A bare one is a plain identifier so that it still
+     * parses where the "@@" it replaces used to sit. Neither uses a character that appears in the
+     * "__PINT_BLADE_n__" or "--pint-blade-n" forms, so it can never hide inside another placeholder.
+     */
+    private function buildEscapedAtToken(bool $quoted): string
+    {
+        $token = $quoted ? '0z' : 'zz';
+
+        while (str_contains($this->original, $token)) {
+            $token .= 'z';
+        }
+
+        return $token;
     }
 
     /**
