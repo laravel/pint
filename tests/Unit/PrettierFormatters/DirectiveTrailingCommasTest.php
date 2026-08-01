@@ -22,6 +22,13 @@ it('adds a comma to a multiline array inside a multi-argument directive', functi
     expect((new DirectiveTrailingCommas)->postFormat($in))->toBe($out);
 });
 
+it('never adds a comma to an include directive that Blade appends an argument to', function () {
+    $in = "@include(\n    'div',\n    [\n        'text' => 'Test'\n    ]\n)\n";
+    $out = "@include(\n    'div',\n    [\n        'text' => 'Test',\n    ]\n)\n";
+
+    expect((new DirectiveTrailingCommas)->postFormat($in))->toBe($out);
+});
+
 it('adds a comma to a wrapped call argument list', function () {
     $in = "@can(\n    'update',\n    \$user,\n    \$post\n)\n";
     $out = "@can(\n    'update',\n    \$user,\n    \$post,\n)\n";

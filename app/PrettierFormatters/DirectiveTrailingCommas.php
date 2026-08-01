@@ -9,9 +9,11 @@ class DirectiveTrailingCommas implements PrettierPostFormatter
     /**
      * Directives whose top-level "(...)" is not a comma-safe call.
      *
-     * Blade splices these straight into a control structure, a language
-     * construct, or a raw statement, so a trailing comma is a parse error
-     * rather than a harmless extra argument.
+     * Blade splices most of these straight into a control structure, a
+     * language construct, or a raw statement, so a trailing comma is a parse
+     * error rather than a harmless extra argument. The include family is a
+     * call, but Blade appends its own argument after the expression, so a
+     * trailing comma there collapses the join into an empty argument.
      *
      * @var array<int, string>
      */
@@ -24,6 +26,8 @@ class DirectiveTrailingCommas implements PrettierPostFormatter
         'break', 'continue',
         // Compiled to a language construct or a raw statement...
         'isset', 'empty', 'unset', 'php', 'use',
+        // Compiled to a call with "get_defined_vars()" appended after the expression...
+        'include', 'includeif', 'includewhen', 'includeunless', 'includefirst',
     ];
 
     /**
