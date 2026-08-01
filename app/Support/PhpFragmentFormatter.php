@@ -17,14 +17,14 @@ class PhpFragmentFormatter
      *
      * @var array<int, string>
      */
-    private const DENYLIST = ['no_closing_tag', 'Pint/laravel_blade'];
+    private const DENYLIST = ['no_closing_tag', 'no_unused_imports', 'Pint/laravel_blade'];
 
     /**
      * Fixers skipped only for stripped fragments, where they corrupt the output.
      *
      * @var array<int, string>
      */
-    private const FRAGMENT_DENYLIST = ['fully_qualified_strict_types', 'no_unused_imports', 'declare_strict_types'];
+    private const FRAGMENT_DENYLIST = ['fully_qualified_strict_types', 'declare_strict_types'];
 
     /**
      * The priority-sorted PHP fixers, memoized per fragment/file key.

@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\User;
 use Illuminate\View\Component;
+use Livewire\Volt\Component as VoltComponent;
 
 new class extends Component
 {
