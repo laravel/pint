@@ -1,5 +1,5 @@
 <div>
-    @@if ($condition) This@@if is rendered literally, not parsed.@@endif
+    @@if ($condition) This @@if is rendered literally, not parsed.@@endif
 
     <p>@{{ vueVariable }}</p>
     <span>@{{ user.name }}</span>

@@ -155,6 +155,33 @@ it('keeps the imports of a class-based single file component the markup uses', f
     expect(fixImports($in))->toBe($in);
 });
 
+it('keeps the enum a livewire component only its own markup reaches for', function () {
+    // The report this fixer came from: an enum used by an attribute and a directive,
+    // and by nothing the fixer can see inside the php block itself.
+    $in = <<<'BLADE'
+    <?php
+
+    declare(strict_types=1);
+
+    use Livewire\Component;
+    use Modules\ProfitabilityCalculator\Enums\ViewMode;
+
+    new class extends Component
+    {
+        public string $viewMode;
+    }; ?>
+
+    <flux:radio.group class="mt-4 grid grid-cols-{{ ViewMode::count() }}" wire:model.live="viewMode">
+        @foreach (ViewMode::cases() as $mode)
+            <flux:radio value="{{ $mode->value }}">{{ $mode->label() }}</flux:radio>
+        @endforeach
+    </flux:radio.group>
+
+    BLADE;
+
+    expect(fixImports($in))->toBe($in);
+});
+
 it('drops an unused import of a plain php file as usual', function () {
     $in = <<<'PHP'
     <?php

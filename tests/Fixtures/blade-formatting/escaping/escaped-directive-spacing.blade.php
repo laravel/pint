@@ -1,0 +1,10 @@
+<div>
+    Text @@if more
+</div>
+
+<p>
+    Wrapped
+    @@endif
+</p>
+
+<span>Hello @@json world</span>

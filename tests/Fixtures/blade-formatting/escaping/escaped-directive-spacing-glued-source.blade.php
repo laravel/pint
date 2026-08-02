@@ -1,0 +1,9 @@
+<?php $mail = 'user@@example'; ?>
+
+<div>
+    Text @@if more
+</div>
+
+<script>
+    var handle = 'x@@y';
+</script>

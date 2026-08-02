@@ -9,8 +9,8 @@ use App\PrettierFormatters\AlpineMaskPatterns;
 use App\PrettierFormatters\CollapseShortSlots;
 use App\PrettierFormatters\CollapseSingleAttribute;
 use App\PrettierFormatters\DedentHuggedTerminator;
-use App\PrettierFormatters\DirectiveTrailingCommas;
 use App\PrettierFormatters\EmbeddedBladeMasker;
+use App\PrettierFormatters\EscapedDirectiveSpacing;
 use App\PrettierFormatters\JoinDanglingCloseBracket;
 use App\PrettierFormatters\JoinDanglingOpenBracket;
 use App\PrettierFormatters\NotOperatorSpacing;
@@ -26,11 +26,13 @@ class BladeFormatter
      * @var array<int, class-string>
      */
     protected static array $formatters = [
+        // Restores the separator prettier eats in front of an escaped "@@" directive.
+        // Runs first so that its post-pass lands before the maskers put their own
+        // "@@" back, leaving those to the pass that masked them.
+        EscapedDirectiveSpacing::class,
+
         // Drops the blank lines prettier injects after a wrapped <pre>/<textarea> tag.
         StripSensitiveLeadingBlankLines::class,
-
-        // Adds a trailing comma to a directive's wrapped call/array arguments.
-        DirectiveTrailingCommas::class,
 
         // Enforces Pint's "! $value" spacing inside JS/Alpine/PHP attribute values.
         NotOperatorSpacing::class,

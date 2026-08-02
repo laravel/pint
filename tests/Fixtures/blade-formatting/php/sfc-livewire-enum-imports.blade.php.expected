@@ -1,0 +1,27 @@
+<?php
+
+declare(strict_types=1);
+
+use Livewire\Component;
+use Modules\ProfitabilityCalculator\Enums\ViewMode;
+
+new class extends Component
+{
+    public string $viewMode;
+}; ?>
+
+<flux:card>
+    <flux:heading size="lg"> {{ __('View') }} </flux:heading>
+
+    <flux:radio.group
+        class="mt-4 grid grid-cols-{{ ViewMode::count() }}"
+        variant="segmented"
+        wire:model.live="viewMode"
+        data-testid="appearance-switcher"
+        data-layout="inline"
+    >
+        @foreach (ViewMode::cases() as $mode)
+            <flux:radio value="{{ $mode->value }}">{{ $mode->label() }}</flux:radio>
+        @endforeach
+    </flux:radio.group>
+</flux:card>
