@@ -47,7 +47,11 @@ class FixCode
         try {
             [$resolver, $totalFiles] = ConfigurationResolverFactory::fromIO($this->input, $this->output);
         } catch (ConsoleException $exception) {
-            return [$exception->getCode(), []];
+            if ($exception->getExitCode() !== 0) {
+                throw $exception;
+            }
+
+            return [0, []];
         }
 
         if (is_null($this->input->getOption('format')) && ! ConfigurationResolverFactory::runningInAgent()) {

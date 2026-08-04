@@ -1,6 +1,7 @@
 <?php
 
 use App\Contracts\PathsRepository;
+use LaravelZero\Framework\Exceptions\ConsoleException;
 
 it('determines diff files', function () {
     $paths = Mockery::mock(PathsRepository::class);
@@ -43,6 +44,20 @@ it('ignores the path argument', function () {
         ->and($output)
         ->toContain('── Laravel', ' 1 file');
 });
+
+it('fails when git is not available', function () {
+    $paths = Mockery::mock(PathsRepository::class);
+
+    $paths
+        ->shouldReceive('diff')
+        ->with('main')
+        ->once()
+        ->andThrow(new ConsoleException(1, 'The [--diff] option is only available when using Git.'));
+
+    $this->swap(PathsRepository::class, $paths);
+
+    run('default', ['--diff' => 'main']);
+})->throws(ConsoleException::class, 'The [--diff] option is only available when using Git.');
 
 it('does not abort when there are no diff files', function () {
     $paths = Mockery::mock(PathsRepository::class);
