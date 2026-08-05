@@ -81,3 +81,30 @@ it('keeps a whitespace-only empty @php block collapsed and idempotent', function
     expect($once)->toBe("<div>\n    @php @endphp\n</div>\n")
         ->and($formatter->postFormat($once))->toBe($once);
 });
+
+it('leaves a nested multiline directive argument untouched when no fixer re-indents it', function () {
+    $formatter = new PhpBlockFormatting(new class extends PhpFragmentFormatter
+    {
+        public function format(string $code, bool $fragment = false): string
+        {
+            return $code;
+        }
+    });
+
+    $in = <<<'BLADE'
+    <div>
+        <div
+            @class([
+                'button',
+                'button--active' => $isActive,
+            ])
+        ></div>
+
+        @include('partials.card', [
+            'title' => $title,
+        ])
+    </div>
+    BLADE;
+
+    expect($formatter->postFormat($in))->toBe($in);
+});

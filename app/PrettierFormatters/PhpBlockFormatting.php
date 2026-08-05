@@ -145,10 +145,12 @@ class PhpBlockFormatting implements PrettierPostFormatter
             return $arg;
         }
 
+        $core = $this->unindentArg($arg, $indent);
+
         if ($keyword = self::CONTROL_DIRECTIVES[strtolower($name)] ?? null) {
-            $host = $keyword.' ('.$arg.') {}';
+            $host = $keyword.' ('.$core.') {}';
         } else {
-            $host = '__pint__('.$arg.');';
+            $host = '__pint__('.$core.');';
         }
 
         $formatted = $this->stripPhpWrapper($this->formatter->format("<?php\n".$host."\n", fragment: true));
@@ -172,6 +174,23 @@ class PhpBlockFormatting implements PrettierPostFormatter
         return Str::of($inner)
             ->explode("\n")
             ->map(fn (string $line, int $index): string => $index === 0 || $line === '' ? $line : $indent.$line)
+            ->implode("\n");
+    }
+
+    /**
+     * Strip the indentation an earlier run added to the continuation lines of an argument.
+     */
+    private function unindentArg(string $inner, string $indent): string
+    {
+        if ($indent === '') {
+            return $inner;
+        }
+
+        $width = strlen($indent);
+
+        return Str::of($inner)
+            ->explode("\n")
+            ->map(fn (string $line, int $index): string => $index === 0 || ! str_starts_with($line, $indent) ? $line : substr($line, $width))
             ->implode("\n");
     }
 
