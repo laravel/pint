@@ -1,9 +1,28 @@
+const fs = require("node:fs");
+const path = require("node:path");
+
 const projectRoot = process.argv[2] || process.cwd();
 const configPath = process.argv[3];
 
 const prettier = require(require.resolve("prettier", { paths: [projectRoot] }));
 
 const bundledOptions = require(configPath);
+
+function defaultTailwindStylesheet() {
+    const stylesheet = path.join(projectRoot, "resources", "css", "app.css");
+
+    try {
+        return /@import\s+["']tailwindcss["']/.test(
+            fs.readFileSync(stylesheet, "utf8"),
+        )
+            ? stylesheet
+            : null;
+    } catch {
+        return null;
+    }
+}
+
+const tailwindStylesheet = defaultTailwindStylesheet();
 
 function resolvePlugins(plugins) {
     if (!Array.isArray(plugins)) {
@@ -64,6 +83,10 @@ async function handleMessage(input) {
         const resolved = filepath.trim();
 
         const options = resolveOptionPlugins({ ...bundledOptions });
+
+        if (tailwindStylesheet && !options.tailwindStylesheet) {
+            options.tailwindStylesheet = tailwindStylesheet;
+        }
 
         const formatted = await prettier.format(content, {
             ...options,
