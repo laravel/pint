@@ -98,7 +98,17 @@ class DefaultCommand extends Command
             return self::SUCCESS;
         }
 
-        $tempFile = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pint_stdin_'.uniqid().'.php';
+        $directory = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pint_stdin_'.uniqid();
+
+        if (! @mkdir($directory, 0700, true)) {
+            abort(1, sprintf('Unable to create a temporary directory for [%s].', $contextPath));
+        }
+
+        // Editors may hand over a Windows path on any platform, where basename() only
+        // treats "\" as a separator when PHP itself runs on Windows.
+        $fileName = basename(str_replace('\\', '/', $contextPath)) ?: 'stdin.php';
+
+        $tempFile = $directory.DIRECTORY_SEPARATOR.$fileName;
 
         $this->input->setArgument('path', [$tempFile]);
         $this->input->setOption('format', 'json');
@@ -110,12 +120,14 @@ class DefaultCommand extends Command
 
             return self::SUCCESS;
         } catch (Throwable $e) {
-            fwrite(STDERR, "pint: error processing {$contextPath}: {$e->getMessage()}\n");
-
-            return self::FAILURE;
+            abort(1, sprintf('Error processing [%s]: %s', $contextPath, $e->getMessage()));
         } finally {
             if (file_exists($tempFile)) {
                 @unlink($tempFile);
+            }
+
+            if (is_dir($directory)) {
+                @rmdir($directory);
             }
         }
     }
