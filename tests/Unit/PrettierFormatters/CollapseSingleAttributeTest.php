@@ -112,6 +112,13 @@ it('preserves indentation when hugging a wrapped directive attribute', function 
     expect((new CollapseSingleAttribute)->postFormat($in))->toBe($out);
 });
 
+it('places a wrapped directive attribute by its own body instead of by the width of the wrap', function () {
+    $in = "        <div\n            @class([\n            'a' => \$x,\n        ])\n        >\n";
+    $out = "        <div @class([\n            'a' => \$x,\n        ])>\n";
+
+    expect((new CollapseSingleAttribute)->postFormat($in))->toBe($out);
+});
+
 it('hugs a wrapped self-closing directive attribute', function () {
     $in = "<input\n    @class([\n        'a' => \$x,\n    ])\n/>\n";
     $out = "<input @class([\n    'a' => \$x,\n]) />\n";
