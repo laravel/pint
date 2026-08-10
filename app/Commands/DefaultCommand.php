@@ -87,6 +87,10 @@ class DefaultCommand extends Command
      * The stdin-filename option provides file path context. If the path matches
      * exclusion rules, the original code is returned unchanged. Falls back to
      * 'stdin.php' if not provided.
+     *
+     * The temporary file keeps the name of the document it came from, so fixers
+     * that derive behavior from the file name, such as [psr_autoloading] and
+     * [Pint/laravel_blade], see the name the code will actually be saved under.
      */
     protected function fixStdinInput(FixCode $fixCode): int
     {
@@ -98,7 +102,15 @@ class DefaultCommand extends Command
             return self::SUCCESS;
         }
 
-        $tempFile = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pint_stdin_'.uniqid().'.php';
+        $directory = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pint_stdin_'.uniqid();
+
+        if (! @mkdir($directory, 0700, true) && ! is_dir($directory)) {
+            fwrite(STDERR, "pint: unable to create a temporary directory for {$contextPath}\n");
+
+            return self::FAILURE;
+        }
+
+        $tempFile = $directory.DIRECTORY_SEPARATOR.basename($contextPath);
 
         $this->input->setArgument('path', [$tempFile]);
         $this->input->setOption('format', 'json');
@@ -116,6 +128,10 @@ class DefaultCommand extends Command
         } finally {
             if (file_exists($tempFile)) {
                 @unlink($tempFile);
+            }
+
+            if (is_dir($directory)) {
+                @rmdir($directory);
             }
         }
     }

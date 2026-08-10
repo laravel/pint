@@ -176,3 +176,32 @@ it('respects pint.json exclusion rules', function (string $filename, bool $shoul
     'excluded notPath pattern' => ['path/to/excluded-file.php', false],
     'not excluded' => ['src/MyClass.php', true],
 ]);
+
+it('gives filename derived fixers the stdin-filename', function () {
+    $input = <<<'PHP'
+    <?php
+
+    namespace App\Models;
+
+    class Wrong
+    {
+    }
+
+    PHP;
+
+    $expected = <<<'PHP'
+    <?php
+
+    namespace App\Models;
+
+    class User {}
+
+    PHP;
+
+    $result = Process::input($input)
+        ->path(base_path('tests/Fixtures/psr-autoloading'))
+        ->run('php '.base_path('pint').' --stdin-filename=app/Models/User.php')
+        ->throw();
+
+    expect($result)->output()->toBe($expected)->errorOutput()->toBe('');
+});
