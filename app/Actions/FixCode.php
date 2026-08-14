@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Factories\ConfigurationResolverFactory;
 use App\Output\ProgressOutput;
+use App\Repositories\ConfigurationJsonRepository;
 use LaravelZero\Framework\Exceptions\ConsoleException;
 use PhpCsFixer\Console\ConfigurationResolver;
 use PhpCsFixer\Differ\NullDiffer;
@@ -58,7 +59,10 @@ class FixCode
             $this->progress->subscribe();
         }
 
-        $method = $this->input->getOption('parallel') ? 'fixParallel' : 'fixSequential';
+        $parallelConfig = resolve(ConfigurationJsonRepository::class)->parallel();
+        $parallel = $this->input->getOption('parallel') || $parallelConfig['enabled'];
+
+        $method = $parallel ? 'fixParallel' : 'fixSequential';
 
         /** @var array<string, array{appliedFixers: array<int, string>, diff: string}> $changes */
         $changes = (fn () => $this->{$method}())->call(new Runner(
@@ -72,7 +76,7 @@ class FixCode
             $resolver->getCacheManager(),
             $resolver->getDirectory(),
             $resolver->shouldStopOnViolation(),
-            $this->getParallelConfig($resolver),
+            $this->getParallelConfig($resolver, $parallelConfig),
             $this->getInput($resolver),
         ));
 
@@ -81,21 +85,18 @@ class FixCode
 
     /**
      * Get the ParallelConfig for the number of cores.
+     *
+     * @param  array{enabled: bool, processes?: int, files_per_process?: int, timeout?: int}  $config
      */
-    private function getParallelConfig(ConfigurationResolver $resolver): ParallelConfig
+    private function getParallelConfig(ConfigurationResolver $resolver, array $config): ParallelConfig
     {
-        $maxProcesses = intval($this->input->getOption('max-processes') ?? 0);
-
-        if (! $this->input->getOption('parallel') || $maxProcesses < 1) {
-            return $resolver->getParallelConfig();
-        }
-
-        $parallelConfig = $resolver->getParallelConfig();
+        $defaults = $resolver->getParallelConfig();
 
         return new ParallelConfig(
-            $maxProcesses,
-            $parallelConfig->getFilesPerProcess(),
-            $parallelConfig->getProcessTimeout()
+            intval($this->input->getOption('max-processes') ?? 0)
+                ?: ($config['processes'] ?? $defaults->getMaxProcesses()),
+            $config['files_per_process'] ?? $defaults->getFilesPerProcess(),
+            $config['timeout'] ?? $defaults->getProcessTimeout(),
         );
     }
 
