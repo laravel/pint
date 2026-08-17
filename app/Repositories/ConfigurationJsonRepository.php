@@ -76,6 +76,26 @@ class ConfigurationJsonRepository
     }
 
     /**
+     * Get the parallel execution configuration.
+     *
+     * Supports both a simple boolean and an object with options:
+     *   "parallel": true
+     *   "parallel": { "enabled": true, "processes": 4, "files_per_process": 20, "timeout": 120 }
+     *
+     * @return array{enabled: bool, processes?: int, files_per_process?: int, timeout?: int}
+     */
+    public function parallel(): array
+    {
+        $value = $this->get()['parallel'] ?? false;
+
+        if (is_array($value)) {
+            return ['enabled' => false, ...$value];
+        }
+
+        return ['enabled' => (bool) $value];
+    }
+
+    /**
      * Determine if the configuration defines paths to inspect.
      *
      * @return bool
