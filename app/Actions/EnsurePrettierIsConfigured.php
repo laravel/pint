@@ -20,6 +20,11 @@ use function Laravel\Prompts\warning;
 class EnsurePrettierIsConfigured
 {
     /**
+     * @var array<string, string>
+     */
+    protected array $cacheFingerprints = [];
+
+    /**
      * Create a new ensure prettier is configured action instance.
      */
     public function __construct(
@@ -27,6 +32,14 @@ class EnsurePrettierIsConfigured
         protected ConfigurationJsonRepository $configuration,
     ) {
         //
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function cacheFingerprints(): array
+    {
+        return $this->cacheFingerprints;
     }
 
     /**
@@ -159,6 +172,21 @@ class EnsurePrettierIsConfigured
                 )->all())),
             ));
         }
+
+        $fingerprints = [];
+
+        foreach ($this->enabledPrettierFixers() as $fixer) {
+            $dependencies = $fixer->prettierDependencies();
+            ksort($dependencies);
+
+            $versions = collect(array_keys($dependencies))
+                ->map(fn (string $package): string => $package.':'.($probes[$package]['version'] ?? ''))
+                ->implode('|');
+
+            $fingerprints[$fixer->getName()] = md5($versions);
+        }
+
+        $this->cacheFingerprints = $fingerprints;
 
         return $this;
     }
