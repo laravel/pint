@@ -15,7 +15,7 @@ class Prettier
      *
      * @var int
      */
-    public const VERSION = 1;
+    public const VERSION = 2;
 
     /**
      * The number of seconds the worker may stay silent before it is torn down.
