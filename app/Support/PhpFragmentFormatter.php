@@ -50,7 +50,7 @@ class PhpFragmentFormatter
     {
         try {
             $tokens = Tokens::fromCode($code);
-        } catch (\CompileError) {
+        } catch (\CompileError|\ParseError) {
             // Not a syntactically-complete PHP document on its own; leave it as-is.
             return $code;
         }
