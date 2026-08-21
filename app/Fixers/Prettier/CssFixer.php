@@ -26,14 +26,6 @@ class CssFixer extends BaseFixer
     /**
      * {@inheritdoc}
      */
-    protected function extensions(): array
-    {
-        return ['css', 'scss', 'less'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function parsers(): array
     {
         return [

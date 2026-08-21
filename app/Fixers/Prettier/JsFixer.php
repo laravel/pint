@@ -20,15 +20,7 @@ class JsFixer extends BaseFixer
      */
     public function getDefinition(): FixerDefinitionInterface
     {
-        return new FixerDefinition('Formats JavaScript files using Prettier.', []);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function extensions(): array
-    {
-        return ['js', 'jsx', 'mjs', 'cjs'];
+        return new FixerDefinition('Formats JavaScript and TypeScript files using Prettier.', []);
     }
 
     /**
@@ -41,6 +33,8 @@ class JsFixer extends BaseFixer
             'jsx' => 'babel',
             'mjs' => 'babel',
             'cjs' => 'babel',
+            'ts' => 'typescript',
+            'tsx' => 'typescript',
         ];
     }
 }

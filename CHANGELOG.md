@@ -2,7 +2,7 @@
 
 ## [Unreleased](https://github.com/laravel/pint/compare/v1.29.2...main)
 
-- Adds `Pint/prettier_js` and `Pint/prettier_css` rules, which format JavaScript and CSS files using Prettier.
+- Adds `Pint/prettier_js` and `Pint/prettier_css` rules, which format JavaScript, TypeScript and CSS files using Prettier.
 
 ## [v1.29.2](https://github.com/laravel/pint/compare/v1.29.1...v1.29.2) - 2026-06-16
 

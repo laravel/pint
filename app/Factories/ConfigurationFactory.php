@@ -3,6 +3,7 @@
 namespace App\Factories;
 
 use App\BladeFormatter;
+use App\Contracts\HasFinderNames;
 use App\Contracts\HasPrettierDependencies;
 use App\Fixers\LaravelBlade\Fixer;
 use App\Fixers\Prettier\CssFixer;
@@ -154,7 +155,8 @@ class ConfigurationFactory
     }
 
     /**
-     * The finder name patterns required by the enabled prettier rules.
+     * The finder name patterns required by the enabled rules that bring their
+     * own file types.
      *
      * @return array<int, string>
      */
@@ -163,9 +165,9 @@ class ConfigurationFactory
         $rules = resolve(ConfigurationJsonRepository::class)->rules();
 
         return collect(static::customFixers())
-            ->filter(fn ($fixer) => $fixer instanceof HasPrettierDependencies)
+            ->filter(fn ($fixer) => $fixer instanceof HasFinderNames)
             ->filter(fn ($fixer) => ($rules[$fixer->getName()] ?? false) === true)
-            ->flatMap(fn (HasPrettierDependencies&FixerInterface $fixer) => $fixer->finderNames())
+            ->flatMap(fn (HasFinderNames $fixer) => $fixer->finderNames())
             ->values()
             ->all();
     }

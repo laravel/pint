@@ -2,6 +2,7 @@
 
 namespace App\Fixers\Prettier;
 
+use App\Contracts\HasFinderNames;
 use App\Contracts\HasPrettierDependencies;
 use App\Exceptions\PrettierException;
 use App\Support\Prettier;
@@ -9,7 +10,7 @@ use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Tokenizer\Tokens;
 use SplFileInfo;
 
-abstract class BaseFixer extends AbstractFixer implements HasPrettierDependencies
+abstract class BaseFixer extends AbstractFixer implements HasFinderNames, HasPrettierDependencies
 {
     /**
      * Create a new prettier fixer instance.
@@ -27,14 +28,7 @@ abstract class BaseFixer extends AbstractFixer implements HasPrettierDependencie
     }
 
     /**
-     * The list of file extensions the fixer formats.
-     *
-     * @return array<int, string>
-     */
-    abstract protected function extensions(): array;
-
-    /**
-     * The prettier parser each extension is formatted with.
+     * The prettier parser each supported file extension is formatted with.
      *
      * @return array<string, string>
      */
@@ -47,7 +41,7 @@ abstract class BaseFixer extends AbstractFixer implements HasPrettierDependencie
     {
         return array_map(
             fn (string $extension): string => '*.'.$extension,
-            $this->extensions(),
+            array_keys($this->parsers()),
         );
     }
 
@@ -78,12 +72,12 @@ abstract class BaseFixer extends AbstractFixer implements HasPrettierDependencie
         // disk, e.g. one handed over through stdin, still keeps its name.
         $path = $file->getRealPath() ?: $file->getPathname();
 
-        if (! $this->matches($path)) {
+        if (($parser = $this->parserFor($path)) === null) {
             return;
         }
 
         $content = $this->prettier->format($path, $tokens->generateCode(), [
-            'parser' => $this->parsers()[$this->extensionOf($path)],
+            'parser' => $parser,
         ]);
 
         // Tokens::setCode() rejects an empty string, so clear the tokens directly.
@@ -101,17 +95,10 @@ abstract class BaseFixer extends AbstractFixer implements HasPrettierDependencie
     }
 
     /**
-     * Determine whether the given path should be formatted.
+     * The prettier parser for the given path, or null when the fixer does
+     * not format it.
      */
-    protected function matches(string $path): bool
-    {
-        return $this->extensionOf($path) !== null;
-    }
-
-    /**
-     * The extension of the given path, or null when the fixer does not format it.
-     */
-    protected function extensionOf(string $path): ?string
+    protected function parserFor(string $path): ?string
     {
         $fileName = basename(str_replace('\\', '/', $path));
 
@@ -120,9 +107,9 @@ abstract class BaseFixer extends AbstractFixer implements HasPrettierDependencie
             return null;
         }
 
-        foreach ($this->extensions() as $extension) {
+        foreach ($this->parsers() as $extension => $parser) {
             if (str_ends_with($fileName, '.'.$extension)) {
-                return $extension;
+                return $parser;
             }
         }
 

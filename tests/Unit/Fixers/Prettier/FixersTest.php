@@ -59,11 +59,11 @@ it('formats javascript through prettier using the babel parser', function () {
     expect(fixWithPrettierFixer($fixer, 'var x = 1', '/app/resources/js/app.js'))->toBe('let x = 1');
 });
 
-it('formats every javascript flavour with the babel parser', function (string $filename) {
+it('formats every javascript flavour with the parser it needs', function (string $filename, string $parser) {
     $fixer = new JsFixer(spyPrettier(
-        function (string $path, string $content, array $options) use ($filename): string {
+        function (string $path, string $content, array $options) use ($filename, $parser): string {
             expect(basename($path))->toBe($filename)
-                ->and($options['parser'])->toBe('babel');
+                ->and($options['parser'])->toBe($parser);
 
             return $content;
         },
@@ -71,10 +71,12 @@ it('formats every javascript flavour with the babel parser', function (string $f
 
     fixWithPrettierFixer($fixer, 'x', '/app/resources/js/'.$filename);
 })->with([
-    ['app.js'],
-    ['component.jsx'],
-    ['module.mjs'],
-    ['config.cjs'],
+    ['app.js', 'babel'],
+    ['component.jsx', 'babel'],
+    ['module.mjs', 'babel'],
+    ['config.cjs', 'babel'],
+    ['module.ts', 'typescript'],
+    ['component.tsx', 'typescript'],
 ]);
 
 it('formats stylesheets with the parser each extension needs', function (string $filename, string $parser) {
@@ -98,7 +100,7 @@ it('exposes the javascript rule to the finder and the configuration', function (
     $fixer = new JsFixer(unreachablePrettier());
 
     expect($fixer->getName())->toBe('Pint/prettier_js')
-        ->and($fixer->finderNames())->toBe(['*.js', '*.jsx', '*.mjs', '*.cjs'])
+        ->and($fixer->finderNames())->toBe(['*.js', '*.jsx', '*.mjs', '*.cjs', '*.ts', '*.tsx'])
         ->and($fixer->prettierDependencies())->toBe(['prettier' => '^3.8.4']);
 });
 
