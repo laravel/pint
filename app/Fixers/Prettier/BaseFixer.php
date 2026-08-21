@@ -6,7 +6,6 @@ use App\Contracts\HasPrettierDependencies;
 use App\Exceptions\PrettierException;
 use App\Support\Prettier;
 use PhpCsFixer\AbstractFixer;
-use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Tokenizer\Tokens;
 use SplFileInfo;
 

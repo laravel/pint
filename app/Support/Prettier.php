@@ -54,6 +54,7 @@ class Prettier
      * Formats the given file.
      *
      * @param  array<string, mixed>  $options
+     *
      * @throws PrettierException
      */
     public function format(string $path, string $content, array $options = []): string
