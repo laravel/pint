@@ -47,7 +47,6 @@ it('keeps the imports of a fragment it formats', function () {
     PHP;
 
     $out = (new PhpFragmentFormatter)->format($in, fragment: true);
-
     expect($out)->toContain('use App\Models\User;')
         ->toContain("\$default = 'all';");
 });
@@ -113,4 +112,26 @@ it('formats an island the same way twice', function () {
     $once = $formatter->format($in);
 
     expect($formatter->format($once))->toBe($once);
+});
+
+it('skips the prettier rules a project enables instead of failing on them', function () {
+    // The rules of "pint.json" flow into the preset's rule set, where only the
+    // PHP fixers can be resolved. The prettier rules must be dropped, not fed
+    // to a factory that does not know them.
+    app()->singleton(
+        ConfigurationJsonRepository::class,
+        fn () => new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/rules/prettier-rules.json', 'laravel'),
+    );
+
+    $in = <<<'PHP'
+    <?php
+
+    $default = "all";
+    ?>
+
+    PHP;
+
+    $out = (new PhpFragmentFormatter)->format($in);
+
+    expect($out)->toContain("\$default = 'all';");
 });

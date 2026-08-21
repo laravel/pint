@@ -1,0 +1,7 @@
+$primary: #333;
+.btn {
+    color: $primary;
+    &:hover {
+        color: lighten($primary, 10%);
+    }
+}

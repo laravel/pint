@@ -17,7 +17,18 @@ class PhpFragmentFormatter
      *
      * @var array<int, string>
      */
-    private const DENYLIST = ['no_closing_tag', 'no_unused_imports', 'Pint/laravel_blade'];
+    private const DENYLIST = ['no_closing_tag', 'no_unused_imports'];
+
+    /**
+     * The prefix of every custom fixer Pint registers.
+     *
+     * Custom fixers never run on a fragment: the factory below only knows the
+     * built-in PHP fixers, so their names are dropped before it is handed the
+     * ruleset.
+     *
+     * @var string
+     */
+    private const CUSTOM_FIXER_PREFIX = 'Pint/';
 
     /**
      * Fixers skipped only for stripped fragments, where they corrupt the output.
@@ -90,6 +101,12 @@ class PhpFragmentFormatter
 
         foreach ($deny as $name) {
             unset($rules[$name]);
+        }
+
+        foreach (array_keys($rules) as $name) {
+            if (str_starts_with((string) $name, self::CUSTOM_FIXER_PREFIX)) {
+                unset($rules[$name]);
+            }
         }
 
         $factory = new FixerFactory;

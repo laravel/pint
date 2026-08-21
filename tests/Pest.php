@@ -124,7 +124,7 @@ uses()
             $this->markTestSkipped('Node is required to run the blade formatter.');
         }
     })
-    ->in('Feature/Blade');
+    ->in('Feature/Blade', 'Feature/Prettier');
 
 function testOutputFile(): string
 {

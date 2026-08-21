@@ -15,7 +15,7 @@ class Prettier
      *
      * @var int
      */
-    public const VERSION = 1;
+    public const VERSION = 2;
 
     /**
      * The number of seconds the worker may stay silent before it is torn down.
@@ -53,9 +53,11 @@ class Prettier
     /**
      * Formats the given file.
      *
+     * @param  array<string, mixed>  $options
+     *
      * @throws PrettierException
      */
-    public function format(string $path, string $content): string
+    public function format(string $path, string $content, array $options = []): string
     {
         $this->ensureStarted();
 
@@ -65,6 +67,7 @@ class Prettier
         $this->inputStream->write(json_encode([
             'path' => $path,
             'content' => $content,
+            'options' => $options,
         ], JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_SUBSTITUTE)."\n");
 
         // Accumulate every chunk; the OS pipe may split the response across reads.
