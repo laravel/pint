@@ -44,6 +44,15 @@ class Fixer extends AbstractFixer implements HasPrettierDependencies
     /**
      * {@inheritdoc}
      */
+    public function finderNames(): array
+    {
+        // Blade files are ".php" files, which the finder already discovers.
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getName(): string
     {
         return 'Pint/laravel_blade';

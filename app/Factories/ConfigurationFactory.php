@@ -3,8 +3,12 @@
 namespace App\Factories;
 
 use App\BladeFormatter;
+use App\Contracts\HasPrettierDependencies;
 use App\Fixers\LaravelBlade\Fixer;
+use App\Fixers\Prettier\CssFixer;
+use App\Fixers\Prettier\JsFixer;
 use App\Repositories\ConfigurationJsonRepository;
+use App\Support\Prettier;
 use PhpCsFixer\Config;
 use PhpCsFixer\ConfigInterface;
 use PhpCsFixer\Finder;
@@ -50,7 +54,7 @@ class ConfigurationFactory
             ->setFinder(self::finder())
             ->setRules(array_merge($rules, resolve(ConfigurationJsonRepository::class)->rules()))
             ->setRiskyAllowed(true)
-            ->setUsingCache(static::shouldExcludeBladeFiles())
+            ->setUsingCache(static::shouldUseCache())
             ->setUnsupportedPhpVersionAllowed(true)
             ->registerCustomFixers(self::customFixers());
     }
@@ -64,6 +68,8 @@ class ConfigurationFactory
     {
         return [
             new Fixer(resolve(BladeFormatter::class)),
+            new JsFixer(resolve(Prettier::class)),
+            new CssFixer(resolve(Prettier::class)),
         ];
     }
 
@@ -81,6 +87,10 @@ class ConfigurationFactory
             ->exclude(static::$exclude)
             ->ignoreDotFiles(true)
             ->ignoreVCS(true);
+
+        foreach (static::prettierNames() as $pattern) {
+            $finder->name($pattern);
+        }
 
         foreach ($localConfiguration->finder() as $method => $arguments) {
             if (! method_exists($finder, $method)) {
@@ -119,6 +129,45 @@ class ConfigurationFactory
         $rules = resolve(ConfigurationJsonRepository::class)->rules();
 
         return ($rules['Pint/laravel_blade'] ?? false) === false;
+    }
+
+    /**
+     * Determine whether the cache may be used.
+     *
+     * A rule whose output depends on the installed prettier dependencies cannot
+     * be cached on file contents alone, so the cache is given up entirely when
+     * any of those rules is enabled.
+     *
+     * @return bool
+     */
+    protected static function shouldUseCache()
+    {
+        $rules = resolve(ConfigurationJsonRepository::class)->rules();
+
+        foreach (static::customFixers() as $fixer) {
+            if ($fixer instanceof HasPrettierDependencies && ($rules[$fixer->getName()] ?? false) === true) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * The finder name patterns required by the enabled prettier rules.
+     *
+     * @return array<int, string>
+     */
+    protected static function prettierNames()
+    {
+        $rules = resolve(ConfigurationJsonRepository::class)->rules();
+
+        return collect(static::customFixers())
+            ->filter(fn ($fixer) => $fixer instanceof HasPrettierDependencies)
+            ->filter(fn ($fixer) => ($rules[$fixer->getName()] ?? false) === true)
+            ->flatMap(fn (HasPrettierDependencies&FixerInterface $fixer) => $fixer->finderNames())
+            ->values()
+            ->all();
     }
 
     /**

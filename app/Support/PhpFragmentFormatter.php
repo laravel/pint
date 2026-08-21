@@ -17,7 +17,13 @@ class PhpFragmentFormatter
      *
      * @var array<int, string>
      */
-    private const DENYLIST = ['no_closing_tag', 'no_unused_imports', 'Pint/laravel_blade'];
+    private const DENYLIST = [
+        'no_closing_tag',
+        'no_unused_imports',
+        'Pint/laravel_blade',
+        'Pint/prettier_js',
+        'Pint/prettier_css',
+    ];
 
     /**
      * Fixers skipped only for stripped fragments, where they corrupt the output.

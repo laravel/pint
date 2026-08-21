@@ -1,0 +1,7 @@
+{
+    "rules": {
+        "Pint/laravel_blade": true,
+        "Pint/prettier_js": true,
+        "Pint/prettier_css": true
+    }
+}
