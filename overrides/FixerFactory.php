@@ -17,11 +17,15 @@ namespace PhpCsFixer;
 use App\BladeFormatter;
 use App\Fixers\LaravelBlade\Fixer as LaravelBladeFixer;
 use App\Fixers\LaravelBlade\NoUnusedImportsFixer as BladeAwareNoUnusedImportsFixer;
+use App\Fixers\LaravelBlade\SkipBladeFilesFixer;
 use App\Fixers\TypeAnnotationsOnlyFixer;
 use PhpCsFixer\ConfigurationException\InvalidFixerConfigurationException;
 use PhpCsFixer\Fixer\ConfigurableFixerInterface;
 use PhpCsFixer\Fixer\FixerInterface;
+use PhpCsFixer\Fixer\Import\FullyQualifiedStrictTypesFixer;
+use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
 use PhpCsFixer\Fixer\Import\NoUnusedImportsFixer;
+use PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer;
 use PhpCsFixer\Fixer\WhitespacesAwareFixerInterface;
 use PhpCsFixer\RuleSet\RuleSetInterface;
 use Symfony\Component\Finder\Finder as SymfonyFinder;
@@ -36,6 +40,18 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 final class FixerFactory
 {
+    /**
+     * Fixers that inject, remove or rewrite import statements and
+     * therefore corrupt raw "<?php" chunks inside Blade templates.
+     *
+     * @var list<class-string<FixerInterface>>
+     */
+    private const BLADE_UNSAFE_FIXERS = [
+        FullyQualifiedStrictTypesFixer::class,
+        GlobalNamespaceImportFixer::class,
+        DeclareStrictTypesFixer::class,
+    ];
+
     private FixerNameValidator $nameValidator;
 
     /**
@@ -105,6 +121,10 @@ final class FixerFactory
 
             if ($fixer instanceof NoUnusedImportsFixer) {
                 $fixer = new BladeAwareNoUnusedImportsFixer($fixer);
+            }
+
+            if (in_array($class, self::BLADE_UNSAFE_FIXERS, true)) {
+                $fixer = new SkipBladeFilesFixer($fixer);
             }
 
             $this->registerFixer($fixer, false);
