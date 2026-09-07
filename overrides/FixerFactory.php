@@ -17,6 +17,7 @@ namespace PhpCsFixer;
 use App\BladeFormatter;
 use App\Fixers\LaravelBlade\Fixer as LaravelBladeFixer;
 use App\Fixers\LaravelBlade\NoUnusedImportsFixer as BladeAwareNoUnusedImportsFixer;
+use App\Fixers\PrettierCacheFingerprint;
 use App\Fixers\TypeAnnotationsOnlyFixer;
 use PhpCsFixer\ConfigurationException\InvalidFixerConfigurationException;
 use PhpCsFixer\Fixer\ConfigurableFixerInterface;
@@ -113,6 +114,7 @@ final class FixerFactory
         $this->registerCustomFixers([
             new TypeAnnotationsOnlyFixer,
             new LaravelBladeFixer(resolve(BladeFormatter::class)),
+            new PrettierCacheFingerprint,
         ]);
 
         return $this;

@@ -2,8 +2,10 @@
 
 namespace App\Factories;
 
+use App\Actions\EnsurePrettierIsConfigured;
 use App\BladeFormatter;
 use App\Fixers\LaravelBlade\Fixer;
+use App\Fixers\PrettierCacheFingerprint;
 use App\Repositories\ConfigurationJsonRepository;
 use PhpCsFixer\Config;
 use PhpCsFixer\ConfigInterface;
@@ -45,12 +47,20 @@ class ConfigurationFactory
      */
     public static function preset($rules)
     {
+        $mergedRules = array_merge($rules, resolve(ConfigurationJsonRepository::class)->rules());
+
+        $fingerprints = resolve(EnsurePrettierIsConfigured::class)->cacheFingerprints();
+
+        if ($fingerprints !== []) {
+            $mergedRules[(new PrettierCacheFingerprint)->getName()] = ['fingerprints' => $fingerprints];
+        }
+
         return (new Config)
             ->setParallelConfig(ParallelConfigFactory::detect())
             ->setFinder(self::finder())
-            ->setRules(array_merge($rules, resolve(ConfigurationJsonRepository::class)->rules()))
+            ->setRules($mergedRules)
             ->setRiskyAllowed(true)
-            ->setUsingCache(static::shouldExcludeBladeFiles())
+            ->setUsingCache(true)
             ->setUnsupportedPhpVersionAllowed(true)
             ->registerCustomFixers(self::customFixers());
     }
@@ -64,6 +74,7 @@ class ConfigurationFactory
     {
         return [
             new Fixer(resolve(BladeFormatter::class)),
+            new PrettierCacheFingerprint,
         ];
     }
 
