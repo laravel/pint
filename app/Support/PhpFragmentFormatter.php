@@ -24,7 +24,7 @@ class PhpFragmentFormatter
      *
      * @var array<int, string>
      */
-    private const FRAGMENT_DENYLIST = ['fully_qualified_strict_types', 'declare_strict_types'];
+    private const FRAGMENT_DENYLIST = ['fully_qualified_strict_types', 'global_namespace_import', 'declare_strict_types'];
 
     /**
      * The priority-sorted PHP fixers, memoized per fragment/file key.
