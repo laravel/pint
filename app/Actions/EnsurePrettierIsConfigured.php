@@ -173,22 +173,31 @@ class EnsurePrettierIsConfigured
             ));
         }
 
-        $fingerprints = [];
-
-        foreach ($this->enabledPrettierFixers() as $fixer) {
-            $dependencies = $fixer->prettierDependencies();
-            ksort($dependencies);
-
-            $versions = collect(array_keys($dependencies))
-                ->map(fn (string $package): string => $package.':'.($probes[$package]['version'] ?? ''))
-                ->implode('|');
-
-            $fingerprints[$fixer->getName()] = md5($versions);
-        }
-
-        $this->cacheFingerprints = $fingerprints;
+        $this->cacheFingerprints = $this->enabledPrettierFixers()
+            ->mapWithKeys(fn (HasPrettierDependencies&FixerInterface $fixer): array => [
+                $fixer->getName() => $this->fingerprint($fixer, $probes),
+            ])
+            ->all();
 
         return $this;
+    }
+
+    /**
+     * Compute the cache fingerprint for the given fixer.
+     *
+     * @param  array<string, array{resolved: bool, version: string|null}>  $probes
+     */
+    public function fingerprint(HasPrettierDependencies $fixer, array $probes): string
+    {
+        $dependencies = $fixer->prettierDependencies();
+        ksort($dependencies);
+
+        $versions = collect(array_keys($dependencies))
+            ->map(fn (string $package): string => $package.':'.($probes[$package]['version'] ?? ''))
+            ->prepend('pint:'.config('app.version'))
+            ->implode('|');
+
+        return md5($versions);
     }
 
     /**
