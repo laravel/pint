@@ -53,7 +53,7 @@ class EnsurePrettierIsConfigured
 
         $this->ensureSupportedDistribution();
 
-        $this->ensureNodeIsInstalled()
+        $this->ensureRuntimeIsInstalled()
             ->ensureNodeDependenciesAreInstalled();
     }
 
@@ -112,12 +112,12 @@ class EnsurePrettierIsConfigured
     }
 
     /**
-     * Ensure node is installed.
+     * Ensure the JavaScript runtime is installed.
      */
-    protected function ensureNodeIsInstalled(): static
+    protected function ensureRuntimeIsInstalled(): static
     {
-        if (Process::run('node -v')->failed()) {
-            abort(1, 'The rules enabled in your pint configuration require Node.js to be installed.');
+        if (Process::run([$this->prettier->runtimeBinary(), '-v'])->failed()) {
+            abort(1, 'The rules enabled in your pint configuration require a JavaScript runtime (Node.js or Bun) to be installed.');
         }
 
         return $this;
@@ -278,7 +278,7 @@ class EnsurePrettierIsConfigured
     protected function probe(string $package): array
     {
         $result = Process::path($this->prettier->projectRoot())
-            ->run(['node', $this->prettier->versionProbePath(), $package]);
+            ->run([$this->prettier->runtimeBinary(), $this->prettier->versionProbePath(), $package]);
 
         if ($result->failed()) {
             return ['resolved' => false, 'version' => null];

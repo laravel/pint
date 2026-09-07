@@ -48,4 +48,15 @@ enum NodePackageManager: string
     {
         return $this->value;
     }
+
+    /**
+     * The JavaScript runtime binary used to execute scripts.
+     */
+    public function runtimeBinary(): string
+    {
+        return match ($this) {
+            self::Bun => 'bun',
+            default => 'node',
+        };
+    }
 }
