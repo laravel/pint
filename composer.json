@@ -24,12 +24,12 @@
     },
     "require-dev": {
         "composer/semver": "^3.4.4",
-        "friendsofphp/php-cs-fixer": "^3.95.18",
-        "illuminate/view": "^13.25.0",
-        "larastan/larastan": "^3.10.0",
+        "friendsofphp/php-cs-fixer": "^3.95.24",
+        "illuminate/view": "^13.30.1",
+        "larastan/larastan": "^3.11.0",
         "laravel-zero/framework": "^13.0.0",
-        "laravel/prompts": "^0.3.22",
-        "mockery/mockery": "^1.6.12",
+        "laravel/prompts": "^0.3.24",
+        "mockery/mockery": "^1.6.15",
         "nunomaduro/termwind": "^2.4.0",
         "pestphp/pest": "^4.7.8",
         "laravel/agent-detector": "^2.0.2"
