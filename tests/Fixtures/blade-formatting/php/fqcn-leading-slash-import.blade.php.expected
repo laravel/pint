@@ -1,0 +1,9 @@
+<?php
+
+use App\Enums\CalculationMode as Mode;
+use App\Models\Category;
+
+$rows = Category::all();
+?>
+
+<div class="grid grid-cols-{{ Mode::count() }}">{{ count($rows) }}</div>

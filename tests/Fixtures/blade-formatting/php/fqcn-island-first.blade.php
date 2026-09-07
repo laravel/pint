@@ -1,0 +1,6 @@
+<?php
+$rows = \App\Models\Category::all();
+$mode = \App\Enums\CalculationMode::Default;
+?>
+
+<div>{{ count($rows) }} {{ $mode->label() }}</div>
