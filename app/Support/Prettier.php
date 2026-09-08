@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Enums\NodePackageManager;
 use App\Exceptions\PrettierException;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -43,7 +44,7 @@ class Prettier
     }
 
     /**
-     * The root directory of the node project.
+     * The root directory of the JavaScript project.
      */
     public function projectRoot(): string
     {
@@ -146,7 +147,7 @@ class Prettier
         }
 
         $this->process = new Process(
-            ['node', $this->workerPath(), $this->projectRoot, $this->configPath()],
+            [$this->runtimeBinary(), $this->workerPath(), $this->projectRoot, $this->configPath()],
             $this->projectRoot,
         );
 
@@ -181,7 +182,7 @@ class Prettier
     }
 
     /**
-     * The path to the bundled node script that probes installed package versions.
+     * The path to the bundled script that probes installed package versions.
      */
     public function versionProbePath(): string
     {
@@ -194,6 +195,14 @@ class Prettier
     public function configPath(): string
     {
         return $this->resourcePath('prettier/prettierrc.json');
+    }
+
+    /**
+     * The JavaScript runtime binary used to execute the bundled prettier scripts.
+     */
+    public function runtimeBinary(): string
+    {
+        return NodePackageManager::detect($this->projectRoot)->runtimeBinary();
     }
 
     /**

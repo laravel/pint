@@ -1,0 +1,17 @@
+<div>
+    <?php
+    $category = new \App\Models\Category;
+
+    if ($category instanceof \App\Contracts\Nameable) {
+        $name = $category->name;
+    }
+
+    try {
+        $category->save();
+    } catch (\App\Exceptions\SaveFailed $e) {
+        $name = null;
+    }
+    ?>
+
+    <span>{{ $name }}</span>
+</div>

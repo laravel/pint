@@ -537,7 +537,7 @@ class PhpBlockFormatting implements PrettierPostFormatter
      */
     private function formatIsland(string $region, string $indent): string
     {
-        $formatted = rtrim($this->formatter->format($region));
+        $formatted = rtrim($this->formatter->format($region, fragment: true));
 
         if ($indent === '') {
             return $formatted;

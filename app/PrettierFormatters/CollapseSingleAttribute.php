@@ -157,9 +157,10 @@ class CollapseSingleAttribute implements PrettierPostFormatter
         $suffix = $terminator === '/>' ? ' />' : '>';
 
         $result = [$indent.'<'.$tag.' '.rtrim($trimmedFirst)];
+        $shift = $this->blockShift($lines, $start + 1, $end, strlen($indent));
 
         for ($continuation = $start + 1; $continuation <= $end; $continuation++) {
-            $line = $this->dedent($lines[$continuation], $dedent);
+            $line = $this->dedent($lines[$continuation], $shift);
 
             if ($continuation === $end) {
                 $line = rtrim($line).$suffix;
@@ -235,6 +236,29 @@ class CollapseSingleAttribute implements PrettierPostFormatter
         }
 
         return null;
+    }
+
+    /**
+     * How far left the continuation lines must move to sit at the tag's indentation.
+     *
+     * @param  array<int, string>  $lines
+     */
+    private function blockShift(array $lines, int $start, int $end, int $indent): int
+    {
+        $shallowest = null;
+
+        for ($index = $start; $index <= $end; $index++) {
+            $line = $lines[$index];
+
+            if (trim($line) === '') {
+                continue;
+            }
+
+            $leading = strlen($line) - strlen(ltrim($line, ' '));
+            $shallowest = $shallowest === null ? $leading : min($shallowest, $leading);
+        }
+
+        return max(0, ($shallowest ?? $indent) - $indent);
     }
 
     /**

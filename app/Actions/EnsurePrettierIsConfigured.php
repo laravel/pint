@@ -20,6 +20,11 @@ use function Laravel\Prompts\warning;
 class EnsurePrettierIsConfigured
 {
     /**
+     * @var array<string, string>
+     */
+    protected array $cacheFingerprints = [];
+
+    /**
      * Create a new ensure prettier is configured action instance.
      */
     public function __construct(
@@ -27,6 +32,14 @@ class EnsurePrettierIsConfigured
         protected ConfigurationJsonRepository $configuration,
     ) {
         //
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function cacheFingerprints(): array
+    {
+        return $this->cacheFingerprints;
     }
 
     /**
@@ -40,7 +53,7 @@ class EnsurePrettierIsConfigured
 
         $this->ensureSupportedDistribution();
 
-        $this->ensureNodeIsInstalled()
+        $this->ensureRuntimeIsInstalled()
             ->ensureNodeDependenciesAreInstalled();
     }
 
@@ -99,12 +112,12 @@ class EnsurePrettierIsConfigured
     }
 
     /**
-     * Ensure node is installed.
+     * Ensure the JavaScript runtime is installed.
      */
-    protected function ensureNodeIsInstalled(): static
+    protected function ensureRuntimeIsInstalled(): static
     {
-        if (Process::run('node -v')->failed()) {
-            abort(1, 'The rules enabled in your pint configuration require Node.js to be installed.');
+        if (Process::run([$this->prettier->runtimeBinary(), '-v'])->failed()) {
+            abort(1, 'The rules enabled in your pint configuration require a JavaScript runtime (Node.js or Bun) to be installed.');
         }
 
         return $this;
@@ -160,7 +173,41 @@ class EnsurePrettierIsConfigured
             ));
         }
 
+        $this->cacheFingerprints = $this->enabledPrettierFixers()
+            ->mapWithKeys(fn (HasPrettierDependencies&FixerInterface $fixer): array => [
+                $fixer->getName() => $this->fingerprint($fixer, $probes),
+            ])
+            ->all();
+
         return $this;
+    }
+
+    /**
+     * Compute the cache fingerprint for the given fixer.
+     *
+     * @param  array<string, array{resolved: bool, version: string|null}>  $probes
+     */
+    public function fingerprint(HasPrettierDependencies $fixer, array $probes): string
+    {
+        $dependencies = $fixer->prettierDependencies();
+        ksort($dependencies);
+
+        $versions = collect(array_keys($dependencies))
+            ->map(fn (string $package): string => $package.':'.($probes[$package]['version'] ?? ''))
+            ->prepend('pint:'.config('app.version'))
+            ->implode('|');
+
+        $stylesheet = $this->prettier->projectRoot().'/resources/css/app.css';
+
+        if (File::isFile($stylesheet) && File::isReadable($stylesheet)) {
+            $content = File::get($stylesheet);
+
+            if (preg_match('/@import\s+["\']tailwindcss["\']/', $content)) {
+                $versions .= '|tailwind:'.md5($content);
+            }
+        }
+
+        return md5($versions);
     }
 
     /**
@@ -241,7 +288,7 @@ class EnsurePrettierIsConfigured
     protected function probe(string $package): array
     {
         $result = Process::path($this->prettier->projectRoot())
-            ->run(['node', $this->prettier->versionProbePath(), $package]);
+            ->run([$this->prettier->runtimeBinary(), $this->prettier->versionProbePath(), $package]);
 
         if ($result->failed()) {
             return ['resolved' => false, 'version' => null];

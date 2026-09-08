@@ -74,6 +74,29 @@ it('keeps the imports of a single file component it formats', function () {
         ->toContain("public string \$mode = 'all';");
 });
 
+it('returns unparseable code unchanged instead of throwing', function () {
+    $in = <<<'PHP'
+    <?php
+    $x = 1;
+    @extends('layouts.app')
+    PHP;
+
+    $out = (new PhpFragmentFormatter)->format($in);
+
+    expect($out)->toBe($in);
+});
+
+it('returns unparseable fragment unchanged instead of throwing', function () {
+    $in = <<<'PHP'
+    <?php
+    $x = [
+    PHP;
+
+    $out = (new PhpFragmentFormatter)->format($in, fragment: true);
+
+    expect($out)->toBe($in);
+});
+
 it('formats an island the same way twice', function () {
     $in = <<<'PHP'
     <?php
