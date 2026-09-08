@@ -24,8 +24,8 @@
     },
     "require-dev": {
         "composer/semver": "^3.4.4",
-        "friendsofphp/php-cs-fixer": "^3.95.24",
-        "illuminate/view": "^13.30.1",
+        "friendsofphp/php-cs-fixer": "^3.95.25",
+        "illuminate/view": "^13.31.0",
         "larastan/larastan": "^3.11.0",
         "laravel-zero/framework": "^13.0.0",
         "laravel/prompts": "^0.3.24",
