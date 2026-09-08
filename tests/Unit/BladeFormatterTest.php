@@ -1,7 +1,30 @@
 <?php
 
 use App\BladeFormatter;
+use App\Contracts\PrettierPostFormatter;
+use App\Contracts\PrettierPreFormatter;
+use App\Exceptions\PrettierException;
 use App\Support\Prettier;
+
+class CorruptingIgnoreRangeFormatter implements PrettierPostFormatter, PrettierPreFormatter
+{
+    public function preFormat(string $content): string
+    {
+        return $content.'INTERMEDIATE';
+    }
+
+    public function postFormat(string $content): string
+    {
+        return (string) preg_replace('/__PINT_BLADE_IGNORE_\d+__/', '', $content);
+    }
+}
+
+class BladeFormatterWithCorruptingIgnoreRangeFormatter extends BladeFormatter
+{
+    protected static array $formatters = [
+        CorruptingIgnoreRangeFormatter::class,
+    ];
+}
 
 /**
  * A prettier double whose "format" is the given callback, so a formatter pipeline can be
@@ -75,4 +98,33 @@ it('hands back the untouched file when an embedded Blade placeholder cannot be r
     expect($out)->toBe($in);
     expect($out)->not->toContain('pm0');
     expect($out)->not->toContain('gone');
+});
+
+it('rejects invalid ignore ranges returned by the worker', function () {
+    $prettier = Mockery::mock(Prettier::class);
+    $prettier->shouldReceive('ignoreRanges')->once()->andReturn([
+        ['start' => 0, 'end' => 100],
+    ]);
+
+    (new BladeFormatter($prettier))->format('invalid.blade.php', '<div></div>');
+})->throws(PrettierException::class, 'Laravel Pint\'s Prettier worker returned invalid Blade ignore ranges.');
+
+it('returns pristine input if an ignore range placeholder is corrupted', function () {
+    $in = "{{-- format-ignore-start --}}\nraw\n{{-- format-ignore-end --}}\n";
+    $end = strlen($in);
+    $prettier = Mockery::mock(Prettier::class);
+    $prettier->shouldReceive('ignoreRanges')->once()->andReturn([
+        ['start' => 0, 'end' => $end, 'sourceStart' => 0, 'sourceEnd' => $end],
+    ]);
+    $prettier->shouldReceive('formatWithIgnoreRanges')
+        ->once()
+        ->with('fallback.blade.php', $in.'INTERMEDIATE')
+        ->andReturn([
+            'formatted' => $in.'INTERMEDIATE',
+            'ranges' => [
+                ['start' => 0, 'end' => $end, 'sourceStart' => 0, 'sourceEnd' => $end],
+            ],
+        ]);
+
+    expect((new BladeFormatterWithCorruptingIgnoreRangeFormatter($prettier))->format('fallback.blade.php', $in))->toBe($in);
 });

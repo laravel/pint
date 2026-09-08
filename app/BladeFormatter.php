@@ -29,7 +29,7 @@ class BladeFormatter
     private array $ignoreRangeMap = [];
 
     /**
-     * The content as it entered protectIgnoreRanges().
+     * The content as it entered format().
      */
     private string $ignoreRangeOriginal = '';
 
@@ -96,6 +96,7 @@ class BladeFormatter
     public function format(string $path, string $content): string
     {
         $original = $content;
+        $this->resetIgnoreRanges($content);
         $ranges = $this->prettier->ignoreRanges($path, $content);
         $formatters = collect(static::$formatters)->map(
             fn (string $formatter): PrettierPreFormatter|PrettierPostFormatter => resolve($formatter),
@@ -111,7 +112,7 @@ class BladeFormatter
                 $content,
             );
 
-            $content = $this->restoreIgnoreRanges($masked);
+            $content = $this->restoreVisibleIgnoreRanges($masked);
 
             if ($ranges === []) {
                 $formatted = $this->prettier->format($path, $content);
@@ -133,8 +134,7 @@ class BladeFormatter
             // duplicated one of its placeholders. Discard the whole run and hand back the
             // untouched file: only the original content is guaranteed to be intact once a
             // masking pass has been given up on.
-            $this->ignoreRangeMap = [];
-            $this->ignoreRangeOriginal = '';
+            $this->resetIgnoreRanges();
 
             return $original;
         }
@@ -147,10 +147,6 @@ class BladeFormatter
      */
     private function protectIgnoreRanges(string $content, array $ranges, string $source): string
     {
-        $this->ignoreRangeMap = [];
-        $this->ignoreRangeOriginal = $content;
-        $this->ignoreRangeCounter = 0;
-
         if ($ranges === []) {
             return $content;
         }
@@ -170,7 +166,7 @@ class BladeFormatter
                 $sourceLength,
             );
 
-            $token = $this->makeIgnoreRangeToken();
+            $token = $this->makeIgnoreRangeToken($content);
             $this->ignoreRangeMap[$token] = substr($source, $sourceStart, $sourceEnd - $sourceStart);
             $result .= substr($content, $cursor, $start - $cursor).$token;
             $cursor = $end;
@@ -209,6 +205,29 @@ class BladeFormatter
     }
 
     /**
+     * Restore ignore ranges that remain visible after the pre-formatters run.
+     */
+    private function restoreVisibleIgnoreRanges(string $content): string
+    {
+        $visible = [];
+
+        foreach ($this->ignoreRangeMap as $token => $original) {
+            $count = substr_count($content, $token);
+
+            if ($count > 1) {
+                throw new UnrestorableContentException;
+            }
+
+            if ($count === 1) {
+                $visible[$token] = $original;
+                unset($this->ignoreRangeMap[$token]);
+            }
+        }
+
+        return strtr($content, $visible);
+    }
+
+    /**
      * Restore the contents of formatter ignore ranges.
      */
     private function restoreIgnoreRanges(string $content): string
@@ -230,20 +249,31 @@ class BladeFormatter
             }
         }
 
-        return str_replace(array_keys($map), array_values($map), $content);
+        return strtr($content, $map);
     }
 
     /**
      * Build a unique placeholder token.
      */
-    private function makeIgnoreRangeToken(): string
+    private function makeIgnoreRangeToken(string $content): string
     {
         while (true) {
             $token = sprintf('__PINT_BLADE_IGNORE_%d__', $this->ignoreRangeCounter++);
 
-            if (! str_contains($this->ignoreRangeOriginal, $token)) {
+            if (! str_contains($this->ignoreRangeOriginal, $token)
+                && ! str_contains($content, $token)) {
                 return $token;
             }
         }
+    }
+
+    /**
+     * Reset the formatter ignore range state.
+     */
+    private function resetIgnoreRanges(string $original = ''): void
+    {
+        $this->ignoreRangeMap = [];
+        $this->ignoreRangeOriginal = $original;
+        $this->ignoreRangeCounter = 0;
     }
 }

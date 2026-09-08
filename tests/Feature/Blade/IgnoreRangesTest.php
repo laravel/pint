@@ -1,30 +1,8 @@
 <?php
 
 use App\BladeFormatter;
-use App\Contracts\PrettierPostFormatter;
-use App\Contracts\PrettierPreFormatter;
-use App\Exceptions\PrettierException;
+use App\PrettierFormatters\EmbeddedBladeMasker;
 use App\Support\Prettier;
-
-class CorruptingIgnoreRangeFormatter implements PrettierPostFormatter, PrettierPreFormatter
-{
-    public function preFormat(string $content): string
-    {
-        return $content.'INTERMEDIATE';
-    }
-
-    public function postFormat(string $content): string
-    {
-        return str_replace('__PINT_BLADE_IGNORE_0__', '', $content);
-    }
-}
-
-class BladeFormatterWithCorruptingIgnoreRangeFormatter extends BladeFormatter
-{
-    protected static array $formatters = [
-        CorruptingIgnoreRangeFormatter::class,
-    ];
-}
 
 bladeFixtureTest('ignore-ranges');
 
@@ -97,31 +75,35 @@ it('safely handles malformed and non-marker occurrences', function (string $in, 
     ],
 ]);
 
-it('rejects invalid ignore ranges returned by the worker', function () {
-    $prettier = Mockery::mock(Prettier::class);
-    $prettier->shouldReceive('ignoreRanges')->once()->andReturn([
-        ['start' => 0, 'end' => 100],
-    ]);
+it('formats surrounding content when an ignore range is nested in an embedded directive block', function (string $element, string $ignored) {
+    $formatter = new class(app(Prettier::class)) extends BladeFormatter
+    {
+        protected static array $formatters = [
+            EmbeddedBladeMasker::class,
+        ];
+    };
+    $ignoreRange = "{{-- format-ignore-start --}}\n"
+        .$ignored."\n"
+        .'{{-- format-ignore-end --}}';
+    $visibleIgnoreRange = "{{-- prettier-ignore-start --}}\n"
+        ."<section  id=\"visible\"></section>\n"
+        .'{{-- prettier-ignore-end --}}';
+    $in = "<{$element}>\n"
+        ."@if(\$ready)\n"
+        .$ignoreRange."\n"
+        ."@endif\n"
+        ."</{$element}>\n"
+        ."<div  id=\"after\"></div>\n"
+        .$visibleIgnoreRange."\n";
 
-    (new BladeFormatter($prettier))->format('invalid.blade.php', '<div></div>');
-})->throws(PrettierException::class, 'Laravel Pint\'s Prettier worker returned invalid Blade ignore ranges.');
+    $formatted = $formatter->format('nested.blade.php', $in);
 
-it('returns pristine input if an ignore range placeholder is corrupted', function () {
-    $in = "{{-- format-ignore-start --}}\nraw\n{{-- format-ignore-end --}}\n";
-    $end = strlen($in);
-    $prettier = Mockery::mock(Prettier::class);
-    $prettier->shouldReceive('ignoreRanges')->once()->andReturn([
-        ['start' => 0, 'end' => $end, 'sourceStart' => 0, 'sourceEnd' => $end],
-    ]);
-    $prettier->shouldReceive('formatWithIgnoreRanges')
-        ->once()
-        ->with('fallback.blade.php', $in.'INTERMEDIATE')
-        ->andReturn([
-            'formatted' => $in.'INTERMEDIATE',
-            'ranges' => [
-                ['start' => 0, 'end' => $end, 'sourceStart' => 0, 'sourceEnd' => $end],
-            ],
-        ]);
-
-    expect((new BladeFormatterWithCorruptingIgnoreRangeFormatter($prettier))->format('fallback.blade.php', $in))->toBe($in);
-});
+    expect($formatted)->toContain($ignoreRange)
+        ->toContain($visibleIgnoreRange)
+        ->toContain('<div id="after"></div>');
+    expect($formatter->format('nested.blade.php', $formatted))->toBe($formatted);
+})->with([
+    'script' => ['script', 'const  keep = [1,  2];'],
+    'script with token-like content' => ['script', 'const  keep = "__PINT_BLADE_IGNORE_2__";'],
+    'style' => ['style', '.keep  { color:  red; }'],
+]);
