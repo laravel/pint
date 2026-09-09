@@ -5,6 +5,7 @@ namespace App\Output;
 use App\Output\Concerns\InteractsWithSymbols;
 use App\Project;
 use App\Repositories\ConfigurationJsonRepository;
+use App\Support\Duration;
 use App\ValueObjects\Issue;
 use Illuminate\Support\Collection;
 use PhpCsFixer\Console\Report\FixReport\ReportSummary;
@@ -71,7 +72,7 @@ class SummaryOutput
                 'issues' => $issues,
                 'testing' => $summary->isDryRun(),
                 'preset' => $this->presets[$this->config->preset()],
-                'duration' => $this->formatDuration($completedTimeSeconds),
+                'duration' => Duration::format($completedTimeSeconds),
             ]),
         );
 
@@ -90,21 +91,6 @@ class SummaryOutput
         }
 
         $this->output->writeln('');
-    }
-
-    /**
-     * Formats the given duration, in seconds
-     *
-     * @param  float  $seconds
-     * @return string
-     */
-    protected function formatDuration($seconds)
-    {
-        if ($seconds >= 60) {
-            return sprintf('%dm %02ds', intdiv((int) $seconds, 60), (int) $seconds % 60);
-        }
-
-        return sprintf('%.2fs', $seconds);
     }
 
     /**
