@@ -40,10 +40,12 @@ class FixCode
     /**
      * Fixes the project resolved by the current input and output.
      *
-     * @return array{int, array<string, array{appliedFixers: array<int, string>, diff: string}>}
+     * @return array{int, array<string, array{appliedFixers: array<int, string>, diff: string}>, float}
      */
     public function execute()
     {
+        $start = microtime(true);
+
         try {
             [$resolver, $totalFiles] = ConfigurationResolverFactory::fromIO($this->input, $this->output);
         } catch (ConsoleException $exception) {
@@ -51,7 +53,9 @@ class FixCode
                 throw $exception;
             }
 
-            return [0, []];
+            $completedTimeSeconds = microtime(true) - $start;
+
+            return [0, [], $completedTimeSeconds];
         }
 
         if (is_null($this->input->getOption('format')) && ! ConfigurationResolverFactory::runningInAgent()) {
@@ -76,7 +80,9 @@ class FixCode
             $this->getInput($resolver),
         ));
 
-        return tap([$totalFiles, $changes], fn () => $this->progress->unsubscribe());
+        $completedTimeSeconds = microtime(true) - $start;
+
+        return tap([$totalFiles, $changes, $completedTimeSeconds], fn () => $this->progress->unsubscribe());
     }
 
     /**

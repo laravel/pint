@@ -56,9 +56,10 @@ class SummaryOutput
      *
      * @param  ReportSummary  $summary
      * @param  int  $totalFiles
+     * @param  float  $completedTimeSeconds
      * @return void
      */
-    public function handle($summary, $totalFiles)
+    public function handle($summary, $totalFiles, $completedTimeSeconds = 0.0)
     {
         renderUsing($this->output);
 
@@ -70,6 +71,7 @@ class SummaryOutput
                 'issues' => $issues,
                 'testing' => $summary->isDryRun(),
                 'preset' => $this->presets[$this->config->preset()],
+                'duration' => $this->formatDuration($completedTimeSeconds),
             ]),
         );
 
@@ -88,6 +90,21 @@ class SummaryOutput
         }
 
         $this->output->writeln('');
+    }
+
+    /**
+     * Formats the given duration, in seconds
+     *
+     * @param  float  $seconds
+     * @return string
+     */
+    protected function formatDuration($seconds)
+    {
+        if ($seconds >= 60) {
+            return sprintf('%dm %02ds', intdiv((int) $seconds, 60), (int) $seconds % 60);
+        }
+
+        return sprintf('%.2fs', $seconds);
     }
 
     /**

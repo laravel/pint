@@ -39,6 +39,8 @@
                         </span>
                     @endif
                 </span>
+
+                <span class="text-gray"> {{ $duration }} </span>
             </div>
         </span>
     </div>

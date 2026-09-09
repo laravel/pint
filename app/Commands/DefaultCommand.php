@@ -76,9 +76,9 @@ class DefaultCommand extends Command
             return $this->fixStdinInput($fixCode);
         }
 
-        [$totalFiles, $changes] = $fixCode->execute();
+        [$totalFiles, $changes, $completedTimeSeconds] = $fixCode->execute();
 
-        return $elaborateSummary->execute($totalFiles, $changes);
+        return $elaborateSummary->execute($totalFiles, $changes, $completedTimeSeconds);
     }
 
     /**

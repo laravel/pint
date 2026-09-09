@@ -39,9 +39,10 @@ class ElaborateSummary
      *
      * @param  int  $totalFiles
      * @param  array<string, array{appliedFixers: array<int, string>, diff: string}>  $changes
+     * @param  float  $completedTimeSeconds
      * @return int
      */
-    public function execute($totalFiles, $changes)
+    public function execute($totalFiles, $changes, $completedTimeSeconds = 0.0)
     {
         $summary = new ReportSummary(
             $changes,
@@ -62,7 +63,7 @@ class ElaborateSummary
         } elseif ($this->output->isQuiet()) {
             $this->writeIssuesToErrorOutput($summary);
         } else {
-            $this->summaryOutput->handle($summary, $totalFiles);
+            $this->summaryOutput->handle($summary, $totalFiles, $completedTimeSeconds);
         }
 
         if (($file = $this->input->getOption('output-to-file')) && (($outputFormat = $this->input->getOption('output-format')) || $format)) {
