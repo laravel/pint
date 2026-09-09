@@ -2,10 +2,36 @@
 
 use App\PrettierFormatters\PhpBlockFormatting;
 use App\Support\PhpFragmentFormatter;
+use PhpCsFixer\Fixer\ControlStructure\TrailingCommaInMultilineFixer;
+use PhpCsFixer\Tokenizer\Tokens;
 
 function phpBlockFormatting(): PhpBlockFormatting
 {
     return new PhpBlockFormatting(new PhpFragmentFormatter);
+}
+
+/**
+ * A formatter whose only rule punctuates multi-line arrays *and* arguments.
+ *
+ * The "laravel" preset only punctuates arrays, but a project may opt
+ * "arguments" into "trailing_comma_in_multiline", which then sees the synthetic
+ * "__pint__(...)" host as a multi-line call.
+ */
+function phpBlockFormattingWithTrailingCommas(): PhpBlockFormatting
+{
+    return new PhpBlockFormatting(new class extends PhpFragmentFormatter
+    {
+        public function format(string $code, bool $fragment = false): string
+        {
+            $fixer = new TrailingCommaInMultilineFixer;
+            $fixer->configure(['elements' => ['arrays', 'arguments']]);
+
+            $tokens = Tokens::fromCode($code);
+            $fixer->fix(new SplFileInfo('fragment.php'), $tokens);
+
+            return $tokens->generateCode();
+        }
+    });
 }
 
 it('leaves a brace control structure split across raw-php islands untouched', function () {
@@ -107,4 +133,29 @@ it('leaves a nested multiline directive argument untouched when no fixer re-inde
     BLADE;
 
     expect($formatter->postFormat($in))->toBe($in);
+});
+
+it('does not leave a trailing comma on a multiline directive argument', function () {
+    // Blade compiles the argument straight into "if (...):", where a trailing
+    // comma is a syntax error, so it never belongs to the argument itself.
+    $in = <<<'BLADE'
+    @if (
+        ($user->isAdmin() || $user->isOwner())
+            && $user->isActive()
+    )
+        <span>Admin</span>
+    @endif
+    BLADE;
+
+    expect(phpBlockFormattingWithTrailingCommas()->postFormat($in))->toBe($in);
+});
+
+it('keeps the trailing comma of an array inside a multiline directive argument', function () {
+    $in = <<<'BLADE'
+    @include('partials.card', [
+        'title' => $title,
+    ])
+    BLADE;
+
+    expect(phpBlockFormattingWithTrailingCommas()->postFormat($in))->toBe($in);
 });

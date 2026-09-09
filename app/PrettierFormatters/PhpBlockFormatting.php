@@ -149,8 +149,10 @@ class PhpBlockFormatting implements PrettierPostFormatter
 
         if ($keyword = self::CONTROL_DIRECTIVES[strtolower($name)] ?? null) {
             $host = $keyword.' ('.$core.') {}';
+            $call = false;
         } else {
             $host = '__pint__('.$core.');';
+            $call = true;
         }
 
         $formatted = $this->stripPhpWrapper($this->formatter->format("<?php\n".$host."\n", fragment: true));
@@ -163,7 +165,24 @@ class PhpBlockFormatting implements PrettierPostFormatter
 
         $inner = substr($formatted, $open + 1, $close - $open - 1);
 
+        if ($call) {
+            $inner = $this->stripHostTrailingComma($inner);
+        }
+
         return $this->reindentArg($inner, $indent);
+    }
+
+    /**
+     * Drop the trailing comma the synthetic call host invited.
+     *
+     * Wrapping an argument in "__pint__(...)" makes it a multi-line argument
+     * list, which "trailing_comma_in_multiline" is entitled to punctuate. Blade
+     * compiles the directive's argument straight into PHP, where that comma is a
+     * syntax error, so it never belongs to the argument itself.
+     */
+    private function stripHostTrailingComma(string $inner): string
+    {
+        return (string) preg_replace('/,(\s*)$/', '$1', $inner);
     }
 
     /**
