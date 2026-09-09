@@ -5,16 +5,94 @@
         "bootstrap",
         "config",
         "overrides",
-        "resources",
-        "vendor"
+        "resources"
+    ],
+    "finder": [
+        {
+            "in": "vendor",
+            "notPath": [
+                "#^brianium/paratest/#",
+                "#^doctrine/deprecations/#",
+                "#^fruitcake/php-cors/#",
+                "#^hamcrest/hamcrest-php/#",
+                "#^iamcal/sql-parser/#",
+                "#^illuminate/database/#",
+                "#^illuminate/http/#",
+                "#^illuminate/session/#",
+                "#^jean85/pretty-package-versions/#",
+                "#^jolicode/jolinotif/#",
+                "#^larastan/larastan/#",
+                "#^laravel/serializable-closure/#",
+                "#^nikic/php-parser/#",
+                "#^pestphp/pest/#",
+                "#^pestphp/pest-plugin-mutate/#",
+                "#^pestphp/pest-plugin-profanity/#",
+                "#^phar-io/manifest/#",
+                "#^phar-io/version/#",
+                "#^phpdocumentor/reflection-common/#",
+                "#^phpdocumentor/reflection-docblock/#",
+                "#^phpdocumentor/type-resolver/#",
+                "#^phpstan/phpdoc-parser/#",
+                "#^phpstan/phpstan/#",
+                "#^phpunit/php-code-coverage/#",
+                "#^phpunit/php-file-iterator/#",
+                "#^phpunit/php-invoker/#",
+                "#^phpunit/php-text-template/#",
+                "#^phpunit/php-timer/#",
+                "#^phpunit/phpunit/#",
+                "#^sebastian/cli-parser/#",
+                "#^sebastian/comparator/#",
+                "#^sebastian/complexity/#",
+                "#^sebastian/environment/#",
+                "#^sebastian/exporter/#",
+                "#^sebastian/global-state/#",
+                "#^sebastian/lines-of-code/#",
+                "#^sebastian/object-enumerator/#",
+                "#^sebastian/object-reflector/#",
+                "#^sebastian/recursion-context/#",
+                "#^sebastian/type/#",
+                "#^sebastian/version/#",
+                "#^staabm/side-effects-detector/#",
+                "#^symfony/http-foundation/#",
+                "#^symfony/http-kernel/#",
+                "#^symfony/mime/#",
+                "#^ta-tikoma/phpunit-architecture-test/#",
+                "#^theseer/tokenizer/#",
+                "#^webmozart/assert/#"
+            ],
+            "exclude": [
+                "doc",
+                "docs",
+                "documentation",
+                "Tests",
+                "tests"
+            ],
+            "notName": [
+                "*.md",
+                "*.rst",
+                "*.xsd",
+                "*.dist",
+                "LICENSE*",
+                "phpstan*.neon*",
+                "phpunit*.xml*",
+                "psalm*.xml*",
+                "infection*.json*"
+            ]
+        }
     ],
     "files": [
-        "composer.json"
+        "composer.json",
+        "vendor/phpstan/phpstan/bootstrap.php",
+        "vendor/phpunit/phpunit/src/Framework/Assert/Functions.php",
+        "vendor/pestphp/pest/src/Functions.php",
+        "vendor/pestphp/pest/src/Pest.php",
+        "vendor/pestphp/pest/src/Plugin.php"
     ],
     "blacklist": [
         "resources/js/worker.cjs",
         "resources/js/version-probe.cjs",
-        "resources/prettier/prettierrc.json"
+        "resources/prettier/prettierrc.json",
+        "vendor/laravel-zero/framework/bin/box"
     ],
     "exclude-composer-files": false,
     "exclude-dev-files": false,

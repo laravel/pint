@@ -2944,23 +2944,22 @@
         },
         {
             "name": "jolicode/jolinotif",
-            "version": "v3.3.1",
+            "version": "v3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jolicode/JoliNotif.git",
-                "reference": "fd188c41fdf2d0659a6e48bac705e0615e6eefdb"
+                "reference": "531b7a42837050eb8f6ee69150dd70a5cadb917d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jolicode/JoliNotif/zipball/fd188c41fdf2d0659a6e48bac705e0615e6eefdb",
-                "reference": "fd188c41fdf2d0659a6e48bac705e0615e6eefdb",
+                "url": "https://api.github.com/repos/jolicode/JoliNotif/zipball/531b7a42837050eb8f6ee69150dd70a5cadb917d",
+                "reference": "531b7a42837050eb8f6ee69150dd70a5cadb917d",
                 "shasum": ""
             },
             "require": {
                 "jolicode/php-os-helper": "^0.3",
                 "php": ">=8.3",
                 "psr/log": "^1.0 || ^2.0 || ^3.0",
-                "symfony/deprecation-contracts": "^3",
                 "symfony/process": "^6.4 || ^7.3 || ^8.0"
             },
             "require-dev": {
@@ -3005,7 +3004,7 @@
             ],
             "support": {
                 "issues": "https://github.com/jolicode/JoliNotif/issues",
-                "source": "https://github.com/jolicode/JoliNotif/tree/v3.3.1"
+                "source": "https://github.com/jolicode/JoliNotif/tree/v3.4.0"
             },
             "funding": [
                 {
@@ -3013,7 +3012,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-07-22T08:53:38+00:00"
+            "time": "2026-09-09T11:32:52+00:00"
         },
         {
             "name": "jolicode/php-os-helper",
