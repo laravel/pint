@@ -197,6 +197,16 @@ class EnsurePrettierIsConfigured
             ->prepend('pint:'.config('app.version'))
             ->implode('|');
 
+        $stylesheet = $this->prettier->projectRoot().'/resources/css/app.css';
+
+        if (File::isFile($stylesheet) && File::isReadable($stylesheet)) {
+            $content = File::get($stylesheet);
+
+            if (preg_match('/@import\s+["\']tailwindcss["\']/', $content)) {
+                $versions .= '|tailwind:'.md5($content);
+            }
+        }
+
         return md5($versions);
     }
 

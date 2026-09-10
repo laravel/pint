@@ -47,3 +47,19 @@ it('changes the fingerprint when the pint version changes', function () {
 it('exposes no cache fingerprints before prettier is configured', function () {
     expect($this->action->cacheFingerprints())->toBe([]);
 });
+
+it('preserves the fingerprint for stylesheets without a Tailwind v4 entrypoint', function () {
+    $stylesheet = base_path('resources/css/app.css');
+    $before = $this->action->fingerprint($this->fixer, $this->probes);
+
+    @mkdir(dirname($stylesheet), 0777, true);
+
+    try {
+        file_put_contents($stylesheet, '@tailwind base; @tailwind components; @tailwind utilities;');
+
+        expect($this->action->fingerprint($this->fixer, $this->probes))->toBe($before);
+    } finally {
+        @unlink($stylesheet);
+        @rmdir(dirname($stylesheet));
+    }
+});
