@@ -5,6 +5,7 @@ namespace App\PrettierFormatters;
 use App\Contracts\PrettierPostFormatter;
 use App\Support\PhpFragmentFormatter;
 use Illuminate\Support\Str;
+use PhpCsFixer\Tokenizer\Tokens;
 
 class PhpBlockFormatting implements PrettierPostFormatter
 {
@@ -149,11 +150,17 @@ class PhpBlockFormatting implements PrettierPostFormatter
 
         if ($keyword = self::CONTROL_DIRECTIVES[strtolower($name)] ?? null) {
             $host = $keyword.' ('.$core.') {}';
+            $call = false;
         } else {
             $host = '__pint__('.$core.');';
+            $call = true;
         }
 
         $formatted = $this->stripPhpWrapper($this->formatter->format("<?php\n".$host."\n", fragment: true));
+
+        if ($call) {
+            $formatted = $this->stripHostTrailingComma($formatted, $host);
+        }
 
         $open = strpos($formatted, '(');
 
@@ -167,13 +174,78 @@ class PhpBlockFormatting implements PrettierPostFormatter
     }
 
     /**
+     * Drop the trailing comma the synthetic call host invited.
+     *
+     * Wrapping an argument in "__pint__(...)" makes it a multi-line argument
+     * list, which "trailing_comma_in_multiline" is entitled to punctuate. Blade
+     * compiles the directive's argument straight into PHP, where that comma is a
+     * syntax error, so it never belongs to the argument itself.
+     */
+    private function stripHostTrailingComma(string $formatted, string $host): string
+    {
+        $tokens = $this->hostTokens($formatted);
+
+        if ($tokens === null || ($comma = $this->hostTrailingComma($tokens)) === null) {
+            return $formatted;
+        }
+
+        // A comma the argument arrived with is the author's own, not the host's.
+        $original = $this->hostTokens($host);
+
+        if ($original !== null && $this->hostTrailingComma($original) !== null) {
+            return $formatted;
+        }
+
+        $tokens->clearAt($comma);
+
+        return $this->stripPhpWrapper($tokens->generateCode());
+    }
+
+    /**
+     * Tokenize a synthetic host, or null when it is not PHP on its own.
+     */
+    private function hostTokens(string $host): ?Tokens
+    {
+        try {
+            return Tokens::fromCode("<?php\n".$host);
+        } catch (\CompileError|\ParseError) {
+            return null;
+        }
+    }
+
+    /**
+     * The index of the comma closing the host's argument list, or null when it ends otherwise.
+     *
+     * A comment is free to trail the comma, so the ")" is found first and the
+     * tokens are walked back from there rather than matched at the very end.
+     */
+    private function hostTrailingComma(Tokens $tokens): ?int
+    {
+        $semicolon = $tokens->getPrevMeaningfulToken($tokens->count());
+        $close = $semicolon === null ? null : $tokens->getPrevMeaningfulToken($semicolon);
+
+        if ($close === null || ! $tokens[$close]->equals(')')) {
+            return null;
+        }
+
+        $comma = $tokens->getPrevMeaningfulToken($close);
+
+        return $comma !== null && $tokens[$comma]->equals(',') ? $comma : null;
+    }
+
+    /**
      * Re-indent the continuation lines of a formatted argument.
      */
     private function reindentArg(string $inner, string $indent): string
     {
-        return Str::of($inner)
-            ->explode("\n")
-            ->map(fn (string $line, int $index): string => $index === 0 || $line === '' ? $line : $indent.$line)
+        $lines = Str::of($inner)->explode("\n");
+
+        // The last line carries the indentation of the directive's ")", so it is
+        // indented even when empty; a blank line inside the argument is not.
+        $last = $lines->count() - 1;
+
+        return $lines
+            ->map(fn (string $line, int $index): string => $index === 0 || ($line === '' && $index !== $last) ? $line : $indent.$line)
             ->implode("\n");
     }
 
