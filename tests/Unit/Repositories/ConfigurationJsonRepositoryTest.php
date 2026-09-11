@@ -131,3 +131,15 @@ it('throw an error if the extended configuration also has an extend', function (
 
     $repository->finder();
 })->throws(LogicException::class);
+
+it('defaults the blade options when none are configured', function () {
+    $repository = new ConfigurationJsonRepository(null, 'laravel');
+
+    expect($repository->blade())->toBe(['void_element_slash' => true]);
+});
+
+it('may have blade options', function () {
+    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/blade-options/pint.json', 'laravel');
+
+    expect($repository->blade())->toBe(['void_element_slash' => false]);
+});

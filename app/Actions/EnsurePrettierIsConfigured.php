@@ -192,9 +192,15 @@ class EnsurePrettierIsConfigured
         $dependencies = $fixer->prettierDependencies();
         ksort($dependencies);
 
+        $blade = $this->configuration->blade();
+        ksort($blade);
+
         $versions = collect(array_keys($dependencies))
             ->map(fn (string $package): string => $package.':'.($probes[$package]['version'] ?? ''))
             ->prepend('pint:'.config('app.version'))
+            // The blade options change the formatter's output without changing any rule,
+            // so they have to be part of the signature the cache is keyed on.
+            ->push('blade:'.json_encode($blade))
             ->implode('|');
 
         return md5($versions);

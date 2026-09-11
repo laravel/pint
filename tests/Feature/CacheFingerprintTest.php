@@ -44,6 +44,17 @@ it('changes the fingerprint when the pint version changes', function () {
     expect($this->action->fingerprint($this->fixer, $this->probes))->not->toBe($before);
 });
 
+it('changes the fingerprint when a blade option changes', function () {
+    $before = $this->action->fingerprint($this->fixer, $this->probes);
+
+    $action = new EnsurePrettierIsConfigured(
+        new Prettier(getcwd()),
+        new ConfigurationJsonRepository(base_path('tests/Fixtures/blade-options/pint.json'), null),
+    );
+
+    expect($action->fingerprint($this->fixer, $this->probes))->not->toBe($before);
+});
+
 it('exposes no cache fingerprints before prettier is configured', function () {
     expect($this->action->cacheFingerprints())->toBe([]);
 });
