@@ -7,6 +7,15 @@ use Symfony\Component\Console\Input\InputInterface;
 class ConfigurationJsonRepository
 {
     /**
+     * Lists the blade formatting options, mapped to their default.
+     *
+     * @var array<string, bool>
+     */
+    protected $bladeOptions = [
+        'void_element_slash' => true,
+    ];
+
+    /**
      * Lists the finder options.
      *
      * @var array<int, string>
@@ -66,6 +75,32 @@ class ConfigurationJsonRepository
     }
 
     /**
+     * Get the blade formatting options, filled in with their defaults.
+     *
+     * @return array<string, bool>
+     */
+    public function blade()
+    {
+        $options = $this->get()['blade'] ?? [];
+
+        if (! is_array($options)) {
+            abort(1, 'The [blade] configuration option must be an object.');
+        }
+
+        foreach ($options as $option => $value) {
+            if (! array_key_exists($option, $this->bladeOptions)) {
+                abort(1, sprintf('Blade option [%s] is not valid.', $option));
+            }
+
+            if (! is_bool($value)) {
+                abort(1, sprintf('Blade option [%s] must be a boolean.', $option));
+            }
+        }
+
+        return array_merge($this->bladeOptions, $options);
+    }
+
+    /**
      * Get the cache file location.
      *
      * @return string|null
@@ -98,7 +133,7 @@ class ConfigurationJsonRepository
     /**
      * Get the configuration from the "pint.json" file.
      *
-     * @return array<string, array<int, string>|string>
+     * @return array<string, mixed>
      */
     protected function get()
     {
@@ -136,8 +171,8 @@ class ConfigurationJsonRepository
     /**
      * Resolve the file to extend.
      *
-     * @param  array<string, array<int, string>|string>  $configuration
-     * @return array<string, array<int, string>|string>
+     * @param  array<string, mixed>  $configuration
+     * @return array<string, mixed>
      */
     private function resolveExtend(array $configuration)
     {

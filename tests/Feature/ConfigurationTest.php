@@ -1,5 +1,6 @@
 <?php
 
+use App\Repositories\ConfigurationJsonRepository;
 use LaravelZero\Framework\Exceptions\ConsoleException;
 
 it('ensures configuration file is valid', function () {
@@ -53,3 +54,15 @@ it('uses explicit paths over configured in paths', function () {
         ->and($output)->toContain(implode(DIRECTORY_SEPARATOR, ['excluded', 'file.php']))
         ->and($output)->not->toContain(implode(DIRECTORY_SEPARATOR, ['included', 'file.php']));
 });
+
+it('rejects an unknown blade option', function () {
+    (new ConfigurationJsonRepository(base_path('tests/Fixtures/blade-options/invalid-option.json'), 'laravel'))->blade();
+})->throws(ConsoleException::class, 'Blade option [no_such_option] is not valid.');
+
+it('rejects a blade option that is not a boolean', function () {
+    (new ConfigurationJsonRepository(base_path('tests/Fixtures/blade-options/invalid-type.json'), 'laravel'))->blade();
+})->throws(ConsoleException::class, 'Blade option [void_element_slash] must be a boolean.');
+
+it('rejects a blade configuration that is not an object', function () {
+    (new ConfigurationJsonRepository(base_path('tests/Fixtures/blade-options/invalid-shape.json'), 'laravel'))->blade();
+})->throws(ConsoleException::class, 'The [blade] configuration option must be an object.');

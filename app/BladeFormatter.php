@@ -16,6 +16,7 @@ use App\PrettierFormatters\JoinDanglingOpenBracket;
 use App\PrettierFormatters\NotOperatorSpacing;
 use App\PrettierFormatters\PhpBlockFormatting;
 use App\PrettierFormatters\StripSensitiveLeadingBlankLines;
+use App\PrettierFormatters\StripVoidElementSlash;
 use App\Support\Prettier;
 
 class BladeFormatter
@@ -61,6 +62,11 @@ class BladeFormatter
 
         // Runs Pint over the PHP in @php blocks, <?php islands, directives, and echoes.
         PhpBlockFormatting::class,
+
+        // Drops the XHTML style "/" prettier prints on void elements, when the
+        // "blade.void_element_slash" option asks for it. Runs last, over fully
+        // restored markup.
+        StripVoidElementSlash::class,
     ];
 
     /**

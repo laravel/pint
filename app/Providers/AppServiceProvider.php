@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Actions\EnsurePrettierIsConfigured;
 use App\BladeFormatter;
+use App\PrettierFormatters\StripVoidElementSlash;
 use App\Project;
 use App\Repositories\ConfigurationJsonRepository;
 use App\Support\Prettier;
@@ -55,6 +56,12 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(BladeFormatter::class, function ($app) {
             return new BladeFormatter($app->make(Prettier::class));
+        });
+
+        $this->app->bind(StripVoidElementSlash::class, function ($app) {
+            return new StripVoidElementSlash(
+                $app->make(ConfigurationJsonRepository::class)->blade()['void_element_slash'],
+            );
         });
     }
 }
