@@ -1,18 +1,15 @@
 <?php
 
 use App\Contracts\PathsRepository;
+use JMac\Testing\Double;
 use LaravelZero\Framework\Exceptions\ConsoleException;
 
 it('determines diff files', function () {
-    $paths = Mockery::mock(PathsRepository::class);
+    $paths = Double::for(PathsRepository::class);
 
-    $paths
-        ->shouldReceive('diff')
-        ->with('main')
-        ->once()
-        ->andReturn([
-            base_path('tests/Fixtures/without-issues-laravel/file.php'),
-        ]);
+    $paths->expects('diff')->with('main')->returns([
+        base_path('tests/Fixtures/without-issues-laravel/file.php'),
+    ]);
 
     $this->swap(PathsRepository::class, $paths);
 
@@ -24,14 +21,11 @@ it('determines diff files', function () {
 });
 
 it('ignores the path argument', function () {
-    $paths = Mockery::mock(PathsRepository::class);
+    $paths = Double::for(PathsRepository::class);
 
-    $paths
-        ->shouldReceive('diff')
-        ->once()
-        ->andReturn([
-            base_path('tests/Fixtures/without-issues-laravel/file.php'),
-        ]);
+    $paths->expects('diff')->returns([
+        base_path('tests/Fixtures/without-issues-laravel/file.php'),
+    ]);
 
     $this->swap(PathsRepository::class, $paths);
 
@@ -46,13 +40,9 @@ it('ignores the path argument', function () {
 });
 
 it('fails when git is not available', function () {
-    $paths = Mockery::mock(PathsRepository::class);
+    $paths = Double::for(PathsRepository::class);
 
-    $paths
-        ->shouldReceive('diff')
-        ->with('main')
-        ->once()
-        ->andThrow(new ConsoleException(1, 'The [--diff] option is only available when using Git.'));
+    $paths->expects('diff')->with('main')->throws(new ConsoleException(1, 'The [--diff] option is only available when using Git.'));
 
     $this->swap(PathsRepository::class, $paths);
 
@@ -60,12 +50,9 @@ it('fails when git is not available', function () {
 })->throws(ConsoleException::class, 'The [--diff] option is only available when using Git.');
 
 it('does not abort when there are no diff files', function () {
-    $paths = Mockery::mock(PathsRepository::class);
+    $paths = Double::for(PathsRepository::class);
 
-    $paths
-        ->shouldReceive('diff')
-        ->once()
-        ->andReturn([]);
+    $paths->expects('diff')->returns([]);
 
     $this->swap(PathsRepository::class, $paths);
 
@@ -79,15 +66,11 @@ it('does not abort when there are no diff files', function () {
 });
 
 it('parses nested branch names', function () {
-    $paths = Mockery::mock(PathsRepository::class);
+    $paths = Double::for(PathsRepository::class);
 
-    $paths
-        ->shouldReceive('diff')
-        ->with('origin/main')
-        ->once()
-        ->andReturn([
-            base_path('tests/Fixtures/without-issues-laravel/file.php'),
-        ]);
+    $paths->expects('diff')->with('origin/main')->returns([
+        base_path('tests/Fixtures/without-issues-laravel/file.php'),
+    ]);
 
     $this->swap(PathsRepository::class, $paths);
 
