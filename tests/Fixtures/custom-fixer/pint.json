@@ -1,0 +1,9 @@
+{
+    "preset": "empty",
+    "customRules": [
+        "Tests\\Fixtures\\CustomFixer\\RemoveCommentFixer"
+    ],
+    "rules": {
+        "App/remove_comment": true
+    }
+}

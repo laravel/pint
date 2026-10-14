@@ -1,0 +1,6 @@
+{
+    "preset": "empty",
+    "customRules": [
+        "App\\Fixers\\DoesNotExist"
+    ]
+}
