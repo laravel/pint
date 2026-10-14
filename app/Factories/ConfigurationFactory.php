@@ -75,7 +75,40 @@ class ConfigurationFactory
         return [
             new Fixer(resolve(BladeFormatter::class)),
             new PrettierCacheFingerprint,
+            ...self::userRegisteredFixers(),
         ];
+    }
+
+    /**
+     * Instantiate the custom fixer classes registered under the "customRules"
+     * key of the local configuration.
+     *
+     * @return array<int, FixerInterface>
+     */
+    protected static function userRegisteredFixers()
+    {
+        return collect(resolve(ConfigurationJsonRepository::class)->customFixers())
+            ->map(function (string $class) {
+                if (! class_exists($class)) {
+                    abort(1, sprintf(
+                        'Custom fixer [%s] declared in "customRules" could not be found.',
+                        $class,
+                    ));
+                }
+
+                $fixer = new $class;
+
+                if (! $fixer instanceof FixerInterface) {
+                    abort(1, sprintf(
+                        'Custom fixer [%s] must implement [%s].',
+                        $class,
+                        FixerInterface::class,
+                    ));
+                }
+
+                return $fixer;
+            })
+            ->all();
     }
 
     /**

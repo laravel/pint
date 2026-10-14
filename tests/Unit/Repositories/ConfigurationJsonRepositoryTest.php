@@ -131,3 +131,17 @@ it('throw an error if the extended configuration also has an extend', function (
 
     $repository->finder();
 })->throws(LogicException::class);
+
+it('may have custom fixer classes to register', function () {
+    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/custom-fixer/pint.json', null);
+
+    expect($repository->customFixers())->toBe([
+        'Tests\\Fixtures\\CustomFixer\\RemoveCommentFixer',
+    ]);
+});
+
+it('defaults to no custom fixer classes', function () {
+    $repository = new ConfigurationJsonRepository(null, 'psr12');
+
+    expect($repository->customFixers())->toBeEmpty();
+});
