@@ -66,6 +66,17 @@ class ConfigurationJsonRepository
     }
 
     /**
+     * Get the custom fixer classes to register, as declared under the
+     * "customRules" key of the configuration file.
+     *
+     * @return array<int, string>
+     */
+    public function customFixers()
+    {
+        return $this->get()['customRules'] ?? [];
+    }
+
+    /**
      * Get the cache file location.
      *
      * @return string|null
