@@ -88,6 +88,9 @@ final class ProcessFactory
 
         $commandArgs = [
             ProcessUtils::escapeArgument($phpBinary),
+            // Workers do not inherit "-d" flags, so a worker running out of memory would silently drop its files.
+            '-d',
+            ProcessUtils::escapeArgument('memory_limit='.ini_get('memory_limit')),
             ProcessUtils::escapeArgument($mainScript),
             'worker',
             '--port',
