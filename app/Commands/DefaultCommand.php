@@ -54,6 +54,7 @@ class DefaultCommand extends Command
                     new InputOption('output-format', '', InputOption::VALUE_REQUIRED, 'The format that should be used when outputting the test results to a file'),
                     new InputOption('stdin-filename', null, InputOption::VALUE_REQUIRED, 'File path context for stdin input'),
                     new InputOption('cache-file', '', InputArgument::OPTIONAL, 'The path to the cache file'),
+                    new InputOption('no-cache', '', InputOption::VALUE_NONE, 'Check every file without reading or writing the cache'),
                     new InputOption('parallel', 'p', InputOption::VALUE_NONE, 'Runs the linter in parallel (Experimental)'),
                     new InputOption('max-processes', null, InputOption::VALUE_REQUIRED, 'The number of processes to spawn when using parallel execution'),
                 ],

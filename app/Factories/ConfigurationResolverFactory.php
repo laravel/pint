@@ -74,6 +74,7 @@ class ConfigurationResolverFactory
                         : (string) microtime()
                     ),
                 ]),
+                'using-cache' => $input->getOption('no-cache') ? 'no' : null,
                 'stop-on-violation' => $input->getOption('bail'),
                 'verbosity' => $output->getVerbosity(),
                 'show-progress' => 'true',
