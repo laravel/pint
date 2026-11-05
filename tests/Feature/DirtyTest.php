@@ -1,17 +1,15 @@
 <?php
 
 use App\Contracts\PathsRepository;
+use JMac\Testing\Double;
 use LaravelZero\Framework\Exceptions\ConsoleException;
 
 it('determines dirty files', function () {
-    $paths = Mockery::mock(PathsRepository::class);
+    $paths = Double::for(PathsRepository::class);
 
-    $paths
-        ->shouldReceive('dirty')
-        ->once()
-        ->andReturn([
-            base_path('tests/Fixtures/without-issues-laravel/file.php'),
-        ]);
+    $paths->expects('dirty')->returns([
+        base_path('tests/Fixtures/without-issues-laravel/file.php'),
+    ]);
 
     $this->swap(PathsRepository::class, $paths);
 
@@ -23,14 +21,11 @@ it('determines dirty files', function () {
 });
 
 it('ignores the path argument', function () {
-    $paths = Mockery::mock(PathsRepository::class);
+    $paths = Double::for(PathsRepository::class);
 
-    $paths
-        ->shouldReceive('dirty')
-        ->once()
-        ->andReturn([
-            base_path('tests/Fixtures/without-issues-laravel/file.php'),
-        ]);
+    $paths->expects('dirty')->returns([
+        base_path('tests/Fixtures/without-issues-laravel/file.php'),
+    ]);
 
     $this->swap(PathsRepository::class, $paths);
 
@@ -45,12 +40,9 @@ it('ignores the path argument', function () {
 });
 
 it('fails when git is not available', function () {
-    $paths = Mockery::mock(PathsRepository::class);
+    $paths = Double::for(PathsRepository::class);
 
-    $paths
-        ->shouldReceive('dirty')
-        ->once()
-        ->andThrow(new ConsoleException(1, 'The [--dirty] option is only available when using Git.'));
+    $paths->expects('dirty')->throws(new ConsoleException(1, 'The [--dirty] option is only available when using Git.'));
 
     $this->swap(PathsRepository::class, $paths);
 
@@ -58,12 +50,9 @@ it('fails when git is not available', function () {
 })->throws(ConsoleException::class, 'The [--dirty] option is only available when using Git.');
 
 it('does not abort when there are no dirty files', function () {
-    $paths = Mockery::mock(PathsRepository::class);
+    $paths = Double::for(PathsRepository::class);
 
-    $paths
-        ->shouldReceive('dirty')
-        ->once()
-        ->andReturn([]);
+    $paths->expects('dirty')->returns([]);
 
     $this->swap(PathsRepository::class, $paths);
 
