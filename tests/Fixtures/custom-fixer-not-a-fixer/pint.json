@@ -1,0 +1,6 @@
+{
+    "preset": "empty",
+    "customRules": [
+        "Tests\\Fixtures\\CustomFixer\\NotAFixer"
+    ]
+}
