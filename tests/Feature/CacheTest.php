@@ -45,7 +45,7 @@ beforeEach(function () {
 });
 
 afterEach(function () {
-    foreach (['/resources/views/welcome.blade.php', '/Example.php', '/pint.json', '/.pint.cache'] as $file) {
+    foreach (['/resources/views/welcome.blade.php', '/Example.php', '/pint.json', '/.pint.cache', '/victim.txt', '/victim.json'] as $file) {
         @unlink($this->directory.$file);
     }
 
@@ -93,3 +93,42 @@ it('reports no changes on a second run served from the cache', function () {
     expect(runPintWithCache($this->directory, $this->cacheFile, ['--blade', '--test']))->toBe(0)
         ->and(cacheSignature($this->cacheFile))->toBe($signature);
 });
+
+it('refuses to overwrite an existing file that is not a cache', function () {
+    $victim = $this->directory.DIRECTORY_SEPARATOR.'victim.txt';
+    file_put_contents($victim, 'important content');
+
+    expect(runPintWithCache($this->directory, $victim, ['--test']))->toBe(1)
+        ->and(file_get_contents($victim))->toBe('important content');
+});
+
+it('refuses to overwrite an existing file that is not a cache when configured in pint.json', function () {
+    $victim = $this->directory.DIRECTORY_SEPARATOR.'victim.json';
+    file_put_contents($victim, '{"not":"a cache"}');
+    file_put_contents($this->directory.'/pint.json', json_encode(['preset' => 'laravel', 'cache-file' => $victim]));
+
+    $process = new Process(['php', 'pint', '--config', $this->directory.'/pint.json', '--test', $this->directory], base_path());
+    $process->run();
+
+    expect($process->getExitCode())->toBe(1)
+        ->and($process->getOutput().$process->getErrorOutput())->toContain('is not a Pint cache file')
+        ->and(file_get_contents($victim))->toBe('{"not":"a cache"}');
+});
+
+it('writes the cache into an existing empty file', function () {
+    touch($this->cacheFile);
+
+    expect(runPintWithCache($this->directory, $this->cacheFile, ['--test']))->toBe(1)
+        ->and(cacheSignature($this->cacheFile))->toHaveKey('hashes');
+});
+
+it('overwrites a cache file left truncated by an interrupted write', function () {
+    file_put_contents($this->cacheFile, '{"php":"8.3.0","version":"3.');
+
+    expect(runPintWithCache($this->directory, $this->cacheFile, ['--test']))->toBe(1)
+        ->and(cacheSignature($this->cacheFile))->toHaveKey('hashes');
+});
+
+it('accepts a non regular file such as the null device as the cache file', function () {
+    expect(runPintWithCache($this->directory, '/dev/null', ['--test']))->toBe(1);
+})->skipOnWindows();
