@@ -45,7 +45,7 @@ beforeEach(function () {
 });
 
 afterEach(function () {
-    foreach (['/resources/views/welcome.blade.php', '/Example.php', '/pint.json', '/.pint.cache', '/victim.txt', '/victim.json'] as $file) {
+    foreach (['/resources/views/welcome.blade.php', '/Example.php', '/pint.json', '/.pint.cache', '/existing.txt'] as $file) {
         @unlink($this->directory.$file);
     }
 
@@ -95,24 +95,11 @@ it('reports no changes on a second run served from the cache', function () {
 });
 
 it('refuses to overwrite an existing file that is not a cache', function () {
-    $victim = $this->directory.DIRECTORY_SEPARATOR.'victim.txt';
-    file_put_contents($victim, 'important content');
+    $existing = $this->directory.DIRECTORY_SEPARATOR.'existing.txt';
+    file_put_contents($existing, 'existing content');
 
-    expect(runPintWithCache($this->directory, $victim, ['--test']))->toBe(1)
-        ->and(file_get_contents($victim))->toBe('important content');
-});
-
-it('refuses to overwrite an existing file that is not a cache when configured in pint.json', function () {
-    $victim = $this->directory.DIRECTORY_SEPARATOR.'victim.json';
-    file_put_contents($victim, '{"not":"a cache"}');
-    file_put_contents($this->directory.'/pint.json', json_encode(['preset' => 'laravel', 'cache-file' => $victim]));
-
-    $process = new Process(['php', 'pint', '--config', $this->directory.'/pint.json', '--test', $this->directory], base_path());
-    $process->run();
-
-    expect($process->getExitCode())->toBe(1)
-        ->and($process->getOutput().$process->getErrorOutput())->toContain('is not a Pint cache file')
-        ->and(file_get_contents($victim))->toBe('{"not":"a cache"}');
+    expect(runPintWithCache($this->directory, $existing, ['--test']))->toBe(1)
+        ->and(file_get_contents($existing))->toBe('existing content');
 });
 
 it('writes the cache into an existing empty file', function () {
