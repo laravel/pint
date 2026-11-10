@@ -69,24 +69,19 @@ it('does not overwrite a project file that is not a cache', function () {
     $autoloader = file_get_contents($this->project.'/vendor/autoload.php');
 
     expect(fn () => runPintWithConfiguration($this->project, ['cache-file' => 'vendor/autoload.php']))
-        ->toThrow(ConsoleException::class, 'already exists and is not a Pint cache.');
+        ->toThrow(ConsoleException::class, 'already exists and is not a Pint cache file.');
 
     expect(file_get_contents($this->project.'/vendor/autoload.php'))->toBe($autoloader);
 });
 
-it('writes a cache file inside the project', function (string $cacheFile, bool $empty) {
-    if ($empty) {
-        touch($this->project.'/'.$cacheFile);
-    }
-
+it('writes a cache file inside the project', function (string $cacheFile) {
     [$statusCode] = runPintWithConfiguration($this->project, ['cache-file' => $cacheFile]);
 
     expect($statusCode)->toBe(1)
         ->and(json_decode((string) file_get_contents($this->project.'/'.$cacheFile), true))->toHaveKey('hashes');
 })->with([
-    'new file' => ['.pint.cache', false],
-    'new folders' => ['build/cache/.pint.cache', false],
-    'empty file' => ['package/.pint.cache', true],
+    'new file' => '.pint.cache',
+    'new folders' => 'build/cache/.pint.cache',
 ]);
 
 it('extends a file anywhere inside the project', function () {

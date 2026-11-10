@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Project;
-use PhpCsFixer\Cache\Cache;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Filesystem\Path;
 
@@ -81,13 +80,7 @@ class ConfigurationJsonRepository
             return $cacheFile;
         }
 
-        $cacheFile = $this->resolveProjectPath('cache-file', $cacheFile);
-
-        if (is_file($cacheFile) && filesize($cacheFile) > 0 && ! $this->isCache($cacheFile)) {
-            abort(1, sprintf('The cache file [%s] already exists and is not a Pint cache.', $cacheFile));
-        }
-
-        return $cacheFile;
+        return $this->resolveProjectPath('cache-file', $cacheFile);
     }
 
     /**
@@ -218,21 +211,5 @@ class ConfigurationJsonRepository
         }
 
         return implode(DIRECTORY_SEPARATOR, [$resolved, ...$missing]);
-    }
-
-    /**
-     * Determine if the given file is a PHP CS Fixer cache.
-     *
-     * @return bool
-     */
-    protected function isCache(string $path)
-    {
-        try {
-            Cache::fromJson((string) file_get_contents($path));
-        } catch (\InvalidArgumentException) {
-            return false;
-        }
-
-        return true;
     }
 }
