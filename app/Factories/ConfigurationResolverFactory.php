@@ -66,14 +66,16 @@ class ConfigurationResolverFactory
                 'dry-run' => $input->getOption('test') || $input->getOption('bail'),
                 'path' => $path,
                 'path-mode' => ConfigurationResolver::PATH_MODE_OVERRIDE,
-                'cache-file' => $input->getOption('cache-file') ?? $localConfiguration->cacheFile() ?? implode(DIRECTORY_SEPARATOR, [
-                    realpath(sys_get_temp_dir()),
-                    md5(
-                        app()->isProduction()
-                        ? (implode('|', $path).'||'.(string) Prettier::VERSION)
-                        : (string) microtime()
-                    ),
-                ]),
+                'cache-file' => static::ensureCacheFileIsSafeToWrite(
+                    $input->getOption('cache-file') ?? $localConfiguration->cacheFile() ?? implode(DIRECTORY_SEPARATOR, [
+                        realpath(sys_get_temp_dir()),
+                        md5(
+                            app()->isProduction()
+                            ? (implode('|', $path).'||'.(string) Prettier::VERSION)
+                            : (string) microtime()
+                        ),
+                    ]),
+                ),
                 'stop-on-violation' => $input->getOption('bail'),
                 'verbosity' => $output->getVerbosity(),
                 'show-progress' => 'true',
@@ -87,6 +89,54 @@ class ConfigurationResolverFactory
         )));
 
         return [$resolver, $totalFiles];
+    }
+
+    /**
+     * Ensure the given cache file does not overwrite an unrelated file.
+     *
+     * @param  string  $cacheFile
+     * @return string
+     */
+    protected static function ensureCacheFileIsSafeToWrite($cacheFile)
+    {
+        if (! file_exists($cacheFile)) {
+            return $cacheFile;
+        }
+
+        if (is_dir($cacheFile)) {
+            abort(1, sprintf('The cache file [%s] is a directory.', $cacheFile));
+        }
+
+        if (! is_file($cacheFile)) {
+            return $cacheFile;
+        }
+
+        $contents = @file_get_contents($cacheFile);
+
+        if ($contents === false) {
+            abort(1, sprintf('The cache file [%s] could not be read.', $cacheFile));
+        }
+
+        if (trim($contents) === '') {
+            return $cacheFile;
+        }
+
+        if (! static::isCache($contents)) {
+            abort(1, sprintf('The cache file [%s] already exists and is not a Pint cache file. Refusing to overwrite it.', $cacheFile));
+        }
+
+        return $cacheFile;
+    }
+
+    /**
+     * Determine if the given contents hold a PHP CS Fixer cache.
+     *
+     * @param  string  $contents
+     * @return bool
+     */
+    protected static function isCache($contents)
+    {
+        return str_starts_with($contents, '{"php":');
     }
 
     /**
