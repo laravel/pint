@@ -2,7 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Project;
+use PhpCsFixer\Cache\Cache;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Filesystem\Path;
 
 class ConfigurationJsonRepository
 {
@@ -72,7 +75,19 @@ class ConfigurationJsonRepository
      */
     public function cacheFile()
     {
-        return $this->get()['cache-file'] ?? null;
+        $cacheFile = $this->get()['cache-file'] ?? null;
+
+        if (is_null($cacheFile) || ! $this->isProjectConfiguration()) {
+            return $cacheFile;
+        }
+
+        $cacheFile = $this->resolveProjectPath('cache-file', $cacheFile);
+
+        if (is_file($cacheFile) && filesize($cacheFile) > 0 && ! $this->isCache($cacheFile)) {
+            abort(1, sprintf('The cache file [%s] already exists and is not a Pint cache.', $cacheFile));
+        }
+
+        return $cacheFile;
     }
 
     /**
@@ -141,7 +156,11 @@ class ConfigurationJsonRepository
      */
     private function resolveExtend(array $configuration)
     {
-        $path = realpath(dirname($this->path).DIRECTORY_SEPARATOR.$configuration['extend']);
+        $extend = dirname($this->path).DIRECTORY_SEPARATOR.$configuration['extend'];
+
+        $path = $this->isProjectConfiguration()
+            ? $this->resolveProjectPath('extend', $extend)
+            : realpath($extend);
 
         $extended = json_decode(file_get_contents($path), true);
 
@@ -150,5 +169,70 @@ class ConfigurationJsonRepository
         }
 
         return array_replace_recursive($extended, $configuration);
+    }
+
+    /**
+     * Determine if the configuration file is located inside the project.
+     *
+     * @return bool
+     */
+    protected function isProjectConfiguration()
+    {
+        if (is_null($this->path) || str_starts_with($this->path, 'https://')) {
+            return false;
+        }
+
+        $root = Project::path();
+
+        if (Path::isBasePath($root, Path::makeAbsolute($this->path, $root))) {
+            return true;
+        }
+
+        $realPath = realpath($this->path);
+        $realRoot = realpath($root);
+
+        return $realPath !== false && $realRoot !== false && Path::isBasePath($realRoot, $realPath);
+    }
+
+    /**
+     * Resolve the given configuration path, ensuring it is located inside the project.
+     *
+     * @return string
+     */
+    protected function resolveProjectPath(string $option, string $path)
+    {
+        $existing = Path::isAbsolute($path) ? $path : Project::path().DIRECTORY_SEPARATOR.$path;
+        $missing = [];
+
+        while (! file_exists($existing) && ! is_link($existing) && dirname($existing) !== $existing) {
+            array_unshift($missing, basename($existing));
+
+            $existing = dirname($existing);
+        }
+
+        $resolved = realpath($existing);
+        $root = realpath(Project::path());
+
+        if ($resolved === false || $root === false || in_array('..', $missing, true) || ! Path::isBasePath($root, $resolved)) {
+            abort(1, sprintf('The [%s] path [%s] must be inside the project.', $option, $path));
+        }
+
+        return implode(DIRECTORY_SEPARATOR, [$resolved, ...$missing]);
+    }
+
+    /**
+     * Determine if the given file is a PHP CS Fixer cache.
+     *
+     * @return bool
+     */
+    protected function isCache(string $path)
+    {
+        try {
+            Cache::fromJson((string) file_get_contents($path));
+        } catch (\InvalidArgumentException) {
+            return false;
+        }
+
+        return true;
     }
 }
