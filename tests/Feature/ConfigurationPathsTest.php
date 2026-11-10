@@ -31,7 +31,6 @@ beforeEach(function () {
     file_put_contents($this->project.'/Example.php', "<?php\n\$a  =  1;\n");
 
     symlink($this->root.'/outside', $this->project.'/linked');
-    symlink($this->root.'/outside/missing.php', $this->project.'/dangling.php');
 
     chdir($this->project);
 });
@@ -55,8 +54,16 @@ it('rejects a cache file outside the project', function (string $cacheFile, stri
     'symlinked directory' => ['linked/victim.php', '/outside/victim.php'],
     'parent of a symlinked directory' => ['linked/../victim.php', '/victim.php'],
     'parent of a missing directory' => ['missing/../../victim.php', '/victim.php'],
-    'dangling symlink' => ['dangling.php', '/outside/missing.php'],
 ]);
+
+it('rejects a cache file that is a dangling symlink', function () {
+    symlink($this->root.'/outside/missing.php', $this->project.'/dangling.php');
+
+    expect(fn () => runPintWithConfiguration($this->project, ['cache-file' => 'dangling.php']))
+        ->toThrow(ConsoleException::class, 'The [cache-file] path [dangling.php] must be inside');
+
+    expect($this->root.'/outside/missing.php')->not->toBeFile();
+})->skipOnWindows();
 
 it('does not overwrite a project file that is not a cache', function () {
     $autoloader = file_get_contents($this->project.'/vendor/autoload.php');
