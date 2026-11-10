@@ -1,6 +1,7 @@
 <?php
 
 use App\Fixers\PrettierCacheFingerprint;
+use PhpCsFixer\Hasher;
 use Symfony\Component\Process\Process;
 
 /**
@@ -92,4 +93,28 @@ it('reports no changes on a second run served from the cache', function () {
 
     expect(runPintWithCache($this->directory, $this->cacheFile, ['--blade', '--test']))->toBe(0)
         ->and(cacheSignature($this->cacheFile))->toBe($signature);
+});
+
+it('does not write the cache when the cache is disabled', function (array $options) {
+    expect(runPintWithCache($this->directory, $this->cacheFile, ['--no-cache', ...$options]))->toBe(0)
+        ->and($this->cacheFile)->not->toBeFile();
+})->with([
+    'sequential' => [[]],
+    'parallel' => [['--parallel']],
+]);
+
+it('checks files the cache claims are formatted when the cache is disabled', function () {
+    expect(runPintWithCache($this->directory, $this->cacheFile))->toBe(0)
+        ->and(runPintWithCache($this->directory, $this->cacheFile, ['--test', '--no-cache']))->toBe(0);
+
+    $unformatted = "<?php\n\nclass Example\n{\n    public function handle()\n    {\n        return array(1, 2);\n    }\n}\n";
+    file_put_contents($this->directory.'/Example.php', $unformatted);
+
+    $cache = cacheSignature($this->cacheFile);
+    $key = collect(array_keys($cache['hashes']))->first(fn (string $file) => basename($file) === 'Example.php');
+    $cache['hashes'][$key] = Hasher::calculate($unformatted);
+    file_put_contents($this->cacheFile, json_encode($cache, JSON_THROW_ON_ERROR));
+
+    expect(runPintWithCache($this->directory, $this->cacheFile, ['--test']))->toBe(0)
+        ->and(runPintWithCache($this->directory, $this->cacheFile, ['--test', '--no-cache']))->toBe(1);
 });
