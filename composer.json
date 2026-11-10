@@ -23,16 +23,16 @@
         "ext-xml": "*"
     },
     "require-dev": {
-        "composer/semver": "^3.4.4",
-        "friendsofphp/php-cs-fixer": "^3.95.25",
-        "illuminate/view": "^13.31.0",
-        "larastan/larastan": "^3.11.0",
+        "composer/semver": "^3.6.0",
+        "friendsofphp/php-cs-fixer": "^3.95.30",
+        "illuminate/view": "^13.40.0",
+        "larastan/larastan": "^3.14.0",
         "laravel-zero/framework": "^13.0.0",
-        "laravel/prompts": "^0.3.24",
+        "laravel/prompts": "^0.3.27",
         "mockery/mockery": "^1.6.15",
-        "nunomaduro/termwind": "^2.4.0",
+        "nunomaduro/termwind": "^2.4.1",
         "pestphp/pest": "^4.7.8",
-        "laravel/agent-detector": "^2.0.2"
+        "laravel/agent-detector": "^2.0.5"
     },
     "autoload": {
         "psr-4": {
