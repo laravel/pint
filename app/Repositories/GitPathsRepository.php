@@ -41,7 +41,7 @@ class GitPathsRepository implements PathsRepository
         $dirtyFiles = collect(preg_split('/\R+/', $process->getOutput(), flags: PREG_SPLIT_NO_EMPTY))
             ->mapWithKeys(fn ($file) => [substr($file, 3) => trim(substr($file, 0, 3))])
             ->reject(fn ($status) => $status === 'D')
-            ->map(fn ($status, $file) => $status === 'R' ? Str::after($file, ' -> ') : $file)
+            ->map(fn ($status, $file) => Str::startsWith($status, 'R') ? Str::after($file, ' -> ') : $file)
             ->values();
 
         return $this->processFileNames($dirtyFiles);
