@@ -27,7 +27,7 @@ return [
     */
 
     'paths' => [
-        resource_path('views'),
+        Phar::running() !== '' ? Phar::running().'/resources/views' : resource_path('views'),
     ],
 
 ];
