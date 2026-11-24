@@ -52,11 +52,13 @@ class Prettier
     }
 
     /**
-     * Formats the given file.
+     * Formats the given file, the given options overriding the bundled configuration.
+     *
+     * @param  array<string, mixed>  $options
      *
      * @throws PrettierException
      */
-    public function format(string $path, string $content): string
+    public function format(string $path, string $content, array $options = []): string
     {
         $this->ensureStarted();
 
@@ -66,6 +68,7 @@ class Prettier
         $this->inputStream->write(json_encode([
             'path' => $path,
             'content' => $content,
+            'options' => (object) $options,
         ], JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_SUBSTITUTE)."\n");
 
         // Accumulate every chunk; the OS pipe may split the response across reads.

@@ -16,7 +16,7 @@ function fakePrettier(Closure $handler): Prettier
             parent::__construct($projectRoot);
         }
 
-        public function format(string $path, string $content): string
+        public function format(string $path, string $content, array $options = []): string
         {
             return ($this->handler)($content);
         }

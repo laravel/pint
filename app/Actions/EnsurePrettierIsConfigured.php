@@ -11,6 +11,7 @@ use Composer\Semver\Semver;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
+use PhpCsFixer\Fixer\ConfigurableFixerInterface;
 use PhpCsFixer\Fixer\FixerInterface;
 
 use function Laravel\Prompts\confirm;
@@ -66,7 +67,7 @@ class EnsurePrettierIsConfigured
     }
 
     /**
-     * The enabled rules that depend on prettier.
+     * The enabled rules that depend on prettier, configured from the rules.
      *
      * @return Collection<int, HasPrettierDependencies&FixerInterface>
      */
@@ -76,7 +77,12 @@ class EnsurePrettierIsConfigured
 
         return collect(ConfigurationFactory::customFixers())
             ->filter(fn ($fixer) => $fixer instanceof HasPrettierDependencies)
-            ->filter(fn ($fixer) => ($rules[$fixer->getName()] ?? false) === true)
+            ->filter(fn ($fixer) => ($rules[$fixer->getName()] ?? false) === true || is_array($rules[$fixer->getName()] ?? false))
+            ->each(function ($fixer) use ($rules) {
+                if ($fixer instanceof ConfigurableFixerInterface && is_array($rules[$fixer->getName()])) {
+                    $fixer->configure($rules[$fixer->getName()]);
+                }
+            })
             ->values();
     }
 
@@ -105,8 +111,7 @@ class EnsurePrettierIsConfigured
      */
     public function requiredPackages(): array
     {
-        return collect(ConfigurationFactory::customFixers())
-            ->filter(fn ($fixer) => $fixer instanceof HasPrettierDependencies)
+        return $this->enabledPrettierFixers()
             ->flatMap(fn (HasPrettierDependencies $fixer) => $fixer->prettierDependencies())
             ->all();
     }

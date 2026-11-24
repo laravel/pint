@@ -59,11 +59,18 @@ process.stdin.on("data", function (chunk) {
 
 async function handleMessage(input) {
     try {
-        const { path: filepath, content } = JSON.parse(input);
+        const {
+            path: filepath,
+            content,
+            options: overrides,
+        } = JSON.parse(input);
 
         const resolved = filepath.trim();
 
-        const options = resolveOptionPlugins({ ...bundledOptions });
+        const options = resolveOptionPlugins({
+            ...bundledOptions,
+            ...overrides,
+        });
 
         const formatted = await prettier.format(content, {
             ...options,
