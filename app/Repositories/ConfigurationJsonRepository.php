@@ -48,7 +48,8 @@ class ConfigurationJsonRepository
      * Get the rules options.
      *
      * The "--blade" option is a shortcut that toggles the [Pint/laravel_blade]
-     * rule, so it is folded into the configured rules here.
+     * rule, so it is folded into the configured rules here, keeping the rule's
+     * options when "pint.json" configures them.
      *
      * @return array<string, mixed>
      */
@@ -59,7 +60,7 @@ class ConfigurationJsonRepository
         if (app()->bound(InputInterface::class)) {
             $input = resolve(InputInterface::class);
 
-            if ($input->hasOption('blade') && $input->getOption('blade') === true) {
+            if ($input->hasOption('blade') && $input->getOption('blade') === true && ! is_array($rules['Pint/laravel_blade'] ?? null)) {
                 $rules['Pint/laravel_blade'] = true;
             }
         }
@@ -106,7 +107,7 @@ class ConfigurationJsonRepository
     /**
      * Get the configuration from the "pint.json" file.
      *
-     * @return array<string, array<int, string>|string>
+     * @return array<string, mixed>
      */
     protected function get()
     {

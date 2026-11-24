@@ -61,6 +61,18 @@ it('lets the --blade option take over even when disabled in pint.json', function
     ]);
 });
 
+it('keeps the blade rule options from pint.json when the --blade option is passed', function () {
+    app()->instance(InputInterface::class, bladeInput(true));
+
+    $repository = new ConfigurationJsonRepository(dirname(__DIR__, 2).'/Fixtures/rules/blade-configured.json', null);
+
+    expect($repository->rules())->toBe([
+        'Pint/laravel_blade' => [
+            'sort_tailwind_classes' => false,
+        ],
+    ]);
+});
+
 it('respects the blade rule from pint.json when the --blade option is absent', function () {
     app()->instance(InputInterface::class, bladeInput(false));
 

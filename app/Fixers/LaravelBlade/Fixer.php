@@ -6,13 +6,24 @@ use App\BladeFormatter;
 use App\Contracts\HasPrettierDependencies;
 use App\Exceptions\PrettierException;
 use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\Fixer\ConfigurableFixerInterface;
+use PhpCsFixer\Fixer\ConfigurableFixerTrait;
+use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
+use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverInterface;
+use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Tokenizer\Tokens;
 use SplFileInfo;
 
-class Fixer extends AbstractFixer implements HasPrettierDependencies
+/**
+ * @implements ConfigurableFixerInterface<array{sort_tailwind_classes?: bool}, array{sort_tailwind_classes: bool}>
+ */
+class Fixer extends AbstractFixer implements ConfigurableFixerInterface, HasPrettierDependencies
 {
+    /** @use ConfigurableFixerTrait<array{sort_tailwind_classes?: bool}, array{sort_tailwind_classes: bool}> */
+    use ConfigurableFixerTrait;
+
     /**
      * The list of ignorables.
      *
@@ -27,18 +38,48 @@ class Fixer extends AbstractFixer implements HasPrettierDependencies
     /**
      * {@inheritdoc}
      */
-    public function __construct(protected BladeFormatter $formatter) {}
+    public function __construct(protected BladeFormatter $formatter)
+    {
+        parent::__construct();
+    }
 
     /**
      * {@inheritdoc}
      */
     public function prettierDependencies(): array
     {
-        return [
+        $dependencies = [
             'prettier' => '^3.9.6',
             'prettier-plugin-blade' => '^3.3.3',
-            'prettier-plugin-tailwindcss' => '^0.8.1',
         ];
+
+        if ($this->sortsTailwindClasses()) {
+            $dependencies['prettier-plugin-tailwindcss'] = '^0.8.1';
+        }
+
+        return $dependencies;
+    }
+
+    /**
+     * The prettier options overriding the bundled configuration.
+     *
+     * @return array<string, mixed>
+     */
+    public function prettierOptions(): array
+    {
+        if ($this->sortsTailwindClasses()) {
+            return [];
+        }
+
+        return ['plugins' => ['prettier-plugin-blade']];
+    }
+
+    /**
+     * Determine whether Tailwind CSS classes are sorted.
+     */
+    protected function sortsTailwindClasses(): bool
+    {
+        return $this->configuration['sort_tailwind_classes'] ?? true;
     }
 
     /**
@@ -75,6 +116,19 @@ class Fixer extends AbstractFixer implements HasPrettierDependencies
 
     /**
      * {@inheritdoc}
+     */
+    protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
+    {
+        return new FixerConfigurationResolver([
+            (new FixerOptionBuilder('sort_tailwind_classes', 'Whether Tailwind CSS classes are sorted using "prettier-plugin-tailwindcss".'))
+                ->setAllowedTypes(['bool'])
+                ->setDefault(true)
+                ->getOption(),
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
      *
      * @throws PrettierException
      */
@@ -97,7 +151,7 @@ class Fixer extends AbstractFixer implements HasPrettierDependencies
             }
         }
 
-        $content = $this->formatter->format($path, $content);
+        $content = $this->formatter->format($path, $content, $this->prettierOptions());
 
         // Tokens::setCode() rejects an empty string, so clear the tokens directly.
         if ($content === '') {

@@ -1,0 +1,7 @@
+{
+    "rules": {
+        "Pint/laravel_blade": {
+            "sort_tailwind_classes": false
+        }
+    }
+}

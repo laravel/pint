@@ -74,8 +74,10 @@ class BladeFormatter
 
     /**
      * Format the given content.
+     *
+     * @param  array<string, mixed>  $options
      */
-    public function format(string $path, string $content): string
+    public function format(string $path, string $content, array $options = []): string
     {
         $formatters = collect(static::$formatters)->map(
             fn (string $formatter): PrettierPreFormatter|PrettierPostFormatter => resolve($formatter),
@@ -88,7 +90,7 @@ class BladeFormatter
             $content,
         );
 
-        $formatted = $this->prettier->format($path, $masked);
+        $formatted = $this->prettier->format($path, $masked, $options);
 
         try {
             return $formatters->reduce(

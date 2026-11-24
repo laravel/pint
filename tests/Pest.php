@@ -234,10 +234,15 @@ function bladeFixtureFilesIn(string $root): array
 /**
  * Run "pint --blade" once over a staged temporary project, asserting it exits
  * cleanly. The caller is responsible for staging the files beforehand.
+ *
+ * @param  array<string, mixed>  $rules
  */
-function runPintBlade(string $tmp, bool $parallel = false): void
+function runPintBlade(string $tmp, bool $parallel = false, array $rules = []): void
 {
-    file_put_contents($tmp.'/pint.json', '{"preset":"laravel"}'."\n");
+    file_put_contents($tmp.'/pint.json', json_encode(array_filter([
+        'preset' => 'laravel',
+        'rules' => $rules,
+    ]))."\n");
 
     $command = ['php', 'pint', '--blade'];
 

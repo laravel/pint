@@ -47,3 +47,24 @@ it('changes the fingerprint when the pint version changes', function () {
 it('exposes no cache fingerprints before prettier is configured', function () {
     expect($this->action->cacheFingerprints())->toBe([]);
 });
+
+it('changes the fingerprint when tailwind class sorting is disabled', function () {
+    $before = $this->action->fingerprint($this->fixer, $this->probes);
+
+    $this->fixer->configure(['sort_tailwind_classes' => false]);
+
+    expect($this->action->fingerprint($this->fixer, $this->probes))->not->toBe($before);
+});
+
+it('requires the tailwind plugin only when tailwind class sorting is enabled', function (string $configuration, bool $requiresTailwind) {
+    $action = new EnsurePrettierIsConfigured(
+        new Prettier(getcwd()),
+        new ConfigurationJsonRepository(dirname(__DIR__).'/Fixtures/rules/'.$configuration, null),
+    );
+
+    expect(array_key_exists('prettier-plugin-tailwindcss', $action->requiredPackages()))->toBe($requiresTailwind)
+        ->and($action->requiredPackages())->toHaveKeys(['prettier', 'prettier-plugin-blade']);
+})->with([
+    'enabled' => ['blade-enabled.json', true],
+    'sorting disabled' => ['blade-configured.json', false],
+]);
